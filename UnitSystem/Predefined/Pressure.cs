@@ -1,4 +1,5 @@
 ﻿using System;
+#if false
 using Utilities.Measures.Prefixes;
 
 namespace Utilities.Measures.Predefined
@@ -7,3 +8,4 @@ namespace Utilities.Measures.Predefined
 
     public class Pascal : BaseUnit<Pascal, Pressure> { }
 }
+#endif

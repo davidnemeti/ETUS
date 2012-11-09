@@ -7,13 +7,13 @@ namespace Utilities.Measures
 {
     public abstract class Expression
     {
-        public abstract dynamic Eval(dynamic number);
+        public abstract dynamic Eval(dynamic parameter);
 
-        public Measure<TNumber, TUnit> ToMeasure<TNumber, TUnit>()
+        public Measure<TNumber, TUnit> ToMeasure<TNumber, TUnit>(TNumber parameter)
             where TNumber : struct
             where TUnit : Unit
         {
-            return new Measure<TNumber, TUnit>(Eval());
+            return new Measure<TNumber, TUnit>(Eval(parameter));
         }
 
         #region ConstExpression operators
@@ -144,9 +144,9 @@ namespace Utilities.Measures
         {
         }
 
-        public override object Eval()
+        public override dynamic Eval(dynamic parameter)
         {
-            return ((dynamic)expression1.Eval()) + ((dynamic)expression2.Eval());
+            return expression1.Eval(parameter) + expression2.Eval(parameter);
         }
     }
 
@@ -157,9 +157,9 @@ namespace Utilities.Measures
         {
         }
 
-        public override object Eval()
+        public override dynamic Eval(dynamic parameter)
         {
-            return ((dynamic)expression1.Eval()) - ((dynamic)expression2.Eval());
+            return expression1.Eval(parameter) - expression2.Eval(parameter);
         }
     }
 
@@ -170,9 +170,9 @@ namespace Utilities.Measures
         {
         }
 
-        public override object Eval()
+        public override dynamic Eval(dynamic parameter)
         {
-            return ((dynamic)expression1.Eval()) * ((dynamic)expression2.Eval());
+            return expression1.Eval(parameter) * expression2.Eval(parameter);
         }
     }
 
@@ -183,9 +183,9 @@ namespace Utilities.Measures
         {
         }
 
-        public override object Eval()
+        public override dynamic Eval(dynamic parameter)
         {
-            return ((dynamic)expression1.Eval()) / ((dynamic)expression2.Eval());
+            return expression1.Eval(parameter) / expression2.Eval(parameter);
         }
     }
 
@@ -196,9 +196,9 @@ namespace Utilities.Measures
         {
         }
 
-        public override object Eval()
+        public override dynamic Eval(dynamic parameter)
         {
-            return ((dynamic)expression1.Eval()) ^ ((dynamic)expression2.Eval());
+            return expression1.Eval(parameter) ^ expression2.Eval(parameter);
         }
     }
 
@@ -215,9 +215,9 @@ namespace Utilities.Measures
             return new ParameterExpression();
         }
 
-        public override object Eval()
+        public override dynamic Eval(dynamic parameter)
         {
-            return number;
+            return parameter;
         }
     }
 
@@ -230,7 +230,7 @@ namespace Utilities.Measures
             this.number = number;
         }
 
-        public override object Eval()
+        public override dynamic Eval(dynamic parameter)
         {
             return number;
         }

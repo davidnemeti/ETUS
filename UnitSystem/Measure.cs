@@ -140,7 +140,7 @@ namespace Utilities.Measures
             where TUnitFrom : Unit
             where TUnitTo : Unit
         {
-            return new Measure<TNumber, TUnitTo>(convertTo(ParameterExpression.FromMeasure(measureFrom)).Eval());
+            return new Measure<TNumber, TUnitTo>(convertTo(ParameterExpression.FromMeasure(measureFrom)).Eval(measureFrom.Number));
         }
 
         public static ImplicitlyConvertible<TNumber> Implicit<TNumber, TUnit>(Measure<TNumber, TUnit> measure)

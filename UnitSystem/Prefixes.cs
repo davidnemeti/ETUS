@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+#if false
 namespace Utilities.Measures.Prefixes
 {
     public class Yotta<TUnit> : PrefixUnit<TUnit>, IConvertibleFromExplicit<TUnit, Yotta<TUnit>>
@@ -185,3 +186,4 @@ namespace Utilities.Measures.Prefixes
         }
     }
 }
+#endif

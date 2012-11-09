@@ -1,4 +1,5 @@
 ﻿using System;
+#if false
 using Utilities.Measures.Prefixes;
 
 namespace Utilities.Measures.Predefined
@@ -81,3 +82,4 @@ namespace Utilities.Measures.Predefined
     //    }
     //}
 }
+#endif
