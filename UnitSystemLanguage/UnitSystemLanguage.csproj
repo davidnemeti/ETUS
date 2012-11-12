@@ -49,4 +49,9 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <PropertyGroup>
+    <TransformOnBuild>true</TransformOnBuild>
+    <TransformOutOfDateOnly>true</TransformOutOfDateOnly>
+  </PropertyGroup>
+  <Import Project="$(VSToolsPath)\TextTemplating\Microsoft.TextTemplating.targets" Condition="'$(VSToolsPath)' != ''" />
 </Project>
