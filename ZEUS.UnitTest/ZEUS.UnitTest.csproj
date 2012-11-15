@@ -54,7 +54,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\UnitSystem\ZEUS.Core.csproj">
+    <ProjectReference Include="..\ZEUS.Core\ZEUS.Core.csproj">
       <Project>{ae184949-6e86-42e6-9e6f-c9160a3db88e}</Project>
       <Name>ZEUS.Core</Name>
     </ProjectReference>
