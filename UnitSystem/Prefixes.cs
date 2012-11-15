@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 #if false
-namespace Utilities.Measures.Prefixes
+namespace ZEUS.Core.Prefixes
 {
     public class Yotta<TUnit> : PrefixUnit<TUnit>, IConvertibleFromExplicit<TUnit, Yotta<TUnit>>
         where TUnit : Unit, new()

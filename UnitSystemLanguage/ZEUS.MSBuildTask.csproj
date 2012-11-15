@@ -7,8 +7,8 @@
     <ProjectGuid>{065599CB-B61A-4433-9B5D-10422A37B596}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>UnitSystemLanguage</RootNamespace>
-    <AssemblyName>UnitSystemLanguage</AssemblyName>
+    <RootNamespace>ZEUS.MSBuildTask</RootNamespace>
+    <AssemblyName>ZEUS.MSBuildTask</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -46,11 +46,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Compile.cs" />
-    <Compile Include="UnitSystemGrammar.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="CompileUnitSystem.targets">
+    <None Include="ZEUS.MSBuildTask.targets">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

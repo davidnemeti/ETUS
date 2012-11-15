@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Utilities.Measures
+namespace ZEUS.Core
 {
     public struct Ratio<TNumber>
     {

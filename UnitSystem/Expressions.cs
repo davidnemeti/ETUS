@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Utilities.Measures
+namespace ZEUS.Core
 {
     public abstract class Expression
     {

@@ -6,8 +6,8 @@
     <ProjectGuid>{25B45583-4A88-458F-A585-5A9849622071}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>UnitSystemUnitTest</RootNamespace>
-    <AssemblyName>UnitSystemUnitTest</AssemblyName>
+    <RootNamespace>ZEUS.UnitTest</RootNamespace>
+    <AssemblyName>ZEUS.UnitTest</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -54,9 +54,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\UnitSystem\UnitSystem.csproj">
+    <ProjectReference Include="..\UnitSystem\ZEUS.Core.csproj">
       <Project>{ae184949-6e86-42e6-9e6f-c9160a3db88e}</Project>
-      <Name>UnitSystem</Name>
+      <Name>ZEUS.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
