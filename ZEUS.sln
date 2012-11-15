@@ -17,6 +17,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZEUS.Generator.CSharp", "ZE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZEUS.DomainModel", "ZEUS.DomainModel\ZEUS.DomainModel.csproj", "{54970364-A9F5-4EE1-9165-4B9178FB8D25}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{E8BB73D5-07BA-42F5-9E1E-A84CAF30E702}"
+	ProjectSection(SolutionItems) = preProject
+		Libraries\Irony.dll = Libraries\Irony.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
