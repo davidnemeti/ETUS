@@ -1,0 +1,38 @@
+﻿use namespace UnitSystem.Prefixes
+
+namespace UnitSystem.Predefined
+
+
+define quantity Length
+
+define unit Meter of Length
+
+define unit Mile of Length
+	<-> 1609.344 Meter
+
+define unit Inch of Length
+	<-> 0.0254 Meter
+
+define quantity Time
+
+define unit Second of Time
+
+define unit Minute of Time
+	<-> 60 Second
+
+define unit Hour of Time
+	<-> 60 Minute
+	<-> 3600 Second
+
+define quantity Speed
+
+define unit Mph of Speed
+	<-> Mile/Hour
+
+define quantity Temperature
+
+define unit Celsius of Temperature
+	<=> ([Fahrenheit] - 32) * 5/9
+	<=> [Celsius] * 9/5 + 32 = [Fahrenheit]
+
+define unit Fahrenheit of Temperature
