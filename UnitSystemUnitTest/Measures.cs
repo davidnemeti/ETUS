@@ -1,11 +1,11 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using Utilities.Measures;
-//using Utilities.Measures.Predefined;
-//using Utilities.Measures.Prefixes;
+using ZEUS.Core;
+//using ZEUS.Predefined;
+//using ZEUS.Core.Prefixes;
 
-namespace UtilitiesUnitTest
+namespace ZEUS.UnitTest
 {
     public class Length : Quantity { }
 
