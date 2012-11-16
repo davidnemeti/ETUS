@@ -21,13 +21,12 @@ namespace ETUS.MSBuildTask
 
         public override bool Execute()
         {
-            foreach (ITaskItem inputFile in InputFiles)
-            {
-                var outputFile = Compile(inputFile.ItemSpec);
-                OutputFiles.Add(outputFile);
-            }
+            throw new Exception();
+            //foreach (ITaskItem inputFile in InputFiles)
+            //{
+            //    var outputFile = Compile(inputFile.ItemSpec);
+            //    OutputFiles.Add(outputFile);
+            //}
         }
-
-        private Compile
     }
 }
