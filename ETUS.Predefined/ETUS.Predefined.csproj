@@ -8,8 +8,8 @@
     <ProjectGuid>{4B5C4051-73A8-4D71-B040-134E50D5840E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ZEUS.Predefined</RootNamespace>
-    <AssemblyName>ZEUS.Predefined</AssemblyName>
+    <RootNamespace>ETUS.Predefined</RootNamespace>
+    <AssemblyName>ETUS.Predefined</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Profile24</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>

@@ -7,7 +7,7 @@ using System.Text;
 
 #pragma warning disable 0618
 
-namespace ZEUS.Core
+namespace ETUS.Core
 {
     public abstract class Quantity
     {

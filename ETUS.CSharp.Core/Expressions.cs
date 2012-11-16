@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ZEUS.Core
+namespace ETUS.Core
 {
     public abstract class Expression
     {

@@ -6,7 +6,7 @@ using System.IO;
 using Microsoft.Build.Utilities;
 using Microsoft.Build.Framework;
 
-namespace ZEUS.MSBuildTask
+namespace ETUS.MSBuildTask
 {
     class CompileUnitSystem : Task
     {

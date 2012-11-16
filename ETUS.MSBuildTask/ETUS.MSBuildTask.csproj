@@ -7,8 +7,8 @@
     <ProjectGuid>{065599CB-B61A-4433-9B5D-10422A37B596}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ZEUS.MSBuildTask</RootNamespace>
-    <AssemblyName>ZEUS.MSBuildTask</AssemblyName>
+    <RootNamespace>ETUS.MSBuildTask</RootNamespace>
+    <AssemblyName>ETUS.MSBuildTask</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -45,7 +45,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ZEUS.MSBuildTask.targets">
+    <None Include="ETUS.MSBuildTask.targets">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

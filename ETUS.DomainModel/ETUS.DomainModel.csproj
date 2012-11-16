@@ -8,8 +8,8 @@
     <ProjectGuid>{54970364-A9F5-4EE1-9165-4B9178FB8D25}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ZEUS.DomainModel</RootNamespace>
-    <AssemblyName>ZEUS.DomainModel</AssemblyName>
+    <RootNamespace>ETUS.DomainModel</RootNamespace>
+    <AssemblyName>ETUS.DomainModel</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Profile24</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
