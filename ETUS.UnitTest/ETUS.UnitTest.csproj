@@ -54,9 +54,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ETUS.Core\ETUS.Core.csproj">
+    <ProjectReference Include="..\ETUS.CSharp\ETUS.CSharp.Core\ETUS.CSharp.Core.csproj">
       <Project>{ae184949-6e86-42e6-9e6f-c9160a3db88e}</Project>
-      <Name>ETUS.Core</Name>
+      <Name>ETUS.CSharp.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

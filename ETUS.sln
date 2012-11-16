@@ -22,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{
 		Libraries\Irony.dll = Libraries\Irony.dll
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ETUS.CSharp", "ETUS.CSharp", "{A47BD37B-2C2A-4421-9502-423AEE93DFA6}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -67,5 +69,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AE184949-6E86-42E6-9E6F-C9160A3DB88E} = {A47BD37B-2C2A-4421-9502-423AEE93DFA6}
+		{26206DDF-2D73-48F5-847F-3495D78D31C1} = {A47BD37B-2C2A-4421-9502-423AEE93DFA6}
 	EndGlobalSection
 EndGlobal
