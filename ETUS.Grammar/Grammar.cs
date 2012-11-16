@@ -112,6 +112,9 @@ namespace UnitSystemLanguage
             simple_conversion.Rule = simple_conversion_op + expression + unit_name;
             complex_conversion.Rule = complex_conversion_op + (expression_with_units | expression_with_units + EQUAL_STATEMENT + unit_variable);
 
+            simple_conversion_op.Rule = SIMPLE_MUTUAL_CONVERSION_OP | SIMPLE_TO_THAT_CONVERSION_OP | SIMPLE_TO_THIS_CONVERSION_OP;
+            complex_conversion_op.Rule = COMPLEX_MUTUAL_CONVERSION_OP | COMPLEX_TO_THAT_CONVERSION_OP | COMPLEX_TO_THIS_CONVERSION_OP;
+
             binary_operator.Rule = ADD_OP | SUB_OP | MUL_OP | DIV_OP | POW_OP;
             unary_operator.Rule = NEG_OP | POS_OP;
 
