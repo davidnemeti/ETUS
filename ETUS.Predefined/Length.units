@@ -1,6 +1,6 @@
 ﻿use namespace UnitSystem.Prefixes
 
-namespace ZEUS.Predefined
+declare namespace ZEUS.Predefined
 
 
 define quantity Length

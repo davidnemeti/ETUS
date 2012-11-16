@@ -21,57 +21,62 @@ namespace UnitSystemLanguage
             var quantity_definition = new NonTerminal("quantity_definition");
             var unit_definition = new NonTerminal("unit_definition");
 
-            var quantity_name = new IdentifierTerminal("quantity_name");
-            var unit_name = new IdentifierTerminal("unit_name");
+            IdentifierTerminal identifier = new IdentifierTerminal("identifier");
+            NonTerminal qualified_identifier = new NonTerminal("qualified_identifier");
 
-            var conversions = new NonTerminal("conversions");
-            var conversion = new NonTerminal("conversion");
-            var simple_conversion = new NonTerminal("simple_conversion");
-            var complex_conversion = new NonTerminal("complex_conversion");
-            var simple_conversion_op = new NonTerminal("simple_conversion_op");
-            var complex_conversion_op = new NonTerminal("complex_conversion_op");
-            var expression = new NonTerminal("expression");
-            var binary_expression = new NonTerminal("binary_expression");
-            var unary_expression = new NonTerminal("unary_expression");
-            var expression_with_units = new NonTerminal("expression_with_units");
-            var binary_expression_with_units = new NonTerminal("binary_expression_with_units");
-            var unary_expression_with_units = new NonTerminal("unary_expression_with_units");
-            var literal = new NumberLiteral("number");
-            var constant = new ConstantTerminal("constant");
-            var external_variable = new IdentifierTerminal("external_variable");
-            var unit_variable = new NonTerminal("unit_variable");
-            var binary_operator = new NonTerminal("binary_operator");
-            var unary_operator = new NonTerminal("unary_operator");
+            NonTerminal unit_name = new NonTerminal("unit_name");
+            NonTerminal quantity_name = new NonTerminal("quantity_name");
+            NonTerminal namespace_name = new NonTerminal("namespace_name");
 
-            constant.Add("PI", Math.PI);
-            constant.Add("π", Math.PI);
+            NonTerminal conversions = new NonTerminal("conversions");
+            NonTerminal conversion = new NonTerminal("conversion");
+            NonTerminal simple_conversion = new NonTerminal("simple_conversion");
+            NonTerminal complex_conversion = new NonTerminal("complex_conversion");
+            NonTerminal simple_conversion_op = new NonTerminal("simple_conversion_op");
+            NonTerminal complex_conversion_op = new NonTerminal("complex_conversion_op");
+            NonTerminal expression = new NonTerminal("expression");
+            NonTerminal binary_expression = new NonTerminal("binary_expression");
+            NonTerminal unary_expression = new NonTerminal("unary_expression");
+            NonTerminal expression_with_units = new NonTerminal("expression_with_units");
+            NonTerminal binary_expression_with_units = new NonTerminal("binary_expression_with_units");
+            NonTerminal unary_expression_with_units = new NonTerminal("unary_expression_with_units");
+            NonTerminal unit_variable = new NonTerminal("unit_variable");
+            NonTerminal binary_operator = new NonTerminal("binary_operator");
+            NonTerminal unary_operator = new NonTerminal("unary_operator");
 
-            var USE = ToTerm("use");
-            var DEFINE = ToTerm("define");
-            var NAMESPACE = ToTerm("namespace");
-            var QUANTITY = ToTerm("quantity");
-            var UNIT = ToTerm("unit");
-            var OF = ToTerm("of");
-            var SIMPLE_MUTUAL_CONVERSION_OP = ToTerm("<->");
-            var SIMPLE_TO_THIS_CONVERSION_OP = ToTerm("<-");
-            var SIMPLE_TO_THAT_CONVERSION_OP = ToTerm("->");
-            var COMPLEX_MUTUAL_CONVERSION_OP = ToTerm("<=>");
-            var COMPLEX_TO_THIS_CONVERSION_OP = ToTerm("<=");
-            var COMPLEX_TO_THAT_CONVERSION_OP = ToTerm("=>");
+            NumberLiteral literal = new NumberLiteral("number");
+            ConstantTerminal constant = new ConstantTerminal("constant");
+            IdentifierTerminal external_variable = new IdentifierTerminal("external_variable");
 
-            var ADD_OP = ToTerm("+");
-            var SUB_OP = ToTerm("-");
-            var POS_OP = ToTerm("+");
-            var NEG_OP = ToTerm("-");
-            var MUL_OP = ToTerm("*");
-            var DIV_OP = ToTerm("/");
-            var POW_OP = ToTerm("^");
-            var EQUAL_STATEMENT = ToTerm("=");
+            KeyTerm dot = ToTerm(".", "dot");
 
-            var LEFT_PAREN = ToTerm("(");
-            var RIGHT_PAREN = ToTerm(")");
-            var LEFT_BRACKET = ToTerm("[");
-            var RIGHT_BRACKET = ToTerm("]");
+            KeyTerm USE = ToTerm("use");
+            KeyTerm DECLARE = ToTerm("declare");
+            KeyTerm DEFINE = ToTerm("define");
+            KeyTerm NAMESPACE = ToTerm("namespace");
+            KeyTerm QUANTITY = ToTerm("quantity");
+            KeyTerm UNIT = ToTerm("unit");
+            KeyTerm OF = ToTerm("of");
+            KeyTerm SIMPLE_MUTUAL_CONVERSION_OP = ToTerm("<->");
+            KeyTerm SIMPLE_TO_THIS_CONVERSION_OP = ToTerm("<-");
+            KeyTerm SIMPLE_TO_THAT_CONVERSION_OP = ToTerm("->");
+            KeyTerm COMPLEX_MUTUAL_CONVERSION_OP = ToTerm("<=>");
+            KeyTerm COMPLEX_TO_THIS_CONVERSION_OP = ToTerm("<=");
+            KeyTerm COMPLEX_TO_THAT_CONVERSION_OP = ToTerm("=>");
+
+            KeyTerm ADD_OP = ToTerm("+");
+            KeyTerm SUB_OP = ToTerm("-");
+            KeyTerm POS_OP = ToTerm("+");
+            KeyTerm NEG_OP = ToTerm("-");
+            KeyTerm MUL_OP = ToTerm("*");
+            KeyTerm DIV_OP = ToTerm("/");
+            KeyTerm POW_OP = ToTerm("^");
+            KeyTerm EQUAL_STATEMENT = ToTerm("=");
+
+            KeyTerm LEFT_PAREN = ToTerm("(");
+            KeyTerm RIGHT_PAREN = ToTerm(")");
+            KeyTerm LEFT_BRACKET = ToTerm("[");
+            KeyTerm RIGHT_BRACKET = ToTerm("]");
 
             RegisterOperators(20, ADD_OP, SUB_OP);
             RegisterOperators(30, MUL_OP, DIV_OP);
@@ -81,11 +86,23 @@ namespace UnitSystemLanguage
             RegisterBracePair(LEFT_PAREN.Text, RIGHT_PAREN.Text);
             RegisterBracePair(LEFT_BRACKET.Text, RIGHT_BRACKET.Text);
 
+            #region Constants
+
+            constant.Add("PI", Math.PI);
+            constant.Add("π", Math.PI);
+
+            #endregion
+
+            #region Rules
+
             this.Root = module;
 
             module.Rule = MakeStarRule(namespace_usages, namespace_usage) +
                 @namespace +
                 MakePlusRule(definitions, quantity_definition | unit_definition);
+
+            namespace_usage.Rule = USE + NAMESPACE + namespace_name;
+            @namespace.Rule = DECLARE + NAMESPACE + namespace_name;
 
             quantity_definition.Rule = DEFINE + QUANTITY + quantity_name;
             unit_definition.Rule = DEFINE + UNIT + unit_name + OF + quantity_name + MakeStarRule(conversions, conversion);
@@ -107,6 +124,14 @@ namespace UnitSystemLanguage
             unary_expression_with_units.Rule = LEFT_PAREN + unary_expression_with_units + RIGHT_PAREN | unary_operator + unary_expression_with_units;
 
             unit_variable.Rule = LEFT_BRACKET + unit_name + RIGHT_BRACKET;
+
+            qualified_identifier.Rule = MakePlusRule(qualified_identifier, dot, identifier);
+
+            unit_name.Rule = identifier;
+            quantity_name.Rule = identifier;
+            namespace_name.Rule = identifier;
+
+            #endregion
         }
     }
 }
