@@ -132,7 +132,7 @@ namespace UnitSystemLanguage
 
             unit_name.Rule = identifier;
             quantity_name.Rule = identifier;
-            namespace_name.Rule = identifier;
+            namespace_name.Rule = qualified_identifier;
 
             #endregion
         }
