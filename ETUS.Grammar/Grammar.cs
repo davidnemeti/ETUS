@@ -39,7 +39,7 @@ namespace UnitSystemLanguage
             var literal = new NumberLiteral("number");
             var constant = new ConstantTerminal("constant");
             var external_variable = new IdentifierTerminal("external_variable");
-            var unit_variable = new NonTerminal("unit_variable", );
+            var unit_variable = new NonTerminal("unit_variable");
 
             constant.Add("PI", Math.PI);
             constant.Add("π", Math.PI);
