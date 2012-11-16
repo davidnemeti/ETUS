@@ -57,12 +57,12 @@ namespace UnitSystemLanguage
             KeyTerm QUANTITY = ToTerm("quantity");
             KeyTerm UNIT = ToTerm("unit");
             KeyTerm OF = ToTerm("of");
-            KeyTerm SIMPLE_MUTUAL_CONVERSION_OP = ToTerm("<->");
-            KeyTerm SIMPLE_TO_THIS_CONVERSION_OP = ToTerm("<-");
-            KeyTerm SIMPLE_TO_THAT_CONVERSION_OP = ToTerm("->");
-            KeyTerm COMPLEX_MUTUAL_CONVERSION_OP = ToTerm("<=>");
-            KeyTerm COMPLEX_TO_THIS_CONVERSION_OP = ToTerm("<=");
-            KeyTerm COMPLEX_TO_THAT_CONVERSION_OP = ToTerm("=>");
+            KeyTerm SIMPLE_MUTUAL_CONVERSION_OP = ToTerm("<=>");
+            KeyTerm SIMPLE_TO_THIS_CONVERSION_OP = ToTerm("<=");
+            KeyTerm SIMPLE_TO_THAT_CONVERSION_OP = ToTerm("=>");
+            KeyTerm COMPLEX_MUTUAL_CONVERSION_OP = ToTerm("<:>");
+            KeyTerm COMPLEX_TO_THIS_CONVERSION_OP = ToTerm("<:");
+            KeyTerm COMPLEX_TO_THAT_CONVERSION_OP = ToTerm(":>");
 
             KeyTerm ADD_OP = ToTerm("+");
             KeyTerm SUB_OP = ToTerm("-");
