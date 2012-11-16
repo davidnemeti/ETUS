@@ -40,6 +40,8 @@ namespace UnitSystemLanguage
             var constant = new ConstantTerminal("constant");
             var external_variable = new IdentifierTerminal("external_variable");
             var unit_variable = new NonTerminal("unit_variable");
+            var binary_operator = new NonTerminal("binary_operator");
+            var unary_operator = new NonTerminal("unary_operator");
 
             constant.Add("PI", Math.PI);
             constant.Add("π", Math.PI);
@@ -93,20 +95,16 @@ namespace UnitSystemLanguage
             simple_conversion.Rule = simple_conversion_op + expression + unit_name;
             complex_conversion.Rule = complex_conversion_op + (expression_with_units | expression_with_units + EQUAL_STATEMENT + unit_variable);
 
+            binary_operator.Rule = ADD_OP | SUB_OP | MUL_OP | DIV_OP | POW_OP;
+            unary_operator.Rule = NEG_OP | POS_OP;
+
             expression.Rule = literal | constant | external_variable | binary_expression | unary_expression;
-            binary_expression.Rule = expression + ADD_OP + expression | expression + SUB_OP + expression | expression + MUL_OP + expression |
-                expression + DIV_OP + expression | expression + POW_OP + expression;
-            unary_expression.Rule = LEFT_PAREN + expression + RIGHT_PAREN | NEG_OP + expression | POS_OP + expression;
+            binary_expression.Rule = expression + binary_operator + expression;
+            unary_expression.Rule = LEFT_PAREN + expression + RIGHT_PAREN | unary_operator + expression;
 
             expression_with_units.Rule = unit_variable | binary_expression_with_units | unary_expression_with_units;
-            binary_expression_with_units.Rule = expression + ADD_OP + expression | expression + SUB_OP + expression | expression + MUL_OP + expression |
-                expression + DIV_OP + expression | expression + POW_OP + expression;
-            unary_expression_with_units.Rule = LEFT_PAREN + expression + RIGHT_PAREN | NEG_OP + expression | POS_OP + expression;
-
-            //expression_with_units.Rule = unit_variable | binary_expression_with_units | unary_expression_with_units;
-            //binary_expression_with_units.Rule = expression + ADD_OP + expression | expression + SUB_OP + expression | expression + MUL_OP + expression |
-            //    expression + DIV_OP + expression | expression + POW_OP + expression;
-            //unary_expression_with_units.Rule = LEFT_PAREN + expression + RIGHT_PAREN | NEG_OP + expression | POS_OP + expression;
+            binary_expression_with_units.Rule = expression + binary_operator + expression_with_units | expression_with_units + binary_operator + expression;
+            unary_expression_with_units.Rule = LEFT_PAREN + unary_expression_with_units + RIGHT_PAREN | unary_operator + unary_expression_with_units;
 
             unit_variable.Rule = LEFT_BRACKET + unit_name + RIGHT_BRACKET;
         }
