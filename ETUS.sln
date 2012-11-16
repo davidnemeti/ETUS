@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETUS.Core", "ETUS.Core\ETUS.Core.csproj", "{AE184949-6E86-42E6-9E6F-C9160A3DB88E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETUS.CSharp.Core", "ETUS.CSharp\ETUS.CSharp.Core\ETUS.CSharp.Core.csproj", "{AE184949-6E86-42E6-9E6F-C9160A3DB88E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETUS.UnitTest", "ETUS.UnitTest\ETUS.UnitTest.csproj", "{25B45583-4A88-458F-A585-5A9849622071}"
 EndProject
@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETUS.Grammar", "ETUS.Gramma
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETUS.Compiler", "ETUS.Compiler\ETUS.Compiler.csproj", "{C1215259-7678-4B1E-ADC4-428FBD9D3433}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETUS.Generator.CSharp", "ETUS.Generator.CSharp\ETUS.Generator.CSharp.csproj", "{26206DDF-2D73-48F5-847F-3495D78D31C1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETUS.CSharp.Generator", "ETUS.CSharp\ETUS.CSharp.Generator\ETUS.CSharp.Generator.csproj", "{26206DDF-2D73-48F5-847F-3495D78D31C1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETUS.DomainModel", "ETUS.DomainModel\ETUS.DomainModel.csproj", "{54970364-A9F5-4EE1-9165-4B9178FB8D25}"
 EndProject
