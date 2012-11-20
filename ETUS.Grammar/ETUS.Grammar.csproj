@@ -50,6 +50,12 @@
       <HintPath>..\Libraries\Irony.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ETUS.DomainModel\ETUS.DomainModel.csproj">
+      <Project>{54970364-a9f5-4ee1-9165-4b9178fb8d25}</Project>
+      <Name>ETUS.DomainModel</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
