@@ -1,4 +1,4 @@
-﻿use namespace UnitSystem.Prefixes
+﻿use namespace ETUS.Prefixes
 
 declare namespace ZEUS.Predefined
 

@@ -8,7 +8,7 @@ using Microsoft.Build.Framework;
 
 namespace ETUS.MSBuildTask
 {
-    class CompileUnitSystem : Task
+    class CompileTask : Task
     {
         [Required]
         public ITaskItem[] InputFiles { get; set; }

@@ -7,11 +7,11 @@ using Irony;
 using Irony.Ast;
 using Irony.Parsing;
 
-namespace UnitSystemLanguage
+namespace ETUS.Grammar
 {
-    public class UnitSystemGrammar : Grammar
+    public class UDLGrammar : Irony.Parsing.Grammar
     {
-        public UnitSystemGrammar()
+        public UDLGrammar()
         {
             var module = new NonTerminal("module");
             var namespace_usage = new NonTerminal("namespace_usage");
