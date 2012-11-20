@@ -51,7 +51,7 @@ namespace ETUS.Grammar
 
             NumberLiteral number = new NumberLiteral("number");
             ConstantTerminal constant = new ConstantTerminal("constant");
-            IdentifierTerminal external_variable = new IdentifierTerminal("external_variable");
+            NonTerminal external_variable = new NonTerminal("external_variable");
 
             KeyTerm dot = ToTerm(".");
 
@@ -68,6 +68,8 @@ namespace ETUS.Grammar
             KeyTerm COMPLEX_MUTUAL_CONVERSION_OP = ToTerm("<:>");
             KeyTerm COMPLEX_TO_THIS_CONVERSION_OP = ToTerm("<:");
             KeyTerm COMPLEX_TO_THAT_CONVERSION_OP = ToTerm(":>");
+
+            KeyTerm EXTERNAL_VARIABLE_PREFIX = ToTerm("::");
 
             KeyTerm ADD_OP = ToTerm("+");
             KeyTerm SUB_OP = ToTerm("-");
@@ -117,7 +119,7 @@ namespace ETUS.Grammar
             conversions.Rule = MakeStarRule(conversions, conversion);
             conversion.Rule = simple_conversion | complex_conversion;
 
-            simple_conversion.Rule =    simple_conversion_op + unit_expression |
+            simple_conversion.Rule = simple_conversion_op + unit_expression |
                                         simple_conversion_op + expression + unit_expression;
             complex_conversion.Rule = complex_conversion_op + complex_conversion_expression;
 
@@ -141,7 +143,7 @@ namespace ETUS.Grammar
 
             expression_with_units.Rule = unit_variable | binary_expression_with_units | unary_expression_with_units;
             binary_expression_with_units.Rule = expression + binary_operator + expression_with_units | expression_with_units + binary_operator + expression;
-            unary_expression_with_units.Rule = LEFT_PAREN + unary_expression_with_units + RIGHT_PAREN | unary_operator + unary_expression_with_units;
+            unary_expression_with_units.Rule = LEFT_PAREN + expression_with_units + RIGHT_PAREN | unary_operator + expression_with_units;
 
             unit_variable.Rule = LEFT_BRACKET + unit_name + RIGHT_BRACKET;
 
@@ -150,6 +152,7 @@ namespace ETUS.Grammar
             unit_name.Rule = identifier;
             quantity_name.Rule = identifier;
             namespace_name.Rule = qualified_identifier;
+            external_variable.Rule = EXTERNAL_VARIABLE_PREFIX + qualified_identifier;
 
             #endregion
         }
