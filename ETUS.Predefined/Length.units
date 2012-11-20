@@ -2,6 +2,10 @@
 
 declare namespace ZEUS.Predefined
 
+define prefix Milli 1/1000
+define prefix Kilo 1000
+define prefix Yotta 1E24
+define prefix Yocto 1E-24
 
 define quantity Length
 

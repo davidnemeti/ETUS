@@ -13,19 +13,21 @@ namespace ETUS.Grammar
     {
         public UDLGrammar()
         {
-            var module = new NonTerminal("module");
-            var namespace_usage = new NonTerminal("namespace_usage");
-            var namespace_usages = new NonTerminal("namespace_usages");
-            var namespace_declaration = new NonTerminal("namespace");
-            var definitions = new NonTerminal("definitions");
-            var definition = new NonTerminal("definition");
-            var quantity_definition = new NonTerminal("quantity_definition");
-            var unit_definition = new NonTerminal("unit_definition");
+            NonTerminal module = new NonTerminal("module");
+            NonTerminal namespace_usage = new NonTerminal("namespace_usage");
+            NonTerminal namespace_usages = new NonTerminal("namespace_usages");
+            NonTerminal namespace_declaration = new NonTerminal("namespace");
+            NonTerminal definitions = new NonTerminal("definitions");
+            NonTerminal definition = new NonTerminal("definition");
+            NonTerminal quantity_definition = new NonTerminal("quantity_definition");
+            NonTerminal prefix_definition = new NonTerminal("prefix_definition");
+            NonTerminal unit_definition = new NonTerminal("unit_definition");
 
             IdentifierTerminal identifier = new IdentifierTerminal("identifier");
             NonTerminal qualified_identifier = new NonTerminal("qualified_identifier");
 
             NonTerminal unit_name = new NonTerminal("unit_name");
+            NonTerminal prefix_name = new NonTerminal("prefix_name");
             NonTerminal quantity_name = new NonTerminal("quantity_name");
             NonTerminal namespace_name = new NonTerminal("namespace_name");
 
@@ -58,6 +60,7 @@ namespace ETUS.Grammar
             KeyTerm USE = ToTerm("use");
             KeyTerm DECLARE = ToTerm("declare");
             KeyTerm DEFINE = ToTerm("define");
+            KeyTerm PREFIX = ToTerm("prefix");
             KeyTerm NAMESPACE = ToTerm("namespace");
             KeyTerm QUANTITY = ToTerm("quantity");
             KeyTerm UNIT = ToTerm("unit");
@@ -108,11 +111,12 @@ namespace ETUS.Grammar
 
             namespace_usages.Rule = MakeStarRule(namespace_usages, namespace_usage);
             definitions.Rule = MakePlusRule(definitions, definition);
-            definition.Rule = quantity_definition | unit_definition;
+            definition.Rule = quantity_definition | unit_definition | prefix_definition;
 
             namespace_usage.Rule = USE + NAMESPACE + namespace_name;
             namespace_declaration.Rule = DECLARE + NAMESPACE + namespace_name;
 
+            prefix_definition.Rule = DEFINE + PREFIX + prefix_name + expression;
             quantity_definition.Rule = DEFINE + QUANTITY + quantity_name;
             unit_definition.Rule = DEFINE + UNIT + unit_name + OF + quantity_name + conversions;
 
@@ -150,6 +154,7 @@ namespace ETUS.Grammar
             qualified_identifier.Rule = MakePlusRule(qualified_identifier, dot, identifier);
 
             unit_name.Rule = identifier;
+            prefix_name.Rule = identifier;
             quantity_name.Rule = identifier;
             namespace_name.Rule = qualified_identifier;
             external_variable.Rule = EXTERNAL_VARIABLE_PREFIX + qualified_identifier;
