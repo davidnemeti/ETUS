@@ -7,9 +7,9 @@ namespace ETUS.DomainModel
 {
     public class Package
     {
-        public IEnumerable<NamespaceUsing> NamespaceUsings { get; set; }
+        public ICollection<NamespaceUsing> NamespaceUsings { get; set; }
         public NamespaceDeclaration NamespaceDeclaration { get; set; }
-        public IEnumerable<Definition> Definitions { get; set; }
+        public ICollection<Definition> Definitions { get; set; }
     }
 
     public class NamespaceUsing
