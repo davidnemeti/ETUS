@@ -24,6 +24,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ETUS.CSharp", "ETUS.CSharp", "{A47BD37B-2C2A-4421-9502-423AEE93DFA6}"
 EndProject
+Project("{EDCC3B85-0BAD-11DB-BC1A-00112FDE8B61}") = "ETUS.DomainModel2", "ETUS.DomainModel2\ETUS.DomainModel2.nproj", "{A4D801B6-3609-43BE-A669-1FD9FD4277BF}"
+EndProject
+Project("{EDCC3B85-0BAD-11DB-BC1A-00112FDE8B61}") = "SchemaLanguage", "SchemaLanguage\SchemaLanguage.nproj", "{38A73282-3F0B-40F0-9D74-7C7E0D016C08}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -66,12 +70,20 @@ Global
 		{54970364-A9F5-4EE1-9165-4B9178FB8D25}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{54970364-A9F5-4EE1-9165-4B9178FB8D25}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{54970364-A9F5-4EE1-9165-4B9178FB8D25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4D801B6-3609-43BE-A669-1FD9FD4277BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4D801B6-3609-43BE-A669-1FD9FD4277BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4D801B6-3609-43BE-A669-1FD9FD4277BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4D801B6-3609-43BE-A669-1FD9FD4277BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38A73282-3F0B-40F0-9D74-7C7E0D016C08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38A73282-3F0B-40F0-9D74-7C7E0D016C08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38A73282-3F0B-40F0-9D74-7C7E0D016C08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38A73282-3F0B-40F0-9D74-7C7E0D016C08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{AE184949-6E86-42E6-9E6F-C9160A3DB88E} = {A47BD37B-2C2A-4421-9502-423AEE93DFA6}
 		{26206DDF-2D73-48F5-847F-3495D78D31C1} = {A47BD37B-2C2A-4421-9502-423AEE93DFA6}
+		{AE184949-6E86-42E6-9E6F-C9160A3DB88E} = {A47BD37B-2C2A-4421-9502-423AEE93DFA6}
 	EndGlobalSection
 EndGlobal

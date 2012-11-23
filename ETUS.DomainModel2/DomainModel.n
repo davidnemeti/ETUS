@@ -1,0 +1,25 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+
+using SchemaLanguage;
+
+namespace ETUS.DomainModel2
+{
+[assembly:
+    DefineEntity(Package)
+]
+}
+
+public module Test
+{
+    public Foo() : void
+    {
+        //def _boo = ETUS.DomainModel2.Package();
+        //def _boo2 = ETUS.DomainModel2.Foo();
+    }
+}

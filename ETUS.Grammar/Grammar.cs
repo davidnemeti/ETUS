@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Irony;
 using Irony.Ast;
 using Irony.Parsing;
+using ETUS.DomainModel;
 
 namespace ETUS.Grammar
 {
@@ -13,7 +14,7 @@ namespace ETUS.Grammar
     {
         public UDLGrammar()
         {
-            NonTerminal module = new NonTerminal("module");
+            NonTerminal package = new NonTerminal("package", typeof(Package));
             NonTerminal namespace_usage = new NonTerminal("namespace_usage");
             NonTerminal namespace_usages = new NonTerminal("namespace_usages");
             NonTerminal namespace_declaration = new NonTerminal("namespace");
@@ -105,9 +106,9 @@ namespace ETUS.Grammar
 
             #region Rules
 
-            this.Root = module;
+            this.Root = package;
 
-            module.Rule = namespace_usages + namespace_declaration + definitions;
+            package.Rule = namespace_usages + namespace_declaration + definitions;
 
             namespace_usages.Rule = MakeStarRule(namespace_usages, namespace_usage);
             definitions.Rule = MakePlusRule(definitions, definition);
