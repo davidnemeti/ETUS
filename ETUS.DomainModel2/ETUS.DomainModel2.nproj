@@ -63,6 +63,9 @@
     <Compile Include="Expression.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ExpressionWithUnits.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.n" />
     <Compile Include="UnitExpression.n">
       <SubType>Code</SubType>

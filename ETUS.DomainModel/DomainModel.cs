@@ -32,7 +32,7 @@ namespace ETUS.DomainModel
 
     public class PrefixDefinition
     {
-        public Expression Factor { get; set; }
+//        public Expression Factor { get; set; }
     }
 
     public class UnitDefinition
@@ -43,7 +43,6 @@ namespace ETUS.DomainModel
 
     public class QuantityDefinition
     {
-        Expression Expression = new Expression.BinaryExpression(new Expression.Parameter(), new BinaryOperator.Add(), new Expression.Number());
     }
 
     public abstract class Conversion
@@ -52,7 +51,7 @@ namespace ETUS.DomainModel
 
     public class SimpleConversion : Conversion
     {
-        public Expression Value { get; set; }
-        public UnitExpression Unit { get; set; }
+        //public Expression Value { get; set; }
+        //public UnitExpression Unit { get; set; }
     }
 }

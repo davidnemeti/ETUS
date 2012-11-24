@@ -51,9 +51,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ETUS.DomainModel\ETUS.DomainModel.csproj">
-      <Project>{54970364-a9f5-4ee1-9165-4b9178fb8d25}</Project>
-      <Name>ETUS.DomainModel</Name>
+    <ProjectReference Include="..\ETUS.DomainModel2\ETUS.DomainModel2.nproj">
+      <Project>{a4d801b6-3609-43be-a669-1fd9fd4277bf}</Project>
+      <Name>ETUS.DomainModel2</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -2,12 +2,63 @@
 using Nemerle.Text;
 using Nemerle.Utility;
 
-//using System;
-//using System.Collections.Generic;
-//using System.Linq;
+using System;
+using System.Linq;
 
-using SchemaLanguage;
+using ETUS.DomainModel2.Expressions;
 
 namespace ETUS.DomainModel2
 {
+    public class Package
+    {
+        public NamespaceUsings : ICollection[NamespaceUsing] { get; set; }
+        public NamespaceDeclaration : NamespaceDeclaration { get; set; }
+        public Definitions : ICollection[Definition] { get; set; }
+    }
+
+    public class NamespaceUsing
+    {
+        public Name : string { get; set; }
+    }
+
+    public class NamespaceDeclaration
+    {
+        public Name : string { get; set; }
+    }
+
+    public variant Definition
+    {
+        public Name : string { get; set; }
+
+        | Prefix    { Factor : Expression { get; set; } }
+        | Unit      {
+            new Quantity : Quantity { get; set; }
+            Conversions : ICollection[Conversion] { get; set; }
+        }
+        | Quantity
+    }
+
+    public variant Conversion
+    {
+        public OtherUnit : Definition.Unit;
+        public Direction : Direction;
+
+        | Simple    {
+            Factor : Expression { get; set; }
+            Unit : UnitExpression { get; set; }
+        }
+        | Complex   { Expr : ExpressionWithUnit { get; set; } }
+    }
+
+    public enum Direction
+    {
+        | BiDir
+        | To
+        | From
+    }
+
+    public enum Constant
+    {
+        | PI
+    }
 }

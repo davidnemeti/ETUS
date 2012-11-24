@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using Irony;
 using Irony.Ast;
 using Irony.Parsing;
-using ETUS.DomainModel;
+using ETUS.DomainModel2;
+using System.Reflection;
+using System.Linq.Expressions;
 
 namespace ETUS.Grammar
 {
@@ -45,9 +47,9 @@ namespace ETUS.Grammar
             NonTerminal expression = new NonTerminal("expression");
             NonTerminal binary_expression = new NonTerminal("binary_expression");
             NonTerminal unary_expression = new NonTerminal("unary_expression");
-            NonTerminal expression_with_units = new NonTerminal("expression_with_units");
-            NonTerminal binary_expression_with_units = new NonTerminal("binary_expression_with_units");
-            NonTerminal unary_expression_with_units = new NonTerminal("unary_expression_with_units");
+            NonTerminal expression_with_unit = new NonTerminal("expression_with_units");
+            NonTerminal binary_expression_with_unit = new NonTerminal("binary_expression_with_units");
+            NonTerminal unary_expression_with_unit = new NonTerminal("unary_expression_with_units");
             NonTerminal unit_variable = new NonTerminal("unit_variable");
             NonTerminal binary_operator = new NonTerminal("binary_operator");
             NonTerminal unary_operator = new NonTerminal("unary_operator");
@@ -99,8 +101,8 @@ namespace ETUS.Grammar
 
             #region Constants
 
-            constant.Add("PI", Math.PI);
-            constant.Add("π", Math.PI);
+            constant.Add("PI", Constant.PI);
+            constant.Add("π", Constant.PI);
 
             #endregion
 
@@ -109,6 +111,9 @@ namespace ETUS.Grammar
             this.Root = package;
 
             package.Rule = namespace_usages + namespace_declaration + definitions;
+//            package.Rule = namespace_declaration;
+
+            package.AstConfig.NodeCreator = new AstNodeCreator((astContext, parseTreeNode) => parseTreeNode.AstNode = new Package() { NamespaceDeclaration = (NamespaceDeclaration) parseTreeNode.ChildNodes[0].AstNode});
 
             namespace_usages.Rule = MakeStarRule(namespace_usages, namespace_usage);
             definitions.Rule = MakePlusRule(definitions, definition);
@@ -116,6 +121,16 @@ namespace ETUS.Grammar
 
             namespace_usage.Rule = USE + NAMESPACE + namespace_name;
             namespace_declaration.Rule = DECLARE + NAMESPACE + namespace_name;
+
+            //BnfTermInRule id;
+            //namespace_declaration.Rule = DECLARE + NAMESPACE + (id = identifier);
+            //namespace_declaration.Rule = DECLARE + NAMESPACE + Bind(identifier, () => new NamespaceDeclaration().Name);
+            //Bind<NamespaceDeclaration>(namespace_declaration);
+            //Bind(id, () => new NamespaceDeclaration().Name);
+            //Bind2(identifier => new NamespaceDeclaration().Name);
+
+            namespace_declaration.AstConfig.NodeCreator = new AstNodeCreator((astContext, parseTreeNode) => parseTreeNode.AstNode = new NamespaceDeclaration() { Name = (string)parseTreeNode.ChildNodes[2].AstNode });
+            identifier.AstConfig.NodeCreator = new AstNodeCreator((astContext, parseTreeNode) => parseTreeNode.AstNode = parseTreeNode.FindTokenAndGetText());
 
             prefix_definition.Rule = DEFINE + PREFIX + prefix_name + expression;
             quantity_definition.Rule = DEFINE + QUANTITY + quantity_name;
@@ -130,11 +145,12 @@ namespace ETUS.Grammar
 
             unit_expression.Rule = unit_name | binary_unit_expression | unary_unit_expression;
             binary_unit_expression.Rule =   unit_expression + MUL_OP + unit_expression |
+                                            "1" + DIV_OP + unit_expression |
                                             unit_expression + DIV_OP + unit_expression |
                                             unit_expression + POW_OP + number;
             unary_unit_expression.Rule = LEFT_PAREN + unit_expression + RIGHT_PAREN;
 
-            complex_conversion_expression.Rule = expression_with_units | expression_with_units + EQUAL_STATEMENT + unit_variable;
+            complex_conversion_expression.Rule = expression_with_unit | expression_with_unit + EQUAL_STATEMENT + unit_variable;
 
             simple_conversion_op.Rule = SIMPLE_MUTUAL_CONVERSION_OP | SIMPLE_TO_THAT_CONVERSION_OP | SIMPLE_TO_THIS_CONVERSION_OP;
             complex_conversion_op.Rule = COMPLEX_MUTUAL_CONVERSION_OP | COMPLEX_TO_THAT_CONVERSION_OP | COMPLEX_TO_THIS_CONVERSION_OP;
@@ -146,9 +162,9 @@ namespace ETUS.Grammar
             binary_expression.Rule = expression + binary_operator + expression;
             unary_expression.Rule = LEFT_PAREN + expression + RIGHT_PAREN | unary_operator + expression;
 
-            expression_with_units.Rule = unit_variable | binary_expression_with_units | unary_expression_with_units;
-            binary_expression_with_units.Rule = expression + binary_operator + expression_with_units | expression_with_units + binary_operator + expression;
-            unary_expression_with_units.Rule = LEFT_PAREN + expression_with_units + RIGHT_PAREN | unary_operator + expression_with_units;
+            expression_with_unit.Rule = unit_variable | binary_expression_with_unit | unary_expression_with_unit;
+            binary_expression_with_unit.Rule = expression + binary_operator + expression_with_unit | expression_with_unit + binary_operator + expression;
+            unary_expression_with_unit.Rule = LEFT_PAREN + expression_with_unit + RIGHT_PAREN | unary_operator + expression_with_unit;
 
             unit_variable.Rule = LEFT_BRACKET + unit_name + RIGHT_BRACKET;
 
@@ -161,11 +177,63 @@ namespace ETUS.Grammar
             external_variable.Rule = EXTERNAL_VARIABLE_PREFIX + qualified_identifier;
 
             #endregion
+
+            LanguageFlags = LanguageFlags.CreateAst;
         }
+
 
         new private KeyTerm ToTerm(string text)
         {
             return base.ToTerm(text, string.Format("\"{0}\"", text));
         }
+
+        BnfTermInRule Bind<TProperty>(BnfTerm element, Expression<Func<TProperty>> expr)
+        {
+            return new BnfTermInRule(element, GetProperty(expr));
+        }
+
+        //Tuple<> Bind2<TProperty>(Expression<Func<BnfTermInRule, TProperty>> expr)
+        //{
+        //    return new BnfTermInRule(element, GetProperty(expr));
+        //}
+
+        void Bind<TType>(BnfTerm element)
+            where TType : new()
+        {
+            element.AstConfig.NodeCreator = new AstNodeCreator((astContext, parseTreeNode) => parseTreeNode.AstNode = new TType());
+//            element.AstConfig.NodeCreator = new AstNodeCreator((astContext, parseTreeNode) => parseTreeNode.AstNode = new TType() { Name = (string)parseTreeNode.ChildNodes[2].AstNode });
+        }
+
+        public static PropertyInfo GetProperty<T>(Expression<Func<T>> expr)
+        {
+            var member = expr.Body as MemberExpression;
+            if (member == null)
+                throw new InvalidOperationException("Expression is not a member access expression.");
+            var property = member.Member as PropertyInfo;
+            if (property == null)
+                throw new InvalidOperationException("Member in expression is not a property.");
+            return property;
+        }
+    }
+
+    class BnfTermInRule : BnfExpression
+    {
+        PropertyInfo propertyInfo;
+
+        public BnfTermInRule(BnfTerm element)
+            : base(element)
+        {
+        }
+
+        public BnfTermInRule(BnfTerm element, PropertyInfo propertyInfo)
+            : base(element)
+        {
+            this.propertyInfo = propertyInfo;
+        }
+
+        //public static implicit operator BnfTermInRule(BnfTerm element)
+        //{
+        //    return new BnfTermInRule(element);
+        //}
     }
 }

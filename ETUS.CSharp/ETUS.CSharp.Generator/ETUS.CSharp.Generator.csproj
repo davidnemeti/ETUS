@@ -31,10 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ETUS.DomainModel\ETUS.DomainModel.csproj">
-      <Project>{54970364-a9f5-4ee1-9165-4b9178fb8d25}</Project>
-      <Name>ETUS.DomainModel</Name>
-    </ProjectReference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
