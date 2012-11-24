@@ -60,7 +60,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DomainModel.n" />
+    <Compile Include="Expression.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.n" />
+    <Compile Include="UnitExpression.n">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

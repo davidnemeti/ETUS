@@ -59,11 +59,7 @@
     </MacroReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Expression.n" />
     <Compile Include="Properties\AssemblyInfo.n" />
-    <Compile Include="UnitExpression.n">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
