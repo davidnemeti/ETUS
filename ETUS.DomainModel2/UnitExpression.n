@@ -1,0 +1,22 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using ETUS.DomainModel2;
+
+namespace ETUS.DomainModel2.Expressions
+{
+    public variant UnitExpression
+    {
+        | Mul      { Expr1 : UnitExpression; Expr2 : UnitExpression }
+        | Div      { Expr1 : UnitExpression; Expr2 : UnitExpression }
+        | Recip    { Expr : UnitExpression }
+        | Pow      { Expr : UnitExpression; Value : Expression.Number }
+        | Unit     { Value : Definition.Unit }
+    }
+}

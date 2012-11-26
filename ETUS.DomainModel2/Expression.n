@@ -1,0 +1,40 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ETUS.DomainModel2.Expressions
+{
+    public variant Expression
+    {
+        | Binary      {
+            Expr1 : Expression;
+            Op : BinaryOperator;
+            Expr2 : Expression
+        }
+        | Unary       {
+            Op : UnaryOperator;
+            Expr : Expression
+        }
+        | Parameter
+        | Number      { Value : object }
+    }
+
+    public variant BinaryOperator
+    {
+        | Add
+        | Sub
+        | Mul
+        | Div
+        | Pow
+    }
+
+    public variant UnaryOperator
+    {
+        | Pos
+        | Neg
+    }
+}
