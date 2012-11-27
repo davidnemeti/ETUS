@@ -11,19 +11,19 @@ namespace ETUS.DomainModel2.Expressions
     public variant ExpressionWithUnit
     {
         | Binary      {
-            Expr1 : ExpressionWithUnit;
-            Op : BinaryOperator;
-            Expr2 : Expression
+            Expr1 : ExpressionWithUnit { get; set; }
+            Op : BinaryOperator { get; set; }
+            Expr2 : Expression { get; set; }
         }
         | Binary2     {
-            Expr1 : Expression;
-            Op : BinaryOperator;
-            Expr2 : ExpressionWithUnit
+            Expr1 : Expression { get; set; }
+            Op : BinaryOperator { get; set; }
+            Expr2 : ExpressionWithUnit { get; set; }
         }
         | Unary       {
-            Op : UnaryOperator;
-            Expr : ExpressionWithUnit
+            Op : UnaryOperator { get; set; }
+            Expr : ExpressionWithUnit { get; set; }
         }
-        | Unit     { Value : Definition.Unit }
+        | Unit     { Value : Definition.Unit { get; set; } }
     }
 }

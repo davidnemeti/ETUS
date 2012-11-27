@@ -11,16 +11,17 @@ namespace ETUS.DomainModel2.Expressions
     public variant Expression
     {
         | Binary      {
-            Expr1 : Expression;
-            Op : BinaryOperator;
-            Expr2 : Expression
+            Expr1 : Expression { get; set; }
+            Op : BinaryOperator { get; set; }
+            Expr2 : Expression { get; set; }
         }
         | Unary       {
-            Op : UnaryOperator;
-            Expr : Expression
+            Op : UnaryOperator { get; set; }
+            Expr : Expression { get; set; }
         }
         | Parameter
-        | Number      { Value : object }
+        | DoubleNumber    { Value : double { get; set; } }
+        | IntNumber       { Value : int { get; set; } }
     }
 
     public variant BinaryOperator

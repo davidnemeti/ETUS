@@ -13,10 +13,10 @@ namespace ETUS.DomainModel2.Expressions
 {
     public variant UnitExpression
     {
-        | Mul      { Expr1 : UnitExpression; Expr2 : UnitExpression }
-        | Div      { Expr1 : UnitExpression; Expr2 : UnitExpression }
-        | Recip    { Expr : UnitExpression }
-        | Pow      { Expr : UnitExpression; Value : Expression.Number }
-        | Unit     { Value : Definition.Unit }
+        | Mul      { Expr1 : UnitExpression { get; set; } Expr2 : UnitExpression { get; set; } }
+        | Div      { Expr1 : UnitExpression { get; set; } Expr2 : UnitExpression { get; set; } }
+        | Recip    { Expr : UnitExpression { get; set; } }
+        | Pow      { Expr : UnitExpression { get; set; } Value : Expression.IntNumber { get; set; } }
+        | Unit     { Value : Definition.Unit { get; set; } }
     }
 }

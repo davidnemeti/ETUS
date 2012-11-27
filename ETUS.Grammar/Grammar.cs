@@ -7,9 +7,9 @@ using Irony;
 using Irony.Ast;
 using Irony.Parsing;
 using ETUS.DomainModel2;
+using ETUS.DomainModel2.Expressions;
 using SchemaLanguage;
 using System.Reflection;
-using System.Linq.Expressions;
 
 namespace ETUS.Grammar
 {
@@ -17,6 +17,10 @@ namespace ETUS.Grammar
     {
         public UDLGrammar()
         {
+            //Type _binaryExpression = typeof(Expression.Binary);
+            //Type _expression = typeof(Expression);
+            //Type _binaryOperator = typeof(BinaryOperator);
+
             NonTerminal package = new NonTerminal("package", typeof(Package));
             NonTerminal namespace_usage = new NonTerminal("namespace_usage");
             NonTerminal namespace_usages = new NonTerminal("namespace_usages");
@@ -45,15 +49,19 @@ namespace ETUS.Grammar
             NonTerminal binary_unit_expression = new NonTerminal("binary_unit_expression");
             NonTerminal unary_unit_expression = new NonTerminal("unary_unit_expression");
             NonTerminal complex_conversion_expression = new NonTerminal("complex_conversion_expression");
-            NonTerminal expression = new NonTerminal("expression");
-            NonTerminal binary_expression = new NonTerminal("binary_expression");
+            NonTerminal expression = new NonTerminal("expression", typeof(Expression));
+            BnfTermType binary_expression = new BnfTermType(typeof(Expression.Binary));
             NonTerminal unary_expression = new NonTerminal("unary_expression");
             NonTerminal expression_with_unit = new NonTerminal("expression_with_units");
             NonTerminal binary_expression_with_unit = new NonTerminal("binary_expression_with_units");
             NonTerminal unary_expression_with_unit = new NonTerminal("unary_expression_with_units");
             NonTerminal unit_variable = new NonTerminal("unit_variable");
-            NonTerminal binary_operator = new NonTerminal("binary_operator");
+            NonTerminal binary_operator = new NonTerminal("binary_operator", typeof(BinaryOperator));
             NonTerminal unary_operator = new NonTerminal("unary_operator");
+
+            BnfTermProperty binary_Expression__expr1 = new BnfTermProperty(GetProperty(() => new Expression.Binary(null, null, null).Expr1), expression);
+            BnfTermProperty binary_Expression__op = new BnfTermProperty(GetProperty(() => new Expression.Binary(null, null, null).Op), binary_operator);
+            BnfTermProperty binary_Expression__expr2 = new BnfTermProperty(GetProperty(() => new Expression.Binary(null, null, null).Expr2), expression);
 
             NumberLiteral number = new NumberLiteral("number");
             ConstantTerminal constant = new ConstantTerminal("constant");
@@ -109,7 +117,8 @@ namespace ETUS.Grammar
 
             #region Rules
 
-            this.Root = package;
+//            this.Root = package;
+            this.Root = binary_expression;
 
             package.Rule = namespace_usages + namespace_declaration + definitions;
 //            package.Rule = namespace_declaration;
@@ -160,7 +169,7 @@ namespace ETUS.Grammar
             unary_operator.Rule = NEG_OP | POS_OP;
 
             expression.Rule = number | constant | external_variable | binary_expression | unary_expression;
-            binary_expression.Rule = expression + binary_operator + expression;
+            binary_expression.Rule = binary_Expression__expr1 + binary_Expression__op + binary_Expression__expr2;
             unary_expression.Rule = LEFT_PAREN + expression + RIGHT_PAREN | unary_operator + expression;
 
             expression_with_unit.Rule = unit_variable | binary_expression_with_unit | unary_expression_with_unit;
@@ -188,10 +197,10 @@ namespace ETUS.Grammar
             return base.ToTerm(text, string.Format("\"{0}\"", text));
         }
 
-        BnfTermInRule Bind<TProperty>(BnfTerm element, Expression<Func<TProperty>> expr)
-        {
-            return new BnfTermInRule(element, GetProperty(expr));
-        }
+        //BnfTermProperty Bind<TProperty>(BnfTerm element, System.Linq.Expressions.Expression<Func<TProperty>> expr)
+        //{
+        //    return new BnfTermProperty(element, GetProperty(expr));
+        //}
 
         //Tuple<> Bind2<TProperty>(Expression<Func<BnfTermInRule, TProperty>> expr)
         //{
@@ -205,9 +214,9 @@ namespace ETUS.Grammar
 //            element.AstConfig.NodeCreator = new AstNodeCreator((astContext, parseTreeNode) => parseTreeNode.AstNode = new TType() { Name = (string)parseTreeNode.ChildNodes[2].AstNode });
         }
 
-        public static PropertyInfo GetProperty<T>(Expression<Func<T>> expr)
+        public static PropertyInfo GetProperty<T>(System.Linq.Expressions.Expression<Func<T>> expr)
         {
-            var member = expr.Body as MemberExpression;
+            var member = expr.Body as System.Linq.Expressions.MemberExpression;
             if (member == null)
                 throw new InvalidOperationException("Expression is not a member access expression.");
             var property = member.Member as PropertyInfo;
@@ -217,24 +226,36 @@ namespace ETUS.Grammar
         }
     }
 
-    class BnfTermInRule : BnfExpression
+    class BnfTermProperty : BnfTerm
     {
-        PropertyInfo propertyInfo;
+        readonly PropertyInfo propertyInfo;
+        readonly BnfTerm element;
 
-        public BnfTermInRule(BnfTerm element)
-            : base(element)
-        {
-        }
-
-        public BnfTermInRule(BnfTerm element, PropertyInfo propertyInfo)
-            : base(element)
+        public BnfTermProperty(PropertyInfo propertyInfo, BnfTerm element)
+            : base(propertyInfo.Name, null, propertyInfo.PropertyType)
         {
             this.propertyInfo = propertyInfo;
+            this.element = element;
+        }
+    }
+
+    class BnfTermType : NonTerminal
+    {
+        public BnfTermType(Type type)
+            : base(type.Name, type)
+        {
         }
 
-        //public static implicit operator BnfTermInRule(BnfTerm element)
-        //{
-        //    return new BnfTermInRule(element);
-        //}
+        public new BnfExpression Rule
+        {
+            get { return base.Rule; }
+            set
+            {
+                base.Rule = value;
+                AstConfig.NodeCreator = (AstContext context, ParseTreeNode parseNode) =>
+                    {
+                    };
+            }
+        }
     }
 }
