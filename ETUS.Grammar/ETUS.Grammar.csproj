@@ -55,6 +55,10 @@
       <Project>{a4d801b6-3609-43be-a669-1fd9fd4277bf}</Project>
       <Name>ETUS.DomainModel2</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SchemaLanguage\SchemaLanguage.nproj">
+      <Project>{38a73282-3f0b-40f0-9d74-7c7e0d016c08}</Project>
+      <Name>SchemaLanguage</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

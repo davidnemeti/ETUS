@@ -7,6 +7,7 @@ using Irony;
 using Irony.Ast;
 using Irony.Parsing;
 using ETUS.DomainModel2;
+using SchemaLanguage;
 using System.Reflection;
 using System.Linq.Expressions;
 
@@ -129,7 +130,7 @@ namespace ETUS.Grammar
             //Bind(id, () => new NamespaceDeclaration().Name);
             //Bind2(identifier => new NamespaceDeclaration().Name);
 
-            namespace_declaration.AstConfig.NodeCreator = new AstNodeCreator((astContext, parseTreeNode) => parseTreeNode.AstNode = new NamespaceDeclaration() { Name = (string)parseTreeNode.ChildNodes[2].AstNode });
+            namespace_declaration.AstConfig.NodeCreator = new AstNodeCreator((astContext, parseTreeNode) => parseTreeNode.AstNode = new NamespaceDeclaration() { Name = new Name((string)parseTreeNode.ChildNodes[2].AstNode) });
             identifier.AstConfig.NodeCreator = new AstNodeCreator((astContext, parseTreeNode) => parseTreeNode.AstNode = parseTreeNode.FindTokenAndGetText());
 
             prefix_definition.Rule = DEFINE + PREFIX + prefix_name + expression;
