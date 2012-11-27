@@ -74,6 +74,13 @@
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SchemaLanguage\SchemaLanguage.nproj">
+      <Name>SchemaLanguage</Name>
+      <Project>{38a73282-3f0b-40f0-9d74-7c7e0d016c08}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(Nemerle)\Nemerle.MSBuild.targets" />
   <!--
 		To modify your build process, add your task inside one of the targets below and uncomment it. 

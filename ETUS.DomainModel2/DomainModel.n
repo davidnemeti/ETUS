@@ -6,6 +6,9 @@ using System;
 using System.Linq;
 
 using ETUS.DomainModel2.Expressions;
+using SchemaLanguage;
+
+using ICollection = System.Collections.Generic.ICollection;
 
 namespace ETUS.DomainModel2
 {
@@ -18,21 +21,21 @@ namespace ETUS.DomainModel2
 
     public class NamespaceUsing
     {
-        public Name : string { get; set; }
+        public NameRef : NameRef { get; set; }
     }
 
     public class NamespaceDeclaration
     {
-        public Name : string { get; set; }
+        public Name : Name { get; set; }
     }
 
-    public variant Definition
+    public variant Definition : SchemaLanguage.Definition
     {
-        public Name : string { get; set; }
+        public Name : Name { get; set; }
 
         | Prefix    { Factor : Expression { get; set; } }
         | Unit      {
-            new Quantity : Quantity { get; set; }
+            new Quantity : Reference[Quantity] { get; set; }
             Conversions : ICollection[Conversion] { get; set; }
         }
         | Quantity
@@ -40,8 +43,8 @@ namespace ETUS.DomainModel2
 
     public variant Conversion
     {
-        public OtherUnit : Definition.Unit;
-        public Direction : Direction;
+        public OtherUnit : Reference[Definition.Unit] { get; set; }
+        public Direction : Direction { get; set; }
 
         | Simple    {
             Factor : Expression { get; set; }
@@ -60,5 +63,17 @@ namespace ETUS.DomainModel2
     public enum Constant
     {
         | PI
+    }
+    module dfd
+    {
+        ffoo() : void
+        {
+            def unit : Definition.Unit = Definition.Unit(null, null);
+            def foo : Reference[Definition.Unit] = unit.GetReference();
+            def foo2 : Reference[Definition] = unit.GetReference();
+            def foo3 : Reference[Definition] = foo;
+            def boo = foo.Definition;
+            def boo3 = foo3.Definition;
+        }
     }
 }
