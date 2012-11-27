@@ -104,21 +104,21 @@ namespace SchemaLanguage
         }
     }
     
-    module MacroHelper
-    {
-        //public DoTransfrom(typer : Typer, className : PExpr, body : PExpr) : void
-        //{
-        //    Macros.DefineCTX(typer);
+    //module MacroHelper
+    //{
+    //    public DoTransfrom(typer : Typer, className : PExpr, body : PExpr) : void
+    //    {
+    //        Macros.DefineCTX(typer);
             
-        //    def builder = typer.Env.Define(
-        //        <[ decl:
-        //            public class $(className)
-        //            {
-        //            }
-        //        ]>
-        //    );
+    //        def builder = typer.Env.Define(
+    //            <[ decl:
+    //                public class $(className)
+    //                {
+    //                }
+    //            ]>
+    //        );
             
-        //    builder.Define(body);
-        //}
-    }
+    //        builder.Define(body);
+    //    }
+    //}
 }

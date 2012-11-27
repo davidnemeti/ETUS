@@ -64,9 +64,10 @@ namespace ETUS.DomainModel2
     {
         | PI
     }
-    module dfd
+
+    public module dfd
     {
-        ffoo() : void
+        public ffoo() : void
         {
             def _unit : Definition.Unit = Definition.Unit(null, null);
             def _foo : Reference[Definition.Unit] = _unit.GetReference();
