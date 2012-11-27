@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace SchemaLanguage
 {
-    public interface Definition
+    public interface Identity
     {
         Name : Name { get; set; }
     }
@@ -29,41 +29,41 @@ namespace SchemaLanguage
         public Value : string { get; set; }
     }
 
-    public interface Reference[+TDef]
-            where TDef : Definition
+    public interface Reference[+TId]
+            where TId : Identity
     {
         NameRef : NameRef { get; }
-        Definition : TDef { get; }
+        Identity : TId { get; }
     }
 
-    internal class ReferenceImpl[TDef] : Reference[TDef]
-            where TDef : Definition
+    internal class ReferenceImpl[TId] : Reference[TId]
+            where TId : Identity
     {
         public NameRef : NameRef { get; }
-        public Definition : TDef { get; set; }
+        public Identity : TId { get; set; }
         
         public this(nameRef : NameRef)
         {
             this.NameRef = nameRef;
         }
         
-        public this(definition : TDef)
+        public this(identity : TId)
         {
-            this.Definition = definition;
-            this.NameRef = NameRef(definition.Name.Value);
+            this.Identity = identity;
+            this.NameRef = NameRef(identity.Name.Value);
         }
     }
 
     public module Extensions
     {
-        public GetReference[TDef](this definition : TDef) : Reference[TDef]
-            where TDef : Definition
+        public GetReference[TId](this identity : TId) : Reference[TId]
+            where TId : Identity
         {
-            ReferenceImpl(definition);
+            ReferenceImpl(identity);
         }
 
-        public GetReference[TDef](nameRef : NameRef) : Reference[TDef]
-            where TDef : Definition
+        public GetReference[TId](nameRef : NameRef) : Reference[TId]
+            where TId : Identity
         {
             ReferenceImpl(nameRef);
         }

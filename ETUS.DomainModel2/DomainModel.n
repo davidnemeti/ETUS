@@ -29,7 +29,7 @@ namespace ETUS.DomainModel2
         public Name : Name { get; set; }
     }
 
-    public variant Definition : SchemaLanguage.Definition
+    public variant Definition : Identity
     {
         public Name : Name { get; set; }
 
@@ -68,12 +68,12 @@ namespace ETUS.DomainModel2
     {
         ffoo() : void
         {
-            def unit : Definition.Unit = Definition.Unit(null, null);
-            def foo : Reference[Definition.Unit] = unit.GetReference();
-            def foo2 : Reference[Definition] = unit.GetReference();
-            def foo3 : Reference[Definition] = foo;
-            def boo = foo.Definition;
-            def boo3 = foo3.Definition;
+            def _unit : Definition.Unit = Definition.Unit(null, null);
+            def _foo : Reference[Definition.Unit] = _unit.GetReference();
+            def _foo2 : Reference[Definition] = _unit.GetReference();
+            def _foo3 : Reference[Definition] = _foo;
+            def _boo = _foo.Identity;
+            def _boo3 = _foo3.Identity;
         }
     }
 }
