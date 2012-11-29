@@ -276,6 +276,14 @@ namespace ETUS.Grammar
 
     public static class Helper
     {
+        public static void ThrowGrammarError(GrammarErrorLevel grammarErrorLevel, string message, params object[] args)
+        {
+            if (args.Length > 0)
+                message = string.Format(message, args);
+
+            throw new GrammarErrorException(message, new GrammarError(grammarErrorLevel, null, message));
+        }
+
         public static string TypeNameWithDeclaringTypes(Type type)
         {
             return type.IsNested
@@ -320,34 +328,34 @@ namespace ETUS.Grammar
     {
         readonly Type type;
 
-        IDictionary<int, PropertyInfo> parseTreeChildIndexToProperty = new Dictionary<int, PropertyInfo>();
-        ISet<BnfTerm> bnfTermsPunctuationOrEmptyTransient = new HashSet<BnfTerm>();
+        //IDictionary<int, PropertyInfo> parseTreeChildIndexToProperty = new Dictionary<int, PropertyInfo>();
+        //ISet<BnfTerm> bnfTermsPunctuationOrEmptyTransient = new HashSet<BnfTerm>();
 
-        void NonTerminalType_Reduced(object sender, ReducedEventArgs e)
-        {
-            int parseTreeChildIndex = 0;
-            foreach (BnfTerm bnfTerm in e.ReducedProduction.RValues)
-            {
-                // NOTE: we can recognize empty transient terms only by using bnfTermsPunctuationOrEmptyTransient (since they were eliminated earlier)
-                if (bnfTerm.Flags.IsSet(TermFlags.IsPunctuation) || bnfTermsPunctuationOrEmptyTransient.Contains(bnfTerm))
-                    continue;
+        //void NonTerminalType_Reduced(object sender, ReducedEventArgs e)
+        //{
+        //    int parseTreeChildIndex = 0;
+        //    foreach (BnfTerm bnfTerm in e.ReducedProduction.RValues)
+        //    {
+        //        // NOTE: we can recognize empty transient terms only by using bnfTermsPunctuationOrEmptyTransient (since they were eliminated earlier)
+        //        if (bnfTerm.Flags.IsSet(TermFlags.IsPunctuation) || bnfTermsPunctuationOrEmptyTransient.Contains(bnfTerm))
+        //            continue;
 
-                if (bnfTerm is BnfTermProperty)
-                {
-                    BnfTermProperty bnfTermProperty = (BnfTermProperty)bnfTerm;
-                    parseTreeChildIndexToProperty[parseTreeChildIndex] = bnfTermProperty.PropertyInfo;
-                }
+        //        if (bnfTerm is BnfTermProperty)
+        //        {
+        //            BnfTermProperty bnfTermProperty = (BnfTermProperty)bnfTerm;
+        //            parseTreeChildIndexToProperty[parseTreeChildIndex] = bnfTermProperty.PropertyInfo;
+        //        }
 
-                parseTreeChildIndex++;
-            }
-            bnfTermsPunctuationOrEmptyTransient.Clear();
-        }
+        //        parseTreeChildIndex++;
+        //    }
+        //    bnfTermsPunctuationOrEmptyTransient.Clear();
+        //}
 
         public NonTerminalType(Type type)
             : base(Helper.TypeNameWithDeclaringTypes(type))
         {
             this.type = type;
-            this.Reduced += NonTerminalType_Reduced;
+//            this.Reduced += NonTerminalType_Reduced;
         }
 
         public new BnfExpression Rule
@@ -359,40 +367,45 @@ namespace ETUS.Grammar
                     {
                         parseTreeNode.AstNode = Activator.CreateInstance(type);
 
-                        foreach (var parseTreeChild in parseTreeNode.ChildNodes.Select((parseTreeChild, parseTreeChildIndex) =>
-                            new { Value = parseTreeChild, Index = parseTreeChildIndex }))
+                        foreach (var parseTreeChild in parseTreeNode.ChildNodes)
                         {
-                            PropertyInfo propertyInfo;
-                            if (parseTreeChildIndexToProperty.TryGetValue(parseTreeChild.Index, out propertyInfo))
+                            PropertyInfo propertyInfo = (PropertyInfo)parseTreeChild.Tag;
+                            if (propertyInfo != null)
                             {
-                                propertyInfo.SetValue(parseTreeNode.AstNode, parseTreeChild.Value.AstNode);
+                                propertyInfo.SetValue(parseTreeNode.AstNode, parseTreeChild.AstNode);
                             }
-                            else if (!parseTreeChild.Value.Term.Flags.IsSet(TermFlags.NoAstNode))
+                            else if (!parseTreeChild.Term.Flags.IsSet(TermFlags.NoAstNode))
                             {
-                                context.AddMessage(ErrorLevel.Warning, parseTreeChild.Value.Token.Location, "No property assigned for term: {0}", parseTreeChild.Value.Term);
+                                // NOTE: we shouldn't get here since the Rule setter should have handle this kind of error
+                                context.AddMessage(ErrorLevel.Warning, parseTreeChild.Token.Location, "No property assigned for term: {0}", parseTreeChild.Term);
                             }
                         }
 
-                        parseTreeChildIndexToProperty.Clear();
+                        //foreach (var parseTreeChild in parseTreeNode.ChildNodes.Select((parseTreeChild, parseTreeChildIndex) =>
+                        //    new { Value = parseTreeChild, Index = parseTreeChildIndex }))
+                        //{
+                        //    PropertyInfo propertyInfo;
+                        //    if (parseTreeChildIndexToProperty.TryGetValue(parseTreeChild.Index, out propertyInfo))
+                        //    {
+                        //        propertyInfo.SetValue(parseTreeNode.AstNode, parseTreeChild.Value.AstNode);
+                        //    }
+                        //    else if (!parseTreeChild.Value.Term.Flags.IsSet(TermFlags.NoAstNode))
+                        //    {
+                        //        context.AddMessage(ErrorLevel.Warning, parseTreeChild.Value.Token.Location, "No property assigned for term: {0}", parseTreeChild.Value.Term);
+                        //    }
+                        //}
+
+                        //parseTreeChildIndexToProperty.Clear();
                     };
 
                 foreach (var bnfTermList in value.Data)
                 {
-                    for (int bnfTermIndex = 0; bnfTermIndex < bnfTermList.Count; bnfTermIndex++)
+                    foreach (var bnfTerm in bnfTermList)
                     {
-                        if (bnfTermList[bnfTermIndex] is NonTerminal)
-                        {
-                            NonTerminal nonTerminal = (NonTerminal)bnfTermList[bnfTermIndex];
-                            nonTerminal.Reduced += nonTerminal_Reduced;
-                        }
-
-                        BnfTermProperty bnfTermProperty = bnfTermList[bnfTermIndex] as BnfTermProperty;
-                        if (bnfTermProperty != null)
-                        {
-                            //ispunct
-//                            bnfTermList[bnfTermIndex] = bnfTermProperty.bnfTerm;
-//                            bnfTermToProperty.
-                        }
+                        if (bnfTerm is BnfTermProperty)
+                            ((BnfTermProperty)bnfTerm).Reduced += nonTerminal_Reduced;
+                        else if (!bnfTerm.Flags.IsSet(TermFlags.NoAstNode))
+                            Helper.ThrowGrammarError(GrammarErrorLevel.Error, "No property assigned for term: {0}", bnfTerm);
                     }
                 }
 
@@ -402,8 +415,9 @@ namespace ETUS.Grammar
 
         void nonTerminal_Reduced(object sender, ReducedEventArgs e)
         {
-            if (e.ResultNode.IsPunctuationOrEmptyTransient())
-                bnfTermsPunctuationOrEmptyTransient.Add(e.ResultNode.Term);
+            e.ResultNode.Tag = ((BnfTermProperty)sender).PropertyInfo;
+            //if (e.ResultNode.IsPunctuationOrEmptyTransient())
+            //    bnfTermsPunctuationOrEmptyTransient.Add(e.ResultNode.Term);
         }
     }
 
