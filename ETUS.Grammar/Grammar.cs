@@ -10,6 +10,7 @@ using ETUS.DomainModel2;
 using ETUS.DomainModel2.Expressions;
 using SchemaLanguage;
 using System.Reflection;
+using System.IO;
 
 namespace ETUS.Grammar
 {
@@ -49,23 +50,26 @@ namespace ETUS.Grammar
             NonTerminal binary_unit_expression = new NonTerminal("binary_unit_expression");
             NonTerminal unary_unit_expression = new NonTerminal("unary_unit_expression");
             NonTerminal complex_conversion_expression = new NonTerminal("complex_conversion_expression");
-            NonTerminal expression = new NonTerminal("expression", typeof(Expression));
-            BnfTermType binary_expression = new BnfTermType(typeof(Expression.Binary));
+            NonTerminal expression = new NonTerminal("expression");
+            NonTerminalType binary_expression = new NonTerminalType(typeof(Expression.Binary));
             NonTerminal unary_expression = new NonTerminal("unary_expression");
             NonTerminal expression_with_unit = new NonTerminal("expression_with_units");
             NonTerminal binary_expression_with_unit = new NonTerminal("binary_expression_with_units");
             NonTerminal unary_expression_with_unit = new NonTerminal("unary_expression_with_units");
             NonTerminal unit_variable = new NonTerminal("unit_variable");
-            NonTerminal binary_operator = new NonTerminal("binary_operator", typeof(BinaryOperator));
+            NonTerminal binary_operator = new NonTerminal("binary_operator");
+//            NonTerminalType binary_operator = new NonTerminalType(typeof(BinaryOperator));
             NonTerminal unary_operator = new NonTerminal("unary_operator");
 
             BnfTermProperty binary_Expression__expr1 = new BnfTermProperty(GetProperty(() => new Expression.Binary(null, null, null).Expr1), expression);
             BnfTermProperty binary_Expression__op = new BnfTermProperty(GetProperty(() => new Expression.Binary(null, null, null).Op), binary_operator);
             BnfTermProperty binary_Expression__expr2 = new BnfTermProperty(GetProperty(() => new Expression.Binary(null, null, null).Expr2), expression);
 
-            NumberLiteral number = new NumberLiteral("number");
+            NumberLiteral number = new NumberLiteral("number", NumberOptions.Default, (context, parseNode) => parseNode.AstNode = new Expression.DoubleNumber(Convert.ToDouble(parseNode.Token.Value)));
             ConstantTerminal constant = new ConstantTerminal("constant");
             NonTerminal external_variable = new NonTerminal("external_variable");
+
+            MarkTransient(expression);
 
             KeyTerm dot = ToTerm(".");
 
@@ -86,6 +90,7 @@ namespace ETUS.Grammar
 
             KeyTerm EXTERNAL_VARIABLE_PREFIX = ToTerm("::");
 
+//            TerminalType ADD_OP = new TerminalType(ToTerm("+"), typeof(BinaryOperator.Add));
             KeyTerm ADD_OP = ToTerm("+");
             KeyTerm SUB_OP = ToTerm("-");
             KeyTerm POS_OP = ToTerm("+");
@@ -123,7 +128,7 @@ namespace ETUS.Grammar
             package.Rule = namespace_usages + namespace_declaration + definitions;
 //            package.Rule = namespace_declaration;
 
-            package.AstConfig.NodeCreator = new AstNodeCreator((astContext, parseTreeNode) => parseTreeNode.AstNode = new Package() { NamespaceDeclaration = (NamespaceDeclaration) parseTreeNode.ChildNodes[0].AstNode});
+            package.AstConfig.NodeCreator = (astContext, parseTreeNode) => parseTreeNode.AstNode = new Package() { NamespaceDeclaration = (NamespaceDeclaration) parseTreeNode.ChildNodes[0].AstNode};
 
             namespace_usages.Rule = MakeStarRule(namespace_usages, namespace_usage);
             definitions.Rule = MakePlusRule(definitions, definition);
@@ -139,8 +144,8 @@ namespace ETUS.Grammar
             //Bind(id, () => new NamespaceDeclaration().Name);
             //Bind2(identifier => new NamespaceDeclaration().Name);
 
-            namespace_declaration.AstConfig.NodeCreator = new AstNodeCreator((astContext, parseTreeNode) => parseTreeNode.AstNode = new NamespaceDeclaration() { Name = new Name((string)parseTreeNode.ChildNodes[2].AstNode) });
-            identifier.AstConfig.NodeCreator = new AstNodeCreator((astContext, parseTreeNode) => parseTreeNode.AstNode = parseTreeNode.FindTokenAndGetText());
+            namespace_declaration.AstConfig.NodeCreator = (astContext, parseTreeNode) => parseTreeNode.AstNode = new NamespaceDeclaration() { Name = new Name((string)parseTreeNode.ChildNodes[2].AstNode) };
+            identifier.AstConfig.NodeCreator = (astContext, parseTreeNode) => parseTreeNode.AstNode = parseTreeNode.FindTokenAndGetText();
 
             prefix_definition.Rule = DEFINE + PREFIX + prefix_name + expression;
             quantity_definition.Rule = DEFINE + QUANTITY + quantity_name;
@@ -165,11 +170,16 @@ namespace ETUS.Grammar
             simple_conversion_op.Rule = SIMPLE_MUTUAL_CONVERSION_OP | SIMPLE_TO_THAT_CONVERSION_OP | SIMPLE_TO_THIS_CONVERSION_OP;
             complex_conversion_op.Rule = COMPLEX_MUTUAL_CONVERSION_OP | COMPLEX_TO_THAT_CONVERSION_OP | COMPLEX_TO_THIS_CONVERSION_OP;
 
+            binary_operator.AstConfig.NodeCreator = (astContext, parseTreeNode) => parseTreeNode.AstNode = parseTreeNode.ChildNodes[0].Token.ValueString == ADD_OP.Text ? new BinaryOperator.Add() : null;
             binary_operator.Rule = ADD_OP | SUB_OP | MUL_OP | DIV_OP | POW_OP;
             unary_operator.Rule = NEG_OP | POS_OP;
 
-            expression.Rule = number | constant | external_variable | binary_expression | unary_expression;
-            binary_expression.Rule = binary_Expression__expr1 + binary_Expression__op + binary_Expression__expr2;
+            var boo = ToTerm("boo");
+            var soo = ToTerm("soo");
+            MarkPunctuation(soo);
+            expression.Rule = number | constant | external_variable | binary_expression | unary_expression | Empty;
+            binary_expression.Rule = boo + binary_Expression__expr1 + binary_Expression__op + binary_Expression__expr2 |
+                soo + binary_Expression__expr2 + binary_Expression__op + binary_Expression__expr1;
             unary_expression.Rule = LEFT_PAREN + expression + RIGHT_PAREN | unary_operator + expression;
 
             expression_with_unit.Rule = unit_variable | binary_expression_with_unit | unary_expression_with_unit;
@@ -210,8 +220,8 @@ namespace ETUS.Grammar
         void Bind<TType>(BnfTerm element)
             where TType : new()
         {
-            element.AstConfig.NodeCreator = new AstNodeCreator((astContext, parseTreeNode) => parseTreeNode.AstNode = new TType());
-//            element.AstConfig.NodeCreator = new AstNodeCreator((astContext, parseTreeNode) => parseTreeNode.AstNode = new TType() { Name = (string)parseTreeNode.ChildNodes[2].AstNode });
+            element.AstConfig.NodeCreator = (astContext, parseTreeNode) => parseTreeNode.AstNode = new TType();
+//            element.AstConfig.NodeCreator = (astContext, parseTreeNode) => parseTreeNode.AstNode = new TType() { Name = (string)parseTreeNode.ChildNodes[2].AstNode };
         }
 
         public static PropertyInfo GetProperty<T>(System.Linq.Expressions.Expression<Func<T>> expr)
@@ -226,24 +236,118 @@ namespace ETUS.Grammar
         }
     }
 
-    class BnfTermProperty : BnfTerm
-    {
-        readonly PropertyInfo propertyInfo;
-        readonly BnfTerm element;
+    //class BnfTermProperty : BnfExpression
+    //{
+    //    readonly PropertyInfo propertyInfo;
 
-        public BnfTermProperty(PropertyInfo propertyInfo, BnfTerm element)
-            : base(propertyInfo.Name, null, propertyInfo.PropertyType)
+    //    public BnfTermProperty(PropertyInfo propertyInfo, BnfTerm element)
+    //        : base(element)
+    //    {
+    //        this.propertyInfo = propertyInfo;
+    //    }
+    //}
+
+    //class BnfTermProperty : BnfTerm
+    //{
+    //    readonly PropertyInfo propertyInfo;
+    //    public readonly BnfTerm bnfTerm;
+
+    //    public BnfTermProperty(PropertyInfo propertyInfo, BnfTerm bnfTerm)
+    //        : base(propertyInfo.Name)
+    //    {
+    //        this.propertyInfo = propertyInfo;
+    //        this.bnfTerm = bnfTerm;
+    //    }
+    //}
+
+    class BnfTermProperty : NonTerminal
+    {
+        public PropertyInfo PropertyInfo { get; private set; }
+        public BnfTerm BnfTerm { get; private set; }
+
+        public BnfTermProperty(PropertyInfo propertyInfo, BnfTerm bnfTerm)
+            : base(string.Format("{0}.{1}", Helper.TypeNameWithDeclaringTypes(propertyInfo.DeclaringType), propertyInfo.Name.ToLower()), new BnfExpression(bnfTerm))
         {
-            this.propertyInfo = propertyInfo;
-            this.element = element;
+            this.PropertyInfo = propertyInfo;
+            this.BnfTerm = bnfTerm;
+            this.Flags |= TermFlags.IsTransient | TermFlags.NoAstNode;
         }
     }
 
-    class BnfTermType : NonTerminal
+    public static class Helper
     {
-        public BnfTermType(Type type)
-            : base(type.Name, type)
+        public static string TypeNameWithDeclaringTypes(Type type)
         {
+            return type.IsNested
+                ? string.Format("{0}_{1}", TypeNameWithDeclaringTypes(type.DeclaringType), type.Name.ToLower())
+                : type.Name.ToLower();
+        }
+
+        public static string GetNonTerminalsAsText(LanguageData language, bool omitProperties = false)
+        {
+            var sw = new StringWriter();
+            foreach (var nonTerminal in language.GrammarData.NonTerminals.OrderBy(nonTerminal => nonTerminal.Name))
+            {
+                if (omitProperties && nonTerminal is BnfTermProperty)
+                    continue;
+
+                sw.WriteLine("{0}{1}", nonTerminal.Name, nonTerminal.Flags.IsSet(TermFlags.IsNullable) ? "  (Nullable) " : string.Empty);
+                foreach (Production pr in nonTerminal.Productions)
+                {
+                    sw.WriteLine("   {0}", ProductionToString(pr, omitProperties));
+                }
+            }
+            return sw.ToString();
+        }
+
+        private static string ProductionToString(Production production, bool omitProperties)
+        {
+            var sw = new StringWriter();
+            sw.Write("{0} -> ", production.LValue.Name);
+            foreach (BnfTerm bnfTerm in production.RValues)
+            {
+                BnfTerm bnfTermToWrite = omitProperties && bnfTerm is BnfTermProperty
+                    ? ((BnfTermProperty)bnfTerm).BnfTerm
+                    : bnfTerm;
+
+                sw.Write("{0} ", bnfTermToWrite.Name);
+            }
+            return sw.ToString();
+        }
+    }
+
+    class NonTerminalType : NonTerminal
+    {
+        readonly Type type;
+
+        IDictionary<int, PropertyInfo> parseTreeChildIndexToProperty = new Dictionary<int, PropertyInfo>();
+        ISet<BnfTerm> bnfTermsPunctuationOrEmptyTransient = new HashSet<BnfTerm>();
+
+        void NonTerminalType_Reduced(object sender, ReducedEventArgs e)
+        {
+            int parseTreeChildIndex = 0;
+            foreach (BnfTerm bnfTerm in e.ReducedProduction.RValues)
+            {
+                // NOTE: we can recognize empty transient terms only by using bnfTermsPunctuationOrEmptyTransient (since they were eliminated earlier)
+                if (bnfTerm.Flags.IsSet(TermFlags.IsPunctuation) || bnfTermsPunctuationOrEmptyTransient.Contains(bnfTerm))
+                    continue;
+
+                if (bnfTerm is BnfTermProperty)
+                {
+                    BnfTermProperty bnfTermProperty = (BnfTermProperty)bnfTerm;
+                    parseTreeChildIndexToProperty[parseTreeChildIndex] = bnfTermProperty.PropertyInfo;
+                }
+
+                parseTreeChildIndex++;
+            }
+            bnfTermsPunctuationOrEmptyTransient.Clear();
+        }
+
+        public NonTerminalType(Type type)
+            : base(Helper.TypeNameWithDeclaringTypes(type))
+        {
+            this.type = type;
+            this.Reduced += NonTerminalType_Reduced;
         }
 
         public new BnfExpression Rule
@@ -251,11 +355,65 @@ namespace ETUS.Grammar
             get { return base.Rule; }
             set
             {
-                base.Rule = value;
-                AstConfig.NodeCreator = (AstContext context, ParseTreeNode parseNode) =>
+                AstConfig.NodeCreator = (context, parseTreeNode) =>
                     {
+                        parseTreeNode.AstNode = Activator.CreateInstance(type);
+
+                        foreach (var parseTreeChild in parseTreeNode.ChildNodes.Select((parseTreeChild, parseTreeChildIndex) =>
+                            new { Value = parseTreeChild, Index = parseTreeChildIndex }))
+                        {
+                            PropertyInfo propertyInfo;
+                            if (parseTreeChildIndexToProperty.TryGetValue(parseTreeChild.Index, out propertyInfo))
+                            {
+                                propertyInfo.SetValue(parseTreeNode.AstNode, parseTreeChild.Value.AstNode);
+                            }
+                            else if (!parseTreeChild.Value.Term.Flags.IsSet(TermFlags.NoAstNode))
+                            {
+                                context.AddMessage(ErrorLevel.Warning, parseTreeChild.Value.Token.Location, "No property assigned for term: {0}", parseTreeChild.Value.Term);
+                            }
+                        }
+
+                        parseTreeChildIndexToProperty.Clear();
                     };
+
+                foreach (var bnfTermList in value.Data)
+                {
+                    for (int bnfTermIndex = 0; bnfTermIndex < bnfTermList.Count; bnfTermIndex++)
+                    {
+                        if (bnfTermList[bnfTermIndex] is NonTerminal)
+                        {
+                            NonTerminal nonTerminal = (NonTerminal)bnfTermList[bnfTermIndex];
+                            nonTerminal.Reduced += nonTerminal_Reduced;
+                        }
+
+                        BnfTermProperty bnfTermProperty = bnfTermList[bnfTermIndex] as BnfTermProperty;
+                        if (bnfTermProperty != null)
+                        {
+                            //ispunct
+//                            bnfTermList[bnfTermIndex] = bnfTermProperty.bnfTerm;
+//                            bnfTermToProperty.
+                        }
+                    }
+                }
+
+                base.Rule = value;      // NOTE: this must come after setting AstConfig.NodeCreator
             }
+        }
+
+        void nonTerminal_Reduced(object sender, ReducedEventArgs e)
+        {
+            if (e.ResultNode.IsPunctuationOrEmptyTransient())
+                bnfTermsPunctuationOrEmptyTransient.Add(e.ResultNode.Term);
+        }
+    }
+
+    class TerminalType : BnfTerm
+    {
+        readonly Terminal terminal;
+
+        public TerminalType(Terminal terminal, Type type)
+            : base(type.Name, null, type)
+        {
         }
     }
 }

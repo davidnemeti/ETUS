@@ -75,6 +75,8 @@ namespace ETUS.DomainModel2
             def _foo3 : Reference[Definition] = _foo;
             def _boo = _foo.Identity;
             def _boo3 = _foo3.Identity;
+            def _ = Expression.Binary();
+            def _ = Package();
         }
     }
 }

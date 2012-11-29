@@ -11,6 +11,7 @@ namespace ETUS.DomainModel2.Expressions
     public variant Expression
     {
         | Binary      {
+            public this() {}
             Expr1 : Expression { get; set; }
             Op : BinaryOperator { get; set; }
             Expr2 : Expression { get; set; }
@@ -26,6 +27,8 @@ namespace ETUS.DomainModel2.Expressions
 
     public variant BinaryOperator
     {
+        public dummy : object { get; set; }
+
         | Add
         | Sub
         | Mul
