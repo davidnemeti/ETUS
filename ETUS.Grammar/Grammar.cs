@@ -409,7 +409,7 @@ namespace ETUS.Grammar
                     }
                 }
 
-                base.Rule = value;      // NOTE: this must come after setting AstConfig.NodeCreator
+                base.Rule = value;
             }
         }
 
