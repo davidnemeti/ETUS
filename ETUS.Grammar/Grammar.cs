@@ -51,7 +51,7 @@ namespace ETUS.Grammar
             NonTerminal unary_unit_expression = new NonTerminal("unary_unit_expression");
             NonTerminal complex_conversion_expression = new NonTerminal("complex_conversion_expression");
             NonTerminal expression = new NonTerminal("expression");
-            NonTerminalType binary_expression = new NonTerminalType(typeof(Expression.Binary));
+            TypeForNonTerminal binary_expression = new TypeForNonTerminal(typeof(Expression.Binary));
             NonTerminal unary_expression = new NonTerminal("unary_expression");
             NonTerminal expression_with_unit = new NonTerminal("expression_with_units");
             NonTerminal binary_expression_with_unit = new NonTerminal("binary_expression_with_units");
@@ -61,15 +61,16 @@ namespace ETUS.Grammar
 //            NonTerminalType binary_operator = new NonTerminalType(typeof(BinaryOperator));
             NonTerminal unary_operator = new NonTerminal("unary_operator");
 
-            BnfTermProperty binary_Expression__expr1 = new BnfTermProperty(GetProperty(() => new Expression.Binary(null, null, null).Expr1), expression);
-            BnfTermProperty binary_Expression__op = new BnfTermProperty(GetProperty(() => new Expression.Binary(null, null, null).Op), binary_operator);
-            BnfTermProperty binary_Expression__expr2 = new BnfTermProperty(GetProperty(() => new Expression.Binary(null, null, null).Expr2), expression);
+            PropertyForBnfTerm binary_Expression__expr1 = new PropertyForBnfTerm(GetProperty(() => new Expression.Binary(null, null, null).Expr1), expression);
+            PropertyForBnfTerm binary_Expression__op = new PropertyForBnfTerm(GetProperty(() => new Expression.Binary(null, null, null).Op), binary_operator);
+            PropertyForBnfTerm binary_Expression__expr2 = new PropertyForBnfTerm(GetProperty(() => new Expression.Binary(null, null, null).Expr2), expression);
 
             NumberLiteral number = new NumberLiteral("number", NumberOptions.Default, (context, parseNode) => parseNode.AstNode = new Expression.DoubleNumber(Convert.ToDouble(parseNode.Token.Value)));
             ConstantTerminal constant = new ConstantTerminal("constant");
             NonTerminal external_variable = new NonTerminal("external_variable");
 
-            MarkTransient(expression);
+            MarkTransient(expression, binary_operator);
+//            MarkTransient(expression);
 
             KeyTerm dot = ToTerm(".");
 
@@ -90,8 +91,8 @@ namespace ETUS.Grammar
 
             KeyTerm EXTERNAL_VARIABLE_PREFIX = ToTerm("::");
 
-//            TerminalType ADD_OP = new TerminalType(ToTerm("+"), typeof(BinaryOperator.Add));
-            KeyTerm ADD_OP = ToTerm("+");
+            ObjectForTerminal ADD_OP = new ObjectForTerminal(ToTerm("+"), (context, parseNode) => parseNode.AstNode = new BinaryOperator.Add());
+//            KeyTerm ADD_OP = ToTerm("+");
             KeyTerm SUB_OP = ToTerm("-");
             KeyTerm POS_OP = ToTerm("+");
             KeyTerm NEG_OP = ToTerm("-");
@@ -170,7 +171,7 @@ namespace ETUS.Grammar
             simple_conversion_op.Rule = SIMPLE_MUTUAL_CONVERSION_OP | SIMPLE_TO_THAT_CONVERSION_OP | SIMPLE_TO_THIS_CONVERSION_OP;
             complex_conversion_op.Rule = COMPLEX_MUTUAL_CONVERSION_OP | COMPLEX_TO_THAT_CONVERSION_OP | COMPLEX_TO_THIS_CONVERSION_OP;
 
-            binary_operator.AstConfig.NodeCreator = (astContext, parseTreeNode) => parseTreeNode.AstNode = parseTreeNode.ChildNodes[0].Token.ValueString == ADD_OP.Text ? new BinaryOperator.Add() : null;
+//            binary_operator.AstConfig.NodeCreator = (astContext, parseTreeNode) => parseTreeNode.AstNode = parseTreeNode.ChildNodes[0].Token.ValueString == ADD_OP.Text ? new BinaryOperator.Add() : null;
             binary_operator.Rule = ADD_OP | SUB_OP | MUL_OP | DIV_OP | POW_OP;
             unary_operator.Rule = NEG_OP | POS_OP;
 
@@ -260,17 +261,18 @@ namespace ETUS.Grammar
     //    }
     //}
 
-    class BnfTermProperty : NonTerminal
+    class PropertyForBnfTerm : NonTerminal
     {
         public PropertyInfo PropertyInfo { get; private set; }
         public BnfTerm BnfTerm { get; private set; }
 
-        public BnfTermProperty(PropertyInfo propertyInfo, BnfTerm bnfTerm)
-            : base(string.Format("{0}.{1}", Helper.TypeNameWithDeclaringTypes(propertyInfo.DeclaringType), propertyInfo.Name.ToLower()), new BnfExpression(bnfTerm))
+        public PropertyForBnfTerm(PropertyInfo propertyInfo, BnfTerm bnfTerm)
+            : base(name: string.Format("{0}.{1}", Helper.TypeNameWithDeclaringTypes(propertyInfo.DeclaringType), propertyInfo.Name.ToLower()))
         {
             this.PropertyInfo = propertyInfo;
             this.BnfTerm = bnfTerm;
             this.Flags |= TermFlags.IsTransient | TermFlags.NoAstNode;
+            this.Rule = new BnfExpression(bnfTerm);
         }
     }
 
@@ -296,7 +298,7 @@ namespace ETUS.Grammar
             var sw = new StringWriter();
             foreach (var nonTerminal in language.GrammarData.NonTerminals.OrderBy(nonTerminal => nonTerminal.Name))
             {
-                if (omitProperties && nonTerminal is BnfTermProperty)
+                if (omitProperties && nonTerminal is PropertyForBnfTerm)
                     continue;
 
                 sw.WriteLine("{0}{1}", nonTerminal.Name, nonTerminal.Flags.IsSet(TermFlags.IsNullable) ? "  (Nullable) " : string.Empty);
@@ -314,8 +316,8 @@ namespace ETUS.Grammar
             sw.Write("{0} -> ", production.LValue.Name);
             foreach (BnfTerm bnfTerm in production.RValues)
             {
-                BnfTerm bnfTermToWrite = omitProperties && bnfTerm is BnfTermProperty
-                    ? ((BnfTermProperty)bnfTerm).BnfTerm
+                BnfTerm bnfTermToWrite = omitProperties && bnfTerm is PropertyForBnfTerm
+                    ? ((PropertyForBnfTerm)bnfTerm).BnfTerm
                     : bnfTerm;
 
                 sw.Write("{0} ", bnfTermToWrite.Name);
@@ -324,7 +326,7 @@ namespace ETUS.Grammar
         }
     }
 
-    class NonTerminalType : NonTerminal
+    class TypeForNonTerminal : NonTerminal
     {
         readonly Type type;
 
@@ -351,7 +353,7 @@ namespace ETUS.Grammar
         //    bnfTermsPunctuationOrEmptyTransient.Clear();
         //}
 
-        public NonTerminalType(Type type)
+        public TypeForNonTerminal(Type type)
             : base(Helper.TypeNameWithDeclaringTypes(type))
         {
             this.type = type;
@@ -402,8 +404,8 @@ namespace ETUS.Grammar
                 {
                     foreach (var bnfTerm in bnfTermList)
                     {
-                        if (bnfTerm is BnfTermProperty)
-                            ((BnfTermProperty)bnfTerm).Reduced += nonTerminal_Reduced;
+                        if (bnfTerm is PropertyForBnfTerm)
+                            ((PropertyForBnfTerm)bnfTerm).Reduced += nonTerminal_Reduced;
                         else if (!bnfTerm.Flags.IsSet(TermFlags.NoAstNode))
                             Helper.ThrowGrammarError(GrammarErrorLevel.Error, "No property assigned for term: {0}", bnfTerm);
                     }
@@ -415,19 +417,22 @@ namespace ETUS.Grammar
 
         void nonTerminal_Reduced(object sender, ReducedEventArgs e)
         {
-            e.ResultNode.Tag = ((BnfTermProperty)sender).PropertyInfo;
+            e.ResultNode.Tag = ((PropertyForBnfTerm)sender).PropertyInfo;
             //if (e.ResultNode.IsPunctuationOrEmptyTransient())
             //    bnfTermsPunctuationOrEmptyTransient.Add(e.ResultNode.Term);
         }
     }
 
-    class TerminalType : BnfTerm
+    class ObjectForTerminal : NonTerminal
     {
         readonly Terminal terminal;
 
-        public TerminalType(Terminal terminal, Type type)
-            : base(type.Name, null, type)
+        public ObjectForTerminal(Terminal terminal, AstNodeCreator nodeCreator)
+            : base(terminal.Name)
         {
+            this.terminal = terminal;
+            this.AstConfig.NodeCreator = nodeCreator;
+            this.Rule = terminal;
         }
     }
 }
