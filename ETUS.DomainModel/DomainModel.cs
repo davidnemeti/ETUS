@@ -6,6 +6,7 @@ using Irony;
 using Irony.Ast;
 using Irony.Parsing;
 using DomainCore;
+using ETUS.DomainModel.Expressions;
 
 namespace ETUS.DomainModel
 {
