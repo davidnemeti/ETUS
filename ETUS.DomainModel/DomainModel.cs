@@ -5,53 +5,78 @@ using System.Text;
 using Irony;
 using Irony.Ast;
 using Irony.Parsing;
+using DomainCore;
 
 namespace ETUS.DomainModel
 {
     public class Package
     {
+        public ICollection<Group> Groups { get; set; }
+    }
+
+    public class Group
+    {
         public ICollection<NamespaceUsing> NamespaceUsings { get; set; }
-        public NamespaceDeclaration NamespaceDeclaration { get; set; }
+        public ICollection<Namespace> Namespaces { get; set; }
+    }
+
+    public class Namespace
+    {
+        public Name Name { get; set; }
         public ICollection<Definition> Definitions { get; set; }
     }
 
     public class NamespaceUsing
     {
-        public string Name { get; set; }
+        public NameRef NameRef { get; set; }
     }
 
-    public class NamespaceDeclaration
+    public abstract class Definition : Identity
     {
-        public string Name { get; set; }
+        public Name Name { get; set; }
     }
 
-    public abstract class Definition
+    public class PrefixDefinition : Definition
     {
-        public string Name { get; set; }
+        public Expression Factor { get; set; }
     }
 
-    public class PrefixDefinition
+    public class UnitDefinition : Definition
     {
-//        public Expression Factor { get; set; }
-    }
-
-    public class UnitDefinition
-    {
-        public QuantityDefinition Quantity { get; set; }
+        public Reference<QuantityDefinition> Quantity { get; set; }
         public Conversion Conversion { get; set; }
     }
 
-    public class QuantityDefinition
+    public class QuantityDefinition : Definition
     {
     }
 
     public abstract class Conversion
     {
+        public Reference<UnitDefinition> OtherUnit { get; set; }
+        public Direction Direction { get; set; }
     }
 
     public class SimpleConversion : Conversion
     {
-        //public Expression Value { get; set; }
-        //public UnitExpression Unit { get; set; }
+        public Expression Factor { get; set; }
+        public UnitExpression Unit { get; set; }
+    }
+
+    public class ComplexConversion : Conversion
+    {
+        public ExpressionWithUnit Expr { get; set; }
+    }
+
+    public enum Direction
+    {
+        BiDir,
+        To,
+        From
+    }
+
+    public enum Constant
+    {
+        PI
     }
 }
