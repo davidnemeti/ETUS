@@ -22,6 +22,13 @@ namespace ETUS.Grammar
             //Type _expression = typeof(Expression);
             //Type _binaryOperator = typeof(BinaryOperator);
 
+            //var a = new Expression.Binary();
+            //var b = new Expression.Unary();
+            //var c = new Package();
+            //var d = new BinaryOperator.Add();
+            //var e = new UnaryOperator.Pos();
+            //var e = new UnaryOperator.Neg();
+
             NonTerminal package = new NonTerminal("package", typeof(Package));
             NonTerminal namespace_usage = new NonTerminal("namespace_usage");
             NonTerminal namespace_usages = new NonTerminal("namespace_usages");

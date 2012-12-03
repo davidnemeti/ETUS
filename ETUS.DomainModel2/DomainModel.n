@@ -76,7 +76,11 @@ namespace ETUS.DomainModel2
             def _boo = _foo.Identity;
             def _boo3 = _foo3.Identity;
             def _ = Expression.Binary();
+//            def _ = Expression.Unary();
             def _ = Package();
+            def _ = BinaryOperator.Add();
+            def _ = UnaryOperator.Pos();
+            def _ = UnaryOperator.Neg();
         }
     }
 }
