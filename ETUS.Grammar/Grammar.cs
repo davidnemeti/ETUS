@@ -51,7 +51,7 @@ namespace ETUS.Grammar
             NonTerminal unary_unit_expression = new NonTerminal("unary_unit_expression");
             NonTerminal complex_conversion_expression = new NonTerminal("complex_conversion_expression");
             NonTerminal expression = new NonTerminal("expression");
-            TypeForNonTerminal binary_expression = new TypeForNonTerminal(typeof(Expression.Binary));
+            TypeBoundToNonTerminal binary_expression = new TypeBoundToNonTerminal(typeof(Expression.Binary));
             NonTerminal unary_expression = new NonTerminal("unary_expression");
             NonTerminal expression_with_unit = new NonTerminal("expression_with_units");
             NonTerminal binary_expression_with_unit = new NonTerminal("binary_expression_with_units");
@@ -61,9 +61,9 @@ namespace ETUS.Grammar
 //            NonTerminalType binary_operator = new NonTerminalType(typeof(BinaryOperator));
             NonTerminal unary_operator = new NonTerminal("unary_operator");
 
-            PropertyForBnfTerm binary_Expression__expr1 = PropertyForBnfTerm.Bind(() => new Expression.Binary().Term1, expression);
-            PropertyForBnfTerm binary_Expression__op = PropertyForBnfTerm.Bind(() => new Expression.Binary().Op, binary_operator);
-            PropertyForBnfTerm binary_Expression__expr2 = PropertyForBnfTerm.Bind(() => new Expression.Binary().Term2, expression);
+            PropertyBoundToBnfTerm binary_Expression__expr1 = PropertyBoundToBnfTerm.Bind(() => new Expression.Binary().Term1, expression);
+            PropertyBoundToBnfTerm binary_Expression__op = PropertyBoundToBnfTerm.Bind(() => new Expression.Binary().Op, binary_operator);
+            PropertyBoundToBnfTerm binary_Expression__expr2 = PropertyBoundToBnfTerm.Bind(() => new Expression.Binary().Term2, expression);
 
             NumberLiteral number = new NumberLiteral("number", NumberOptions.Default,
                 (context, parseNode) => parseNode.AstNode = new Expression.Number<double> { Value = Convert.ToDouble(parseNode.Token.Value) });
@@ -92,7 +92,7 @@ namespace ETUS.Grammar
 
             KeyTerm EXTERNAL_VARIABLE_PREFIX = ToTerm("::");
 
-            ObjectForTerminal ADD_OP = new ObjectForTerminal(ToTerm("+"), (context, parseNode) => parseNode.AstNode = BinaryOperator.Add);
+            ObjectBoundToTerminal ADD_OP = new ObjectBoundToTerminal(ToTerm("+"), (context, parseNode) => parseNode.AstNode = BinaryOperator.Add);
 //            KeyTerm ADD_OP = ToTerm("+");
             KeyTerm SUB_OP = ToTerm("-");
             KeyTerm POS_OP = ToTerm("+");
