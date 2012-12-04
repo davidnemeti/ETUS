@@ -34,6 +34,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "010.Irony.2010", "..\Irony\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainCore", "DomainCore\DomainCore.csproj", "{FFA6152D-DA0C-4588-9CC2-A9B7E3AD5D14}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IronyExtension", "IronyExtension\IronyExtension.csproj", "{A02FB9DE-B174-4438-83AF-034F8004C724}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -96,6 +98,10 @@ Global
 		{FFA6152D-DA0C-4588-9CC2-A9B7E3AD5D14}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFA6152D-DA0C-4588-9CC2-A9B7E3AD5D14}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFA6152D-DA0C-4588-9CC2-A9B7E3AD5D14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A02FB9DE-B174-4438-83AF-034F8004C724}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A02FB9DE-B174-4438-83AF-034F8004C724}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A02FB9DE-B174-4438-83AF-034F8004C724}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A02FB9DE-B174-4438-83AF-034F8004C724}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
