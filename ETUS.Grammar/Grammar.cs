@@ -51,7 +51,7 @@ namespace ETUS.Grammar
             NonTerminal unary_unit_expression = new NonTerminal("unary_unit_expression");
             NonTerminal complex_conversion_expression = new NonTerminal("complex_conversion_expression");
             NonTerminal expression = new NonTerminal("expression");
-            TypeBoundToNonTerminal binary_expression = new TypeBoundToNonTerminal(typeof(Expression.Binary));
+            NonTerminalWithType binary_expression = NonTerminalWithType.Of<Expression.Binary>();
             NonTerminal unary_expression = new NonTerminal("unary_expression");
             NonTerminal expression_with_unit = new NonTerminal("expression_with_units");
             NonTerminal binary_expression_with_unit = new NonTerminal("binary_expression_with_units");
