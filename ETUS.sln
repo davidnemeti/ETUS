@@ -30,7 +30,7 @@ Project("{EDCC3B85-0BAD-11DB-BC1A-00112FDE8B61}") = "SchemaLanguage", "SchemaLan
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication1", "ConsoleApplication1\ConsoleApplication1.csproj", "{65B89830-A608-40DC-96AF-D87C30FED087}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "010.Irony.2010", "..\Irony\irony_1f7bdd8e9147\Irony\010.Irony.2010.csproj", "{D81F5C91-D7DB-46E5-BC99-49488FB6814C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "010.Irony.2010", "..\Irony\Irony\010.Irony.2010.csproj", "{D81F5C91-D7DB-46E5-BC99-49488FB6814C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainCore", "DomainCore\DomainCore.csproj", "{FFA6152D-DA0C-4588-9CC2-A9B7E3AD5D14}"
 EndProject
