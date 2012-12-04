@@ -6,27 +6,27 @@ namespace ETUS.DomainModel.Expressions
 {
     public abstract class ExpressionWithUnit
     {
-        public class BinaryWithUnit : ExpressionWithUnit
+        public class Binary : ExpressionWithUnit
         {
-            public ExpressionWithUnit Expr1 { get; set; }
+            public ExpressionWithUnit Term1 { get; set; }
             public Expression.Binary.Operator Op { get; set; }
-            public Expression Expr2 { get; set; }
+            public Expression Term2 { get; set; }
         }
 
-        public class BinaryWithUnit2 : ExpressionWithUnit
+        public class Binary2 : ExpressionWithUnit
         {
-            public Expression Expr1 { get; set; }
+            public Expression Term1 { get; set; }
             public Expression.Binary.Operator Op { get; set; }
-            public ExpressionWithUnit Expr2 { get; set; }
+            public ExpressionWithUnit Term2 { get; set; }
         }
 
-        public class UnaryWithUnit : ExpressionWithUnit
+        public class Unary : ExpressionWithUnit
         {
             public Expression.Unary.Operator Op { get; set; }
-            public ExpressionWithUnit Expr { get; set; }
+            public ExpressionWithUnit Term { get; set; }
         }
 
-        public class UnitWithUnit : ExpressionWithUnit
+        public class Unit : ExpressionWithUnit
         {
             public UnitDefinition Value { get; set; }
         }
