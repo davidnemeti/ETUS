@@ -61,9 +61,9 @@ namespace ETUS.Grammar
 //            NonTerminalType binary_operator = new NonTerminalType(typeof(BinaryOperator));
             NonTerminal unary_operator = new NonTerminal("unary_operator");
 
-            PropertyBoundToBnfTerm binary_Expression__expr1 = PropertyBoundToBnfTerm.Bind(() => new Expression.Binary().Term1, expression);
+            PropertyBoundToBnfTerm binary_Expression__term1 = expression.Bind(() => new Expression.Binary().Term1);
             PropertyBoundToBnfTerm binary_Expression__op = PropertyBoundToBnfTerm.Bind(() => new Expression.Binary().Op, binary_operator);
-            PropertyBoundToBnfTerm binary_Expression__expr2 = PropertyBoundToBnfTerm.Bind(() => new Expression.Binary().Term2, expression);
+            PropertyBoundToBnfTerm binary_Expression__term2 = PropertyBoundToBnfTerm.Bind(() => new Expression.Binary().Term2, expression);
 
             NumberLiteral number = new NumberLiteral("number", NumberOptions.Default,
                 (context, parseNode) => parseNode.AstNode = new Expression.Number<double> { Value = Convert.ToDouble(parseNode.Token.Value) });
@@ -180,8 +180,8 @@ namespace ETUS.Grammar
             var soo = ToTerm("soo");
             MarkPunctuation(soo);
             expression.Rule = number | constant | external_variable | binary_expression | unary_expression | Empty;
-            binary_expression.Rule = boo + binary_Expression__expr1 + binary_Expression__op + binary_Expression__expr2 |
-                soo + binary_Expression__expr2 + binary_Expression__op + binary_Expression__expr1;
+            binary_expression.Rule = boo + binary_Expression__term1 + binary_Expression__op + binary_Expression__term2 |
+                soo + binary_Expression__term2 + binary_Expression__op + binary_Expression__term1;
             unary_expression.Rule = LEFT_PAREN + expression + RIGHT_PAREN | unary_operator + expression;
 
             expression_with_unit.Rule = unit_variable | binary_expression_with_unit | unary_expression_with_unit;
