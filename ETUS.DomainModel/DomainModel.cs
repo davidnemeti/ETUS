@@ -61,7 +61,7 @@ namespace ETUS.DomainModel
     public class SimpleConversion : Conversion
     {
         public Expression Factor { get; set; }
-        public UnitExpression Unit { get; set; }
+        public UnitExpression OtherUnit { get; set; }
     }
 
     public class ComplexConversion : Conversion
