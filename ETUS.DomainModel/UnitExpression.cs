@@ -16,8 +16,8 @@ namespace ETUS.DomainModel.Expressions
 
             public enum Operator
             {
-                Mul,
-                Div
+                Mul = BinaryOperator.Mul,
+                Div = BinaryOperator.Div
             }
         }
 

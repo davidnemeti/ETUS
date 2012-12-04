@@ -9,20 +9,20 @@ namespace ETUS.DomainModel.Expressions
         public class Binary : ExpressionWithUnit
         {
             public ExpressionWithUnit Term1 { get; set; }
-            public Expression.Binary.Operator Op { get; set; }
+            public BinaryOperator Op { get; set; }
             public Expression Term2 { get; set; }
         }
 
         public class Binary2 : ExpressionWithUnit
         {
             public Expression Term1 { get; set; }
-            public Expression.Binary.Operator Op { get; set; }
+            public BinaryOperator Op { get; set; }
             public ExpressionWithUnit Term2 { get; set; }
         }
 
         public class Unary : ExpressionWithUnit
         {
-            public Expression.Unary.Operator Op { get; set; }
+            public UnaryOperator Op { get; set; }
             public ExpressionWithUnit Term { get; set; }
         }
 

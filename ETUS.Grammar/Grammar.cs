@@ -92,7 +92,7 @@ namespace ETUS.Grammar
 
             KeyTerm EXTERNAL_VARIABLE_PREFIX = ToTerm("::");
 
-            ObjectForTerminal ADD_OP = new ObjectForTerminal(ToTerm("+"), (context, parseNode) => parseNode.AstNode = new BinaryOperator.Add());
+            ObjectForTerminal ADD_OP = new ObjectForTerminal(ToTerm("+"), (context, parseNode) => parseNode.AstNode = BinaryOperator.Add);
 //            KeyTerm ADD_OP = ToTerm("+");
             KeyTerm SUB_OP = ToTerm("-");
             KeyTerm POS_OP = ToTerm("+");

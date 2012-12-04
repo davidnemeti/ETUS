@@ -9,29 +9,14 @@ namespace ETUS.DomainModel.Expressions
         public class Binary : Expression
         {
             public Expression Term1 { get; set; }
-            public Operator Op { get; set; }
+            public BinaryOperator Op { get; set; }
             public Expression Term2 { get; set; }
-
-            public enum Operator
-            {
-                Add,
-                Sub,
-                Mul,
-                Div,
-                Pow
-            }
         }
 
         public class Unary : Expression
         {
-            public Operator Op { get; set; }
+            public UnaryOperator Op { get; set; }
             public Expression Term { get; set; }
-
-            public enum Operator
-            {
-                Pos,
-                Neg
-            }
         }
 
         public class Number<T> : Expression
@@ -42,5 +27,20 @@ namespace ETUS.DomainModel.Expressions
         public class Parameter : Expression
         {
         }
+    }
+
+    public enum BinaryOperator
+    {
+        Add,
+        Sub,
+        Mul,
+        Div,
+        Pow
+    }
+
+    public enum UnaryOperator
+    {
+        Pos,
+        Neg
     }
 }
