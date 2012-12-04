@@ -61,9 +61,9 @@ namespace ETUS.Grammar
 //            NonTerminalType binary_operator = new NonTerminalType(typeof(BinaryOperator));
             NonTerminal unary_operator = new NonTerminal("unary_operator");
 
-            PropertyBoundToBnfTerm binary_Expression__term1 = expression.Bind(() => new Expression.Binary().Term1);
-            PropertyBoundToBnfTerm binary_Expression__op = binary_operator.Bind(() => new Expression.Binary().Op);
-            PropertyBoundToBnfTerm binary_Expression__term2 = expression.Bind(() => new Expression.Binary().Term2);
+            MemberBoundToBnfTerm binary_Expression__term1 = expression.Bind(() => new Expression.Binary().Term1);
+            MemberBoundToBnfTerm binary_Expression__op = binary_operator.Bind(() => new Expression.Binary().Op);
+            MemberBoundToBnfTerm binary_Expression__term2 = expression.Bind(() => new Expression.Binary().Term2);
 
             NumberLiteral number = new NumberLiteral("number", NumberOptions.Default,
                 (context, parseNode) => parseNode.AstNode = new Expression.Number<double> { Value = Convert.ToDouble(parseNode.Token.Value) });
