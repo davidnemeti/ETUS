@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using DomainCore;
+
 namespace ETUS.DomainModel.Expressions
 {
     public abstract class ExpressionWithUnit
@@ -43,7 +45,7 @@ namespace ETUS.DomainModel.Expressions
 
         public class Unit : ExpressionWithUnit
         {
-            public UnitDefinition Value { get; set; }
+            public Reference<UnitDefinition> Value { get; set; }
 
             public override string ToString()
             {

@@ -14,6 +14,11 @@ namespace DomainCore
     public class Name
     {
         public string Value { get; set; }
+
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
     }
 
     public class NameRef
@@ -24,6 +29,11 @@ namespace DomainCore
         }
 
         public string Value { get; private set; }
+
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
     }
 
     public interface Reference<out TId>
@@ -49,17 +59,30 @@ namespace DomainCore
             this.Identity = identity;
             this.NameRef = new NameRef(identity.Name.Value);
         }
+
+        public override string ToString()
+        {
+            return NameRef != null
+                ? string.Format("[refByName: {0}]", NameRef.ToString())
+                : string.Format("[refById: {0}]", Identity.Name.ToString());
+        }
     }
 
-    public static class Extensions
+    public static class Reference
     {
         public static Reference<TId> GetReference<TId>(this TId identity)
+            where TId : Identity
+        {
+            return Get(identity);
+        }
+
+        public static Reference<TId> Get<TId>(TId identity)
             where TId : Identity
         {
             return new ReferenceImpl<TId>(identity);
         }
 
-        public static Reference<TId> GetReference<TId>(NameRef nameRef)
+        public static Reference<TId> Get<TId>(NameRef nameRef)
             where TId : Identity
         {
             return new ReferenceImpl<TId>(nameRef);
