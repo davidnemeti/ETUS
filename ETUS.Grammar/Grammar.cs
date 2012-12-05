@@ -22,47 +22,47 @@ namespace ETUS.Grammar
     {
         public UDLGrammar()
         {
-            NonTerminalWithType group = NonTerminalWithType.Of<Group>();
-            NonTerminalWithType namespace_usage = NonTerminalWithType.Of<NamespaceUsing>();
-            NonTerminalWithType namespace_usages = NonTerminalWithType.Of<List<NamespaceUsing>>();
-            NonTerminalWithType @namespace = NonTerminalWithType.Of<Namespace>();
-            NonTerminalWithType namespaces = NonTerminalWithType.Of<List<Namespace>>();
-            NonTerminalWithType definitions = NonTerminalWithType.Of<List<Definition>>();
-            NonTerminalWithType definition = NonTerminalWithType.OfAbstract<Definition>();
-            NonTerminalWithType quantity_definition = NonTerminalWithType.Of<QuantityDefinition>();
-            NonTerminalWithType prefix_definition = NonTerminalWithType.Of<PrefixDefinition>();
-            NonTerminalWithType unit_definition = NonTerminalWithType.Of<UnitDefinition>();
+            TypeForBoundMembers group = TypeForBoundMembers.Of<Group>();
+            TypeForBoundMembers namespace_usage = TypeForBoundMembers.Of<NamespaceUsing>();
+            TypeForCollection namespace_usages = TypeForCollection.Of<List<NamespaceUsing>>();
+            TypeForBoundMembers @namespace = TypeForBoundMembers.Of<Namespace>();
+            TypeForCollection namespaces = TypeForCollection.Of<List<Namespace>>();
+            TypeForCollection definitions = TypeForCollection.Of<List<Definition>>();
+            TypeForAbstract definition = TypeForAbstract.Of<Definition>();
+            TypeForBoundMembers quantity_definition = TypeForBoundMembers.Of<QuantityDefinition>();
+            TypeForBoundMembers prefix_definition = TypeForBoundMembers.Of<PrefixDefinition>();
+            TypeForBoundMembers unit_definition = TypeForBoundMembers.Of<UnitDefinition>();
 
             IdentifierTerminal identifier = new IdentifierTerminal("identifier");
             NonTerminal qualified_identifier = new NonTerminal("qualified_identifier");
 
-            NonTerminalWithType unit_name = NonTerminalWithType.Of<Name>();
-            NonTerminalWithType prefix_name = NonTerminalWithType.Of<Name>();
-            NonTerminalWithType quantity_name = NonTerminalWithType.Of<Name>();
-            NonTerminalWithType namespace_name = NonTerminalWithType.Of<Name>();
+            TypeForBoundMembers unit_name = TypeForBoundMembers.Of<Name>();
+            TypeForBoundMembers prefix_name = TypeForBoundMembers.Of<Name>();
+            TypeForBoundMembers quantity_name = TypeForBoundMembers.Of<Name>();
+            TypeForBoundMembers namespace_name = TypeForBoundMembers.Of<Name>();
 
-            NonTerminalWithType conversions = NonTerminalWithType.Of<List<Conversion>>();
-            NonTerminalWithType conversion = NonTerminalWithType.OfAbstract<Conversion>();
-            NonTerminalWithType simple_conversion = NonTerminalWithType.Of<SimpleConversion>();
-            NonTerminalWithType complex_conversion = NonTerminalWithType.Of<ComplexConversion>();
-            NonTerminalWithType simple_conversion_op = NonTerminalWithType.Of<Direction>();
+            TypeForCollection conversions = TypeForCollection.Of<List<Conversion>>();
+            TypeForAbstract conversion = TypeForAbstract.Of<Conversion>();
+            TypeForBoundMembers simple_conversion = TypeForBoundMembers.Of<SimpleConversion>();
+            TypeForBoundMembers complex_conversion = TypeForBoundMembers.Of<ComplexConversion>();
+            TypeForBoundMembers simple_conversion_op = TypeForBoundMembers.Of<Direction>();
 //            NonTerminal simple_conversion_op = new NonTerminal("simple_conversion_op");
-            NonTerminalWithType complex_conversion_op = NonTerminalWithType.Of<Direction>();
-            NonTerminalWithType unit_expression = NonTerminalWithType.OfAbstract<UnitExpression>();
-            NonTerminalWithType binary_unit_expression = NonTerminalWithType.Of<UnitExpression.Binary>();
+            TypeForBoundMembers complex_conversion_op = TypeForBoundMembers.Of<Direction>();
+            TypeForAbstract unit_expression = TypeForAbstract.Of<UnitExpression>();
+            TypeForBoundMembers binary_unit_expression = TypeForBoundMembers.Of<UnitExpression.Binary>();
             NonTerminal unary_unit_expression = new NonTerminal("unary_unit_expression");
-            NonTerminalWithType complex_conversion_expression = NonTerminalWithType.OfAbstract<ExpressionWithUnit>();
-            NonTerminalWithType expression = NonTerminalWithType.OfAbstract<Expression>();
-            NonTerminalWithType binary_expression = NonTerminalWithType.Of<Expression.Binary>();
-            NonTerminalWithType unary_expression = NonTerminalWithType.Of<Expression.Unary>();
-            NonTerminalWithType expression_with_unit = NonTerminalWithType.OfAbstract<ExpressionWithUnit>();
-            NonTerminalWithType binary_expression_with_unit = NonTerminalWithType.Of<ExpressionWithUnit.Binary>();
-            NonTerminalWithType binary_expression_with_unit2 = NonTerminalWithType.Of<ExpressionWithUnit.Binary2>();
-            NonTerminalWithType unary_expression_with_unit = NonTerminalWithType.Of<ExpressionWithUnit.Unary>();
-            NonTerminalWithType unit_variable = NonTerminalWithType.Of<ExpressionWithUnit.Unit>();
-            NonTerminalWithType binary_operator = NonTerminalWithType.Of<BinaryOperator>();
-            NonTerminalWithType unary_operator = NonTerminalWithType.Of<UnaryOperator>();
-            NonTerminalWithType external_variable = NonTerminalWithType.Of<Expression.ExternalVariable>();
+            TypeForAbstract complex_conversion_expression = TypeForAbstract.Of<ExpressionWithUnit>();
+            TypeForAbstract expression = TypeForAbstract.Of<Expression>();
+            TypeForBoundMembers binary_expression = TypeForBoundMembers.Of<Expression.Binary>();
+            TypeForBoundMembers unary_expression = TypeForBoundMembers.Of<Expression.Unary>();
+            TypeForAbstract expression_with_unit = TypeForAbstract.Of<ExpressionWithUnit>();
+            TypeForBoundMembers binary_expression_with_unit = TypeForBoundMembers.Of<ExpressionWithUnit.Binary>();
+            TypeForBoundMembers binary_expression_with_unit2 = TypeForBoundMembers.Of<ExpressionWithUnit.Binary2>();
+            TypeForBoundMembers unary_expression_with_unit = TypeForBoundMembers.Of<ExpressionWithUnit.Unary>();
+            TypeForBoundMembers unit_variable = TypeForBoundMembers.Of<ExpressionWithUnit.Unit>();
+            TypeForBoundMembers binary_operator = TypeForBoundMembers.Of<BinaryOperator>();
+            TypeForBoundMembers unary_operator = TypeForBoundMembers.Of<UnaryOperator>();
+            TypeForBoundMembers external_variable = TypeForBoundMembers.Of<Expression.ExternalVariable>();
 
             ObjectBoundToBnfTerm NUMBER = new NumberLiteral("number").Bind((context, parseNode) => new Expression.Number<double> { Value = Convert.ToDouble(parseNode.Token.Value) });
 
@@ -122,14 +122,11 @@ namespace ETUS.Grammar
 
             group.Rule = namespace_usages.Bind(() => new Group().NamespaceUsings) + namespaces.Bind(() => new Group().Namespaces);
 
-            namespace_usages.Rule = MakeStarRule(namespace_usages, namespace_usage)
-                .Bind((context, parseNode) => new List<NamespaceUsing>(parseNode.ChildNodes.Select(childNode => childNode.AstNode).Cast<NamespaceUsing>()));
+            namespace_usages.Rule = MakeStarRule(namespace_usages, namespace_usage);
 
-            namespaces.Rule = MakePlusRule(namespaces, @namespace)
-                .Bind((context, parseNode) => new List<Namespace>(parseNode.ChildNodes.Select(childNode => childNode.AstNode).Cast<Namespace>()));
+            namespaces.Rule = MakePlusRule(namespaces, @namespace);
 
-            definitions.Rule = MakePlusRule(definitions, definition)
-                .Bind((context, parseNode) => new List<Definition>(parseNode.ChildNodes.Select(childNode => childNode.AstNode).Cast<Definition>()));
+            definitions.Rule = MakePlusRule(definitions, definition);
 
             definition.Rule = quantity_definition | unit_definition | prefix_definition;
 
