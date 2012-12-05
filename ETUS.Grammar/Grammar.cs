@@ -66,26 +66,12 @@ namespace ETUS.Grammar
 
             ObjectBoundToBnfTerm NUMBER = new NumberLiteral("number").Bind((context, parseNode) => new Expression.Number<double> { Value = Convert.ToDouble(parseNode.Token.Value) });
 
-            ConstantTerminal CONSTANT = new ConstantTerminal("constant");
-
-            KeyTerm DOT = ToTerm(".");
-
-            KeyTerm USE = ToTerm("use");
-            KeyTerm DECLARE = ToTerm("declare");
-            KeyTerm DEFINE = ToTerm("define");
-            KeyTerm PREFIX = ToTerm("prefix");
-            KeyTerm NAMESPACE = ToTerm("namespace");
-            KeyTerm QUANTITY = ToTerm("quantity");
-            KeyTerm UNIT = ToTerm("unit");
-            KeyTerm OF = ToTerm("of");
             ObjectBoundToBnfTerm SIMPLE_MUTUAL_CONVERSION_OP = ToTerm("<=>").Bind((context, parseNode) => Direction.BiDir);
             ObjectBoundToBnfTerm SIMPLE_TO_THIS_CONVERSION_OP = ToTerm("<=").Bind((context, parseNode) => Direction.From);
             ObjectBoundToBnfTerm SIMPLE_TO_THAT_CONVERSION_OP = ToTerm("=>").Bind((context, parseNode) => Direction.To);
             ObjectBoundToBnfTerm COMPLEX_MUTUAL_CONVERSION_OP = ToTerm("<:>").Bind((context, parseNode) => Direction.BiDir);
             ObjectBoundToBnfTerm COMPLEX_TO_THIS_CONVERSION_OP = ToTerm("<:").Bind((context, parseNode) => Direction.From);
             ObjectBoundToBnfTerm COMPLEX_TO_THAT_CONVERSION_OP = ToTerm(":>").Bind((context, parseNode) => Direction.To);
-
-            KeyTerm EXTERNAL_VARIABLE_PREFIX = ToTerm("::");
 
             ObjectBoundToBnfTerm POS_OP = ToTerm("+").Bind((context, parseNode) => UnaryOperator.Pos);
             ObjectBoundToBnfTerm NEG_OP = ToTerm("-").Bind((context, parseNode) => UnaryOperator.Neg);
@@ -96,8 +82,20 @@ namespace ETUS.Grammar
             ObjectBoundToBnfTerm DIV_OP = ToTerm("/").Bind((context, parseNode) => BinaryOperator.Div);
             ObjectBoundToBnfTerm POW_OP = ToTerm("^").Bind((context, parseNode) => BinaryOperator.Pow);
 
-            KeyTerm EQUAL_STATEMENT = ToTerm("=");
 
+            ConstantTerminal CONSTANT = new ConstantTerminal("constant");
+
+            KeyTerm USE = ToTerm("use");
+            KeyTerm DECLARE = ToTerm("declare");
+            KeyTerm DEFINE = ToTerm("define");
+            KeyTerm PREFIX = ToTerm("prefix");
+            KeyTerm NAMESPACE = ToTerm("namespace");
+            KeyTerm QUANTITY = ToTerm("quantity");
+            KeyTerm UNIT = ToTerm("unit");
+            KeyTerm OF = ToTerm("of");
+            KeyTerm EXTERNAL_VARIABLE_PREFIX = ToTerm("::");
+            KeyTerm DOT = ToTerm(".");
+            KeyTerm EQUAL_STATEMENT = ToTerm("=");
             KeyTerm LEFT_PAREN = ToTerm("(");
             KeyTerm RIGHT_PAREN = ToTerm(")");
             KeyTerm LEFT_BRACKET = ToTerm("[");
