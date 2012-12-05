@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using DomainCore;
+
 namespace ETUS.DomainModel.Expressions
 {
     public abstract class Expression
@@ -39,8 +41,9 @@ namespace ETUS.DomainModel.Expressions
             }
         }
 
-        public class Parameter : Expression
+        public class ExternalVariable : Expression
         {
+            public NameRef NameRef { get; set; }
         }
     }
 

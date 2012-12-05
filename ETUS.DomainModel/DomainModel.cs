@@ -12,19 +12,19 @@ namespace ETUS.DomainModel
 {
     public class Package
     {
-        public ICollection<Group> Groups { get; set; }
+        public IList<Group> Groups { get; set; }
     }
 
     public class Group
     {
-        public ICollection<NamespaceUsing> NamespaceUsings { get; set; }
-        public ICollection<Namespace> Namespaces { get; set; }
+        public IList<NamespaceUsing> NamespaceUsings { get; set; }
+        public IList<Namespace> Namespaces { get; set; }
     }
 
     public class Namespace
     {
         public Name Name { get; set; }
-        public ICollection<Definition> Definitions { get; set; }
+        public IList<Definition> Definitions { get; set; }
     }
 
     public class NamespaceUsing
@@ -50,7 +50,7 @@ namespace ETUS.DomainModel
     public class UnitDefinition : Definition
     {
         public Reference<QuantityDefinition> Quantity { get; set; }
-        public Conversion Conversion { get; set; }
+        public IList<Conversion> Conversions { get; set; }
     }
 
     public class QuantityDefinition : Definition

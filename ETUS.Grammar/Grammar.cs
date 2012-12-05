@@ -22,58 +22,53 @@ namespace ETUS.Grammar
     {
         public UDLGrammar()
         {
-            NonTerminal package = new NonTerminal("package", typeof(Package));
-            NonTerminal namespace_usage = new NonTerminal("namespace_usage");
-            NonTerminal namespace_usages = new NonTerminal("namespace_usages");
-            NonTerminal namespace_declaration = new NonTerminal("namespace");
-            NonTerminal definitions = new NonTerminal("definitions");
-            NonTerminal definition = new NonTerminal("definition");
-            NonTerminal quantity_definition = new NonTerminal("quantity_definition");
-            NonTerminal prefix_definition = new NonTerminal("prefix_definition");
-            NonTerminal unit_definition = new NonTerminal("unit_definition");
+            NonTerminalWithType group = NonTerminalWithType.Of<Group>();
+            NonTerminalWithType namespace_usage = NonTerminalWithType.Of<NamespaceUsing>();
+            NonTerminalWithType namespace_usages = NonTerminalWithType.Of<List<NamespaceUsing>>();
+            NonTerminalWithType @namespace = NonTerminalWithType.Of<Namespace>();
+            NonTerminalWithType namespaces = NonTerminalWithType.Of<List<Namespace>>();
+            NonTerminalWithType definitions = NonTerminalWithType.Of<List<Definition>>();
+            NonTerminalWithType definition = NonTerminalWithType.OfAbstract<Definition>();
+            NonTerminalWithType quantity_definition = NonTerminalWithType.Of<QuantityDefinition>();
+            NonTerminalWithType prefix_definition = NonTerminalWithType.Of<PrefixDefinition>();
+            NonTerminalWithType unit_definition = NonTerminalWithType.Of<UnitDefinition>();
 
             IdentifierTerminal identifier = new IdentifierTerminal("identifier");
             NonTerminal qualified_identifier = new NonTerminal("qualified_identifier");
 
-            NonTerminal unit_name = new NonTerminal("unit_name");
-            NonTerminal prefix_name = new NonTerminal("prefix_name");
-            NonTerminal quantity_name = new NonTerminal("quantity_name");
-            NonTerminal namespace_name = new NonTerminal("namespace_name");
+            NonTerminalWithType unit_name = NonTerminalWithType.Of<Name>();
+            NonTerminalWithType prefix_name = NonTerminalWithType.Of<Name>();
+            NonTerminalWithType quantity_name = NonTerminalWithType.Of<Name>();
+            NonTerminalWithType namespace_name = NonTerminalWithType.Of<Name>();
 
-            NonTerminal conversions = new NonTerminal("conversions");
-            NonTerminal conversion = new NonTerminal("conversion");
-            NonTerminal simple_conversion = new NonTerminal("simple_conversion");
-            NonTerminal complex_conversion = new NonTerminal("complex_conversion");
-            NonTerminal simple_conversion_op = new NonTerminal("simple_conversion_op");
-            NonTerminal complex_conversion_op = new NonTerminal("complex_conversion_op");
-            NonTerminal unit_expression = new NonTerminal("unit_expression");
-            NonTerminal binary_unit_expression = new NonTerminal("binary_unit_expression");
+            NonTerminalWithType conversions = NonTerminalWithType.Of<List<Conversion>>();
+            NonTerminalWithType conversion = NonTerminalWithType.OfAbstract<Conversion>();
+            NonTerminalWithType simple_conversion = NonTerminalWithType.Of<SimpleConversion>();
+            NonTerminalWithType complex_conversion = NonTerminalWithType.Of<ComplexConversion>();
+            NonTerminalWithType simple_conversion_op = NonTerminalWithType.Of<Direction>();
+//            NonTerminal simple_conversion_op = new NonTerminal("simple_conversion_op");
+            NonTerminalWithType complex_conversion_op = NonTerminalWithType.Of<Direction>();
+            NonTerminalWithType unit_expression = NonTerminalWithType.OfAbstract<UnitExpression>();
+            NonTerminalWithType binary_unit_expression = NonTerminalWithType.Of<UnitExpression.Binary>();
             NonTerminal unary_unit_expression = new NonTerminal("unary_unit_expression");
-            NonTerminal complex_conversion_expression = new NonTerminal("complex_conversion_expression");
-            NonTerminal expression = new NonTerminal("expression");
+            NonTerminalWithType complex_conversion_expression = NonTerminalWithType.OfAbstract<ExpressionWithUnit>();
+            NonTerminalWithType expression = NonTerminalWithType.OfAbstract<Expression>();
             NonTerminalWithType binary_expression = NonTerminalWithType.Of<Expression.Binary>();
-            NonTerminal unary_expression = new NonTerminal("unary_expression");
-            NonTerminal expression_with_unit = new NonTerminal("expression_with_units");
-            NonTerminal binary_expression_with_unit = new NonTerminal("binary_expression_with_units");
-            NonTerminal unary_expression_with_unit = new NonTerminal("unary_expression_with_units");
-            NonTerminal unit_variable = new NonTerminal("unit_variable");
-            NonTerminal binary_operator = new NonTerminal("binary_operator");
-//            NonTerminalType binary_operator = new NonTerminalType(typeof(BinaryOperator));
-            NonTerminal unary_operator = new NonTerminal("unary_operator");
+            NonTerminalWithType unary_expression = NonTerminalWithType.Of<Expression.Unary>();
+            NonTerminalWithType expression_with_unit = NonTerminalWithType.OfAbstract<ExpressionWithUnit>();
+            NonTerminalWithType binary_expression_with_unit = NonTerminalWithType.Of<ExpressionWithUnit.Binary>();
+            NonTerminalWithType binary_expression_with_unit2 = NonTerminalWithType.Of<ExpressionWithUnit.Binary2>();
+            NonTerminalWithType unary_expression_with_unit = NonTerminalWithType.Of<ExpressionWithUnit.Unary>();
+            NonTerminalWithType unit_variable = NonTerminalWithType.Of<ExpressionWithUnit.Unit>();
+            NonTerminalWithType binary_operator = NonTerminalWithType.Of<BinaryOperator>();
+            NonTerminalWithType unary_operator = NonTerminalWithType.Of<UnaryOperator>();
+            NonTerminalWithType external_variable = NonTerminalWithType.Of<Expression.ExternalVariable>();
 
-            MemberBoundToBnfTerm binary_Expression__term1 = expression.Bind(() => new Expression.Binary().Term1);
-            MemberBoundToBnfTerm binary_Expression__op = binary_operator.Bind(() => new Expression.Binary().Op);
-            MemberBoundToBnfTerm binary_Expression__term2 = expression.Bind(() => new Expression.Binary().Term2);
+            ObjectBoundToBnfExpression NUMBER = new NumberLiteral("number").Bind((context, parseNode) => new Expression.Number<double> { Value = Convert.ToDouble(parseNode.Token.Value) });
 
-            NumberLiteral number = new NumberLiteral("number", NumberOptions.Default,
-                (context, parseNode) => parseNode.AstNode = new Expression.Number<double> { Value = Convert.ToDouble(parseNode.Token.Value) });
-            ConstantTerminal constant = new ConstantTerminal("constant");
-            NonTerminal external_variable = new NonTerminal("external_variable");
+            ConstantTerminal CONSTANT = new ConstantTerminal("constant");
 
-            MarkTransient(expression, binary_operator);
-//            MarkTransient(expression);
-
-            KeyTerm dot = ToTerm(".");
+            KeyTerm DOT = ToTerm(".");
 
             KeyTerm USE = ToTerm("use");
             KeyTerm DECLARE = ToTerm("declare");
@@ -83,23 +78,24 @@ namespace ETUS.Grammar
             KeyTerm QUANTITY = ToTerm("quantity");
             KeyTerm UNIT = ToTerm("unit");
             KeyTerm OF = ToTerm("of");
-            KeyTerm SIMPLE_MUTUAL_CONVERSION_OP = ToTerm("<=>");
-            KeyTerm SIMPLE_TO_THIS_CONVERSION_OP = ToTerm("<=");
-            KeyTerm SIMPLE_TO_THAT_CONVERSION_OP = ToTerm("=>");
-            KeyTerm COMPLEX_MUTUAL_CONVERSION_OP = ToTerm("<:>");
-            KeyTerm COMPLEX_TO_THIS_CONVERSION_OP = ToTerm("<:");
-            KeyTerm COMPLEX_TO_THAT_CONVERSION_OP = ToTerm(":>");
+            ObjectBoundToBnfExpression SIMPLE_MUTUAL_CONVERSION_OP = ToTerm("<=>").Bind((context, parseNode) => Direction.BiDir);
+            ObjectBoundToBnfExpression SIMPLE_TO_THIS_CONVERSION_OP = ToTerm("<=").Bind((context, parseNode) => Direction.From);
+            ObjectBoundToBnfExpression SIMPLE_TO_THAT_CONVERSION_OP = ToTerm("=>").Bind((context, parseNode) => Direction.To);
+            ObjectBoundToBnfExpression COMPLEX_MUTUAL_CONVERSION_OP = ToTerm("<:>").Bind((context, parseNode) => Direction.BiDir);
+            ObjectBoundToBnfExpression COMPLEX_TO_THIS_CONVERSION_OP = ToTerm("<:").Bind((context, parseNode) => Direction.From);
+            ObjectBoundToBnfExpression COMPLEX_TO_THAT_CONVERSION_OP = ToTerm(":>").Bind((context, parseNode) => Direction.To);
 
             KeyTerm EXTERNAL_VARIABLE_PREFIX = ToTerm("::");
 
-            ObjectBoundToTerminal ADD_OP = ToTerm("+").Bind((context, parseNode) => parseNode.AstNode = BinaryOperator.Add);
-//            KeyTerm ADD_OP = ToTerm("+");
-            KeyTerm SUB_OP = ToTerm("-");
-            KeyTerm POS_OP = ToTerm("+");
-            KeyTerm NEG_OP = ToTerm("-");
-            KeyTerm MUL_OP = ToTerm("*");
-            KeyTerm DIV_OP = ToTerm("/");
-            KeyTerm POW_OP = ToTerm("^");
+            ObjectBoundToBnfExpression POS_OP = ToTerm("+").Bind((context, parseNode) => UnaryOperator.Pos);
+            ObjectBoundToBnfExpression NEG_OP = ToTerm("-").Bind((context, parseNode) => UnaryOperator.Neg);
+
+            ObjectBoundToBnfExpression ADD_OP = ToTerm("+").Bind((context, parseNode) => BinaryOperator.Add);
+            ObjectBoundToBnfExpression SUB_OP = ToTerm("-").Bind((context, parseNode) => BinaryOperator.Sub);
+            ObjectBoundToBnfExpression MUL_OP = ToTerm("*").Bind((context, parseNode) => BinaryOperator.Mul);
+            ObjectBoundToBnfExpression DIV_OP = ToTerm("/").Bind((context, parseNode) => BinaryOperator.Div);
+            ObjectBoundToBnfExpression POW_OP = ToTerm("^").Bind((context, parseNode) => BinaryOperator.Pow);
+
             KeyTerm EQUAL_STATEMENT = ToTerm("=");
 
             KeyTerm LEFT_PAREN = ToTerm("(");
@@ -117,23 +113,26 @@ namespace ETUS.Grammar
 
             #region Constants
 
-            constant.Add("PI", Constant.PI);
-            constant.Add("π", Constant.PI);
+            CONSTANT.Add("PI", Constant.PI);
+            CONSTANT.Add("π", Constant.PI);
 
             #endregion
 
             #region Rules
 
-//            this.Root = package;
-            this.Root = binary_expression;
+            this.Root = group;
 
-            package.Rule = namespace_usages + namespace_declaration + definitions;
-//            package.Rule = namespace_declaration;
+            group.Rule = namespace_usages.Bind(() => new Group().NamespaceUsings) + namespaces.Bind(() => new Group().Namespaces);
 
-//            package.AstConfig.NodeCreator = (astContext, parseTreeNode) => parseTreeNode.AstNode = new Package() { NamespaceDeclaration = (NamespaceDeclaration) parseTreeNode.ChildNodes[0].AstNode};
+            namespace_usages.Rule = MakeStarRule(namespace_usages, namespace_usage)
+                .Bind((context, parseNode) => new List<NamespaceUsing>(parseNode.ChildNodes.Select(childNode => childNode.AstNode).Cast<NamespaceUsing>()));
 
-            namespace_usages.Rule = MakeStarRule(namespace_usages, namespace_usage);
-            definitions.Rule = MakePlusRule(definitions, definition);
+            namespaces.Rule = MakePlusRule(namespaces, @namespace)
+                .Bind((context, parseNode) => new List<Namespace>(parseNode.ChildNodes.Select(childNode => childNode.AstNode).Cast<Namespace>()));
+
+            definitions.Rule = MakePlusRule(definitions, definition)
+                .Bind((context, parseNode) => new List<Definition>(parseNode.ChildNodes.Select(childNode => childNode.AstNode).Cast<Definition>()));
+
             definition.Rule = quantity_definition | unit_definition | prefix_definition;
 
             namespace_usage.Rule = USE + NAMESPACE + namespace_name;
@@ -164,7 +163,7 @@ namespace ETUS.Grammar
             binary_unit_expression.Rule =   unit_expression + MUL_OP + unit_expression |
                                             "1" + DIV_OP + unit_expression |
                                             unit_expression + DIV_OP + unit_expression |
-                                            unit_expression + POW_OP + number;
+                                            unit_expression + POW_OP + NUMBER;
             unary_unit_expression.Rule = LEFT_PAREN + unit_expression + RIGHT_PAREN;
 
             complex_conversion_expression.Rule = expression_with_unit | expression_with_unit + EQUAL_STATEMENT + unit_variable;
@@ -179,18 +178,19 @@ namespace ETUS.Grammar
             var boo = ToTerm("boo");
             var soo = ToTerm("soo");
             MarkPunctuation(soo);
-            expression.Rule = number | constant | external_variable | binary_expression | unary_expression | Empty;
+            expression.Rule = NUMBER | CONSTANT | external_variable | binary_expression | unary_expression | Empty;
             binary_expression.Rule = boo + binary_Expression__term1 + binary_Expression__op + binary_Expression__term2 |
                 soo + binary_Expression__term2 + binary_Expression__op + binary_Expression__term1;
             unary_expression.Rule = LEFT_PAREN + expression + RIGHT_PAREN | unary_operator + expression;
 
-            expression_with_unit.Rule = unit_variable | binary_expression_with_unit | unary_expression_with_unit;
-            binary_expression_with_unit.Rule = expression + binary_operator + expression_with_unit | expression_with_unit + binary_operator + expression;
+            expression_with_unit.Rule = unit_variable | binary_expression_with_unit | binary_expression_with_unit2 | unary_expression_with_unit;
+            binary_expression_with_unit.Rule = expression_with_unit + binary_operator + expression;
+            binary_expression_with_unit2.Rule = expression + binary_operator + expression_with_unit;
             unary_expression_with_unit.Rule = LEFT_PAREN + expression_with_unit + RIGHT_PAREN | unary_operator + expression_with_unit;
 
             unit_variable.Rule = LEFT_BRACKET + unit_name + RIGHT_BRACKET;
 
-            qualified_identifier.Rule = MakePlusRule(qualified_identifier, dot, identifier);
+            qualified_identifier.Rule = MakePlusRule(qualified_identifier, DOT, identifier);
 
             unit_name.Rule = identifier;
             prefix_name.Rule = identifier;
