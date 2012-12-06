@@ -40,8 +40,8 @@ namespace ETUS.Grammar
             ObjectBoundToBnfTerm<NameRef> namespace_name = qualified_identifier.Bind((context, parseNode) => new NameRef(parseNode.Token.ValueString));
             ObjectBoundToBnfTerm<NameRef> nameref = qualified_identifier.Bind((context, parseNode) => new NameRef(parseNode.Token.ValueString));
 
-            ObjectBoundToBnfTerm<Reference<QuantityDefinition>> quantity_reference = nameref.Bind((context, parseNode, nameRef) => Reference.Get<QuantityDefinition>(nameRef));
-            ObjectBoundToBnfTerm<Reference<UnitDefinition>> unit_reference = nameref.Bind((context, parseNode, nameRef) => Reference.Get<UnitDefinition>(nameRef));
+            ObjectBoundToBnfTerm<Reference<QuantityDefinition>> quantity_reference = nameref.Bind(nameRef => Reference.Get<QuantityDefinition>(nameRef));
+            ObjectBoundToBnfTerm<Reference<UnitDefinition>> unit_reference = nameref.Bind(nameRef => Reference.Get<UnitDefinition>(nameRef));
 
             TypeForCollection conversions = TypeForCollection.Of<List<Conversion>>();
             TypeForTransient conversion = TypeForTransient.Of<Conversion>();
@@ -68,22 +68,21 @@ namespace ETUS.Grammar
 
             ObjectBoundToBnfTerm NUMBER = new NumberLiteral("number").Bind((context, parseNode) => new Expression.Number<double> { Value = Convert.ToDouble(parseNode.Token.Value) });
 
-            ObjectBoundToBnfTerm SIMPLE_MUTUAL_CONVERSION_OP = ToTerm("<=>").Bind((context, parseNode) => Direction.BiDir);
+            ObjectBoundToBnfTerm SIMPLE_MUTUAL_CONVERSION_OP = ToTerm("<=>").Bind(Direction.BiDir);
             ObjectBoundToBnfTerm SIMPLE_TO_THIS_CONVERSION_OP = ToTerm("<=").Bind((context, parseNode) => Direction.From);
             ObjectBoundToBnfTerm SIMPLE_TO_THAT_CONVERSION_OP = ToTerm("=>").Bind((context, parseNode) => Direction.To);
             ObjectBoundToBnfTerm COMPLEX_MUTUAL_CONVERSION_OP = ToTerm("<:>").Bind((context, parseNode) => Direction.BiDir);
             ObjectBoundToBnfTerm COMPLEX_TO_THIS_CONVERSION_OP = ToTerm("<:").Bind((context, parseNode) => Direction.From);
             ObjectBoundToBnfTerm COMPLEX_TO_THAT_CONVERSION_OP = ToTerm(":>").Bind((context, parseNode) => Direction.To);
 
-            ObjectBoundToBnfTerm POS_OP = ToTerm("+").Bind((context, parseNode) => UnaryOperator.Pos);
-            ObjectBoundToBnfTerm NEG_OP = ToTerm("-").Bind((context, parseNode) => UnaryOperator.Neg);
+            ObjectBoundToBnfTerm POS_OP = ToTerm("+").Bind(UnaryOperator.Pos);
+            ObjectBoundToBnfTerm NEG_OP = ToTerm("-").Bind(UnaryOperator.Neg);
 
-            ObjectBoundToBnfTerm ADD_OP = ToTerm("+").Bind((context, parseNode) => BinaryOperator.Add);
-            ObjectBoundToBnfTerm SUB_OP = ToTerm("-").Bind((context, parseNode) => BinaryOperator.Sub);
-            ObjectBoundToBnfTerm MUL_OP = ToTerm("*").Bind((context, parseNode) => BinaryOperator.Mul);
-            ObjectBoundToBnfTerm DIV_OP = ToTerm("/").Bind((context, parseNode) => BinaryOperator.Div);
-            ObjectBoundToBnfTerm POW_OP = ToTerm("^").Bind((context, parseNode) => BinaryOperator.Pow);
-
+            ObjectBoundToBnfTerm ADD_OP = ToTerm("+").Bind(BinaryOperator.Add);
+            ObjectBoundToBnfTerm SUB_OP = ToTerm("-").Bind(BinaryOperator.Sub);
+            ObjectBoundToBnfTerm MUL_OP = ToTerm("*").Bind(BinaryOperator.Mul);
+            ObjectBoundToBnfTerm DIV_OP = ToTerm("/").Bind(BinaryOperator.Div);
+            ObjectBoundToBnfTerm POW_OP = ToTerm("^").Bind(BinaryOperator.Pow);
 
             ConstantTerminal CONSTANT = new ConstantTerminal("constant");
 
