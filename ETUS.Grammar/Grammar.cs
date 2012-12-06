@@ -122,7 +122,7 @@ namespace ETUS.Grammar
 
             this.Root = group;
 
-            group.Rule = namespace_usages.Bind(() => group.o.NamespaceUsings) + namespaces.Bind(() => group.o.Namespaces);
+            group.Rule = namespace_usages.Bind(() => group._.NamespaceUsings) + namespaces.Bind(() => group._.Namespaces);
 
             namespace_usages.Rule = MakeStarRule(namespace_usages, namespace_usage);
 
@@ -132,14 +132,14 @@ namespace ETUS.Grammar
 
             definition.Rule = quantity_definition | unit_definition | prefix_definition;
 
-            namespace_usage.Rule = USE + NAMESPACE + nameref.Bind(() => namespace_usage.o.NameRef);
-            @namespace.Rule = DECLARE + NAMESPACE + namespace_name.Bind(() => @namespace.o.Name) + definitions.Bind(() => @namespace.o.Definitions);
+            namespace_usage.Rule = USE + NAMESPACE + nameref.Bind(() => namespace_usage._.NameRef);
+            @namespace.Rule = DECLARE + NAMESPACE + namespace_name.Bind(() => @namespace._.Name) + definitions.Bind(() => @namespace._.Definitions);
 
-            prefix_definition.Rule = DEFINE + PREFIX + name.Bind(() => prefix_definition.o.Name) + expression.Bind(() => prefix_definition.o.Factor);
-            quantity_definition.Rule = DEFINE + QUANTITY + name.Bind(() => quantity_definition.o.Name);
+            prefix_definition.Rule = DEFINE + PREFIX + name.Bind(() => prefix_definition._.Name) + expression.Bind(() => prefix_definition._.Factor);
+            quantity_definition.Rule = DEFINE + QUANTITY + name.Bind(() => quantity_definition._.Name);
 
-            unit_definition.Rule = DEFINE + UNIT + name.Bind(() => unit_definition.o.Name) + OF + quantity_reference.Bind(() => unit_definition.o.Quantity) +
-                conversions.Bind(() => unit_definition.o.Conversions);
+            unit_definition.Rule = DEFINE + UNIT + name.Bind(() => unit_definition._.Name) + OF + quantity_reference.Bind(() => unit_definition._.Quantity) +
+                conversions.Bind(() => unit_definition._.Conversions);
 
             conversions.Rule = MakeStarRule(conversions, conversion);
             conversion.Rule = simple_conversion | complex_conversion;
@@ -164,7 +164,7 @@ namespace ETUS.Grammar
             unary_operator.Rule = NEG_OP | POS_OP;
 
             expression.Rule = NUMBER | CONSTANT | external_variable | binary_expression | unary_expression | Empty;
-            binary_expression.Rule = expression.Bind(() => binary_expression.o.Term1) + binary_operator.Bind(() => binary_expression.o.Op) + expression.Bind(() => binary_expression.o.Term2);
+            binary_expression.Rule = expression.Bind(() => binary_expression._.Term1) + binary_operator.Bind(() => binary_expression._.Op) + expression.Bind(() => binary_expression._.Term2);
             unary_expression.Rule = LEFT_PAREN + expression + RIGHT_PAREN | unary_operator + expression;
 
             expression_with_unit.Rule = unit_variable | binary_expression_with_unit | binary_expression_with_unit2 | unary_expression_with_unit;
