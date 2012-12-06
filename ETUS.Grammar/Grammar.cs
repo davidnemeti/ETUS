@@ -22,67 +22,68 @@ namespace ETUS.Grammar
     {
         public UDLGrammar()
         {
-            TypeForBoundMembers group = TypeForBoundMembers.Of<Group>();
-            TypeForBoundMembers namespace_usage = TypeForBoundMembers.Of<NamespaceUsing>();
-            TypeForCollection namespace_usages = TypeForCollection.Of<List<NamespaceUsing>>();
-            TypeForBoundMembers @namespace = TypeForBoundMembers.Of<Namespace>();
-            TypeForCollection namespaces = TypeForCollection.Of<List<Namespace>>();
-            TypeForCollection definitions = TypeForCollection.Of<List<Definition>>();
-            TypeForTransient definition = TypeForTransient.Of<Definition>();
-            TypeForBoundMembers quantity_definition = TypeForBoundMembers.Of<QuantityDefinition>();
-            TypeForBoundMembers prefix_definition = TypeForBoundMembers.Of<PrefixDefinition>();
-            TypeForBoundMembers unit_definition = TypeForBoundMembers.Of<UnitDefinition>();
+            var group = TypeForBoundMembers.Of<Group>();
+            var namespace_usage = TypeForBoundMembers.Of<NamespaceUsing>();
+            var namespace_usages = TypeForCollection.Of<List<NamespaceUsing>>();
+            var @namespace = TypeForBoundMembers.Of<Namespace>();
+            var namespaces = TypeForCollection.Of<List<Namespace>>();
+            var definitions = TypeForCollection.Of<List<Definition>>();
+            var definition = TypeForTransient.Of<Definition>();
+            var quantity_definition = TypeForBoundMembers.Of<QuantityDefinition>();
+            var prefix_definition = TypeForBoundMembers.Of<PrefixDefinition>();
+            var unit_definition = TypeForBoundMembers.Of<UnitDefinition>();
 
             IdentifierTerminal IDENTIFIER = new IdentifierTerminal("identifier");
             NonTerminal qualified_identifier = new NonTerminal("qualified_identifier");
 
             DataForBnfTerm<Name> name = IDENTIFIER.SetValue((context, parseNode) => new Name { Value = parseNode.Token.ValueString });
-            DataForBnfTerm<NameRef> namespace_name = qualified_identifier.SetValue((context, parseNode) => new NameRef(parseNode.Token.ValueString));
+            DataForBnfTerm<Name> namespace_name = qualified_identifier.SetValue((context, parseNode) => new Name { Value = parseNode.Token.ValueString });
             DataForBnfTerm<NameRef> nameref = qualified_identifier.SetValue((context, parseNode) => new NameRef(parseNode.Token.ValueString));
 
             DataForBnfTerm<Reference<QuantityDefinition>> quantity_reference = nameref.SetValue(nameRef => Reference.Get<QuantityDefinition>(nameRef));
             DataForBnfTerm<Reference<UnitDefinition>> unit_reference = nameref.SetValue(nameRef => Reference.Get<UnitDefinition>(nameRef));
 
-            TypeForCollection conversions = TypeForCollection.Of<List<Conversion>>();
-            TypeForTransient conversion = TypeForTransient.Of<Conversion>();
-            TypeForBoundMembers simple_conversion = TypeForBoundMembers.Of<SimpleConversion>();
-            TypeForBoundMembers complex_conversion = TypeForBoundMembers.Of<ComplexConversion>();
-            TypeForBoundMembers simple_conversion_op = TypeForBoundMembers.Of<Direction>();
+            var conversions = TypeForCollection.Of<List<Conversion>>();
+            var conversion = TypeForTransient.Of<Conversion>();
+            var simple_conversion = TypeForBoundMembers.Of<SimpleConversion>();
+            var complex_conversion = TypeForBoundMembers.Of<ComplexConversion>();
+            var simple_conversion_op = TypeForBoundMembers.Of<Direction>();
 //            NonTerminal simple_conversion_op = new NonTerminal("simple_conversion_op");
-            TypeForBoundMembers complex_conversion_op = TypeForBoundMembers.Of<Direction>();
-            TypeForTransient unit_expression = TypeForTransient.Of<UnitExpression>();
-            TypeForBoundMembers binary_unit_expression = TypeForBoundMembers.Of<UnitExpression.Binary>();
+            var complex_conversion_op = TypeForBoundMembers.Of<Direction>();
+            var unit_expression = TypeForTransient.Of<UnitExpression>();
+            var binary_unit_expression = TypeForBoundMembers.Of<UnitExpression.Binary>();
             NonTerminal unary_unit_expression = new NonTerminal("unary_unit_expression");
-            TypeForTransient complex_conversion_expression = TypeForTransient.Of<ExpressionWithUnit>();
-            TypeForTransient expression = TypeForTransient.Of<Expression>();
-            TypeForBoundMembers binary_expression = TypeForBoundMembers.Of<Expression.Binary>();
-            TypeForBoundMembers unary_expression = TypeForBoundMembers.Of<Expression.Unary>();
-            TypeForTransient expression_with_unit = TypeForTransient.Of<ExpressionWithUnit>();
-            TypeForBoundMembers binary_expression_with_unit = TypeForBoundMembers.Of<ExpressionWithUnit.Binary>();
-            TypeForBoundMembers binary_expression_with_unit2 = TypeForBoundMembers.Of<ExpressionWithUnit.Binary2>();
-            TypeForBoundMembers unary_expression_with_unit = TypeForBoundMembers.Of<ExpressionWithUnit.Unary>();
-            TypeForBoundMembers unit_variable = TypeForBoundMembers.Of<ExpressionWithUnit.Unit>();
-            TypeForTransient binary_operator = TypeForTransient.Of<BinaryOperator>();
-            TypeForTransient unary_operator = TypeForTransient.Of<UnaryOperator>();
-            TypeForBoundMembers external_variable = TypeForBoundMembers.Of<Expression.ExternalVariable>();
+            var complex_conversion_expression = TypeForTransient.Of<ExpressionWithUnit>();
+            var expression = TypeForTransient.Of<Expression>();
+            var binary_expression = TypeForBoundMembers.Of<Expression.Binary>();
+            var unary_expression = TypeForBoundMembers.Of<Expression.Unary>();
+            var expression_with_unit = TypeForTransient.Of<ExpressionWithUnit>();
+            var binary_expression_with_unit = TypeForBoundMembers.Of<ExpressionWithUnit.Binary>();
+            var binary_expression_with_unit2 = TypeForBoundMembers.Of<ExpressionWithUnit.Binary2>();
+            var unary_expression_with_unit = TypeForBoundMembers.Of<ExpressionWithUnit.Unary>();
+            var unit_variable = TypeForBoundMembers.Of<ExpressionWithUnit.Unit>();
+            var binary_operator = TypeForTransient.Of<BinaryOperator>();
+            var unary_operator = TypeForTransient.Of<UnaryOperator>();
+            var external_variable = TypeForBoundMembers.Of<Expression.ExternalVariable>();
 
-            DataForBnfTerm NUMBER = new NumberLiteral("number").SetValue((context, parseNode) => new Expression.Number<double> { Value = Convert.ToDouble(parseNode.Token.Value) });
+            DataForBnfTerm<Expression.Number<double>> NUMBER = new NumberLiteral("number")
+                .SetValue((context, parseNode) => new Expression.Number<double> { Value = Convert.ToDouble(parseNode.Token.Value) });
 
-            DataForBnfTerm SIMPLE_MUTUAL_CONVERSION_OP = ToTerm("<=>").SetValue(Direction.BiDir);
-            DataForBnfTerm SIMPLE_TO_THIS_CONVERSION_OP = ToTerm("<=").SetValue(Direction.From);
-            DataForBnfTerm SIMPLE_TO_THAT_CONVERSION_OP = ToTerm("=>").SetValue(Direction.To);
-            DataForBnfTerm COMPLEX_MUTUAL_CONVERSION_OP = ToTerm("<:>").SetValue(Direction.BiDir);
-            DataForBnfTerm COMPLEX_TO_THIS_CONVERSION_OP = ToTerm("<:").SetValue(Direction.From);
-            DataForBnfTerm COMPLEX_TO_THAT_CONVERSION_OP = ToTerm(":>").SetValue(Direction.To);
+            var SIMPLE_MUTUAL_CONVERSION_OP = ToTerm("<=>").SetValue(Direction.BiDir);
+            var SIMPLE_TO_THIS_CONVERSION_OP = ToTerm("<=").SetValue(Direction.From);
+            var SIMPLE_TO_THAT_CONVERSION_OP = ToTerm("=>").SetValue(Direction.To);
+            var COMPLEX_MUTUAL_CONVERSION_OP = ToTerm("<:>").SetValue(Direction.BiDir);
+            var COMPLEX_TO_THIS_CONVERSION_OP = ToTerm("<:").SetValue(Direction.From);
+            var COMPLEX_TO_THAT_CONVERSION_OP = ToTerm(":>").SetValue(Direction.To);
 
-            DataForBnfTerm POS_OP = ToTerm("+").SetValue(UnaryOperator.Pos);
-            DataForBnfTerm NEG_OP = ToTerm("-").SetValue(UnaryOperator.Neg);
+            var POS_OP = ToTerm("+").SetValue(UnaryOperator.Pos);
+            var NEG_OP = ToTerm("-").SetValue(UnaryOperator.Neg);
 
-            DataForBnfTerm ADD_OP = ToTerm("+").SetValue(BinaryOperator.Add);
-            DataForBnfTerm SUB_OP = ToTerm("-").SetValue(BinaryOperator.Sub);
-            DataForBnfTerm MUL_OP = ToTerm("*").SetValue(BinaryOperator.Mul);
-            DataForBnfTerm DIV_OP = ToTerm("/").SetValue(BinaryOperator.Div);
-            DataForBnfTerm POW_OP = ToTerm("^").SetValue(BinaryOperator.Pow);
+            var ADD_OP = ToTerm("+").SetValue(BinaryOperator.Add);
+            var SUB_OP = ToTerm("-").SetValue(BinaryOperator.Sub);
+            var MUL_OP = ToTerm("*").SetValue(BinaryOperator.Mul);
+            var DIV_OP = ToTerm("/").SetValue(BinaryOperator.Div);
+            var POW_OP = ToTerm("^").SetValue(BinaryOperator.Pow);
 
             ConstantTerminal CONSTANT = new ConstantTerminal("constant");
 
@@ -163,7 +164,7 @@ namespace ETUS.Grammar
             unary_operator.Rule = NEG_OP | POS_OP;
 
             expression.Rule = NUMBER | CONSTANT | external_variable | binary_expression | unary_expression | Empty;
-            binary_expression.Rule = expression + binary_operator + expression;
+            binary_expression.Rule = expression.Bind(() => new Expression.Binary().Term1) + binary_operator.Bind(() => new Expression.Binary().Op) + expression.Bind(() => new Expression.Binary().Term2);
             unary_expression.Rule = LEFT_PAREN + expression + RIGHT_PAREN | unary_operator + expression;
 
             expression_with_unit.Rule = unit_variable | binary_expression_with_unit | binary_expression_with_unit2 | unary_expression_with_unit;
