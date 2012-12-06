@@ -36,12 +36,12 @@ namespace ETUS.Grammar
             IdentifierTerminal IDENTIFIER = new IdentifierTerminal("identifier");
             NonTerminal qualified_identifier = new NonTerminal("qualified_identifier");
 
-            ObjectBoundToBnfTerm<Name> name = IDENTIFIER.Bind((context, parseNode) => new Name { Value = parseNode.Token.ValueString });
-            ObjectBoundToBnfTerm<NameRef> namespace_name = qualified_identifier.Bind((context, parseNode) => new NameRef(parseNode.Token.ValueString));
-            ObjectBoundToBnfTerm<NameRef> nameref = qualified_identifier.Bind((context, parseNode) => new NameRef(parseNode.Token.ValueString));
+            DataForBnfTerm<Name> name = IDENTIFIER.SetValue((context, parseNode) => new Name { Value = parseNode.Token.ValueString });
+            DataForBnfTerm<NameRef> namespace_name = qualified_identifier.SetValue((context, parseNode) => new NameRef(parseNode.Token.ValueString));
+            DataForBnfTerm<NameRef> nameref = qualified_identifier.SetValue((context, parseNode) => new NameRef(parseNode.Token.ValueString));
 
-            ObjectBoundToBnfTerm<Reference<QuantityDefinition>> quantity_reference = nameref.Bind(nameRef => Reference.Get<QuantityDefinition>(nameRef));
-            ObjectBoundToBnfTerm<Reference<UnitDefinition>> unit_reference = nameref.Bind(nameRef => Reference.Get<UnitDefinition>(nameRef));
+            DataForBnfTerm<Reference<QuantityDefinition>> quantity_reference = nameref.SetValue(nameRef => Reference.Get<QuantityDefinition>(nameRef));
+            DataForBnfTerm<Reference<UnitDefinition>> unit_reference = nameref.SetValue(nameRef => Reference.Get<UnitDefinition>(nameRef));
 
             TypeForCollection conversions = TypeForCollection.Of<List<Conversion>>();
             TypeForTransient conversion = TypeForTransient.Of<Conversion>();
@@ -66,23 +66,23 @@ namespace ETUS.Grammar
             TypeForTransient unary_operator = TypeForTransient.Of<UnaryOperator>();
             TypeForBoundMembers external_variable = TypeForBoundMembers.Of<Expression.ExternalVariable>();
 
-            ObjectBoundToBnfTerm NUMBER = new NumberLiteral("number").Bind((context, parseNode) => new Expression.Number<double> { Value = Convert.ToDouble(parseNode.Token.Value) });
+            DataForBnfTerm NUMBER = new NumberLiteral("number").SetValue((context, parseNode) => new Expression.Number<double> { Value = Convert.ToDouble(parseNode.Token.Value) });
 
-            ObjectBoundToBnfTerm SIMPLE_MUTUAL_CONVERSION_OP = ToTerm("<=>").Bind(Direction.BiDir);
-            ObjectBoundToBnfTerm SIMPLE_TO_THIS_CONVERSION_OP = ToTerm("<=").Bind((context, parseNode) => Direction.From);
-            ObjectBoundToBnfTerm SIMPLE_TO_THAT_CONVERSION_OP = ToTerm("=>").Bind((context, parseNode) => Direction.To);
-            ObjectBoundToBnfTerm COMPLEX_MUTUAL_CONVERSION_OP = ToTerm("<:>").Bind((context, parseNode) => Direction.BiDir);
-            ObjectBoundToBnfTerm COMPLEX_TO_THIS_CONVERSION_OP = ToTerm("<:").Bind((context, parseNode) => Direction.From);
-            ObjectBoundToBnfTerm COMPLEX_TO_THAT_CONVERSION_OP = ToTerm(":>").Bind((context, parseNode) => Direction.To);
+            DataForBnfTerm SIMPLE_MUTUAL_CONVERSION_OP = ToTerm("<=>").SetValue(Direction.BiDir);
+            DataForBnfTerm SIMPLE_TO_THIS_CONVERSION_OP = ToTerm("<=").SetValue(Direction.From);
+            DataForBnfTerm SIMPLE_TO_THAT_CONVERSION_OP = ToTerm("=>").SetValue(Direction.To);
+            DataForBnfTerm COMPLEX_MUTUAL_CONVERSION_OP = ToTerm("<:>").SetValue(Direction.BiDir);
+            DataForBnfTerm COMPLEX_TO_THIS_CONVERSION_OP = ToTerm("<:").SetValue(Direction.From);
+            DataForBnfTerm COMPLEX_TO_THAT_CONVERSION_OP = ToTerm(":>").SetValue(Direction.To);
 
-            ObjectBoundToBnfTerm POS_OP = ToTerm("+").Bind(UnaryOperator.Pos);
-            ObjectBoundToBnfTerm NEG_OP = ToTerm("-").Bind(UnaryOperator.Neg);
+            DataForBnfTerm POS_OP = ToTerm("+").SetValue(UnaryOperator.Pos);
+            DataForBnfTerm NEG_OP = ToTerm("-").SetValue(UnaryOperator.Neg);
 
-            ObjectBoundToBnfTerm ADD_OP = ToTerm("+").Bind(BinaryOperator.Add);
-            ObjectBoundToBnfTerm SUB_OP = ToTerm("-").Bind(BinaryOperator.Sub);
-            ObjectBoundToBnfTerm MUL_OP = ToTerm("*").Bind(BinaryOperator.Mul);
-            ObjectBoundToBnfTerm DIV_OP = ToTerm("/").Bind(BinaryOperator.Div);
-            ObjectBoundToBnfTerm POW_OP = ToTerm("^").Bind(BinaryOperator.Pow);
+            DataForBnfTerm ADD_OP = ToTerm("+").SetValue(BinaryOperator.Add);
+            DataForBnfTerm SUB_OP = ToTerm("-").SetValue(BinaryOperator.Sub);
+            DataForBnfTerm MUL_OP = ToTerm("*").SetValue(BinaryOperator.Mul);
+            DataForBnfTerm DIV_OP = ToTerm("/").SetValue(BinaryOperator.Div);
+            DataForBnfTerm POW_OP = ToTerm("^").SetValue(BinaryOperator.Pow);
 
             ConstantTerminal CONSTANT = new ConstantTerminal("constant");
 
