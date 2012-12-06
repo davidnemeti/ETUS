@@ -124,6 +124,9 @@ namespace ETUS.Grammar
 
             group.Rule = namespace_usages.Bind(() => group._.NamespaceUsings) + namespaces.Bind(() => group._.Namespaces);
 
+            group.Rule = namespace_usage.StarList<List<NamespaceUsing>, NamespaceUsing>().Bind(() => group._.NamespaceUsings) + namespaces.Bind(() => group._.Namespaces);
+            group.Rule = namespace_usage.BindStarList(typeof(List<>), () => group._.NamespaceUsings) + namespaces.Bind(() => group._.Namespaces);
+
             namespace_usages.Rule = MakeStarRule(namespace_usages, namespace_usage);
 
             namespaces.Rule = MakePlusRule(namespaces, @namespace);
