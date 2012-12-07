@@ -23,7 +23,6 @@ namespace ETUS.DomainModel
 
     public class Namespace
     {
-        public int? Foo;
         public Name Name { get; set; }
         public IList<Definition> Definitions { get; set; }
     }
