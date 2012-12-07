@@ -24,10 +24,7 @@ namespace ETUS.Grammar
         {
             var group = TypeForBoundMembers.Of<Group>();
             var namespace_usage = TypeForBoundMembers.Of<NamespaceUsing>();
-            var namespace_usages = TypeForCollection.Of<List<NamespaceUsing>>();
             var @namespace = TypeForBoundMembers.Of<Namespace>();
-            var namespaces = TypeForCollection.Of<List<Namespace>>();
-            var definitions = TypeForCollection.Of<List<Definition>>();
             var definition = TypeForTransient.Of<Definition>();
             var quantity_definition = TypeForBoundMembers.Of<QuantityDefinition>();
             var prefix_definition = TypeForBoundMembers.Of<PrefixDefinition>();
@@ -43,7 +40,6 @@ namespace ETUS.Grammar
             DataForBnfTerm<Reference<QuantityDefinition>> quantity_reference = nameref.SetValue(nameRef => Reference.Get<QuantityDefinition>(nameRef));
             DataForBnfTerm<Reference<UnitDefinition>> unit_reference = nameref.SetValue(nameRef => Reference.Get<UnitDefinition>(nameRef));
 
-            var conversions = TypeForCollection.Of<List<Conversion>>();
             var conversion = TypeForTransient.Of<Conversion>();
             var simple_conversion = TypeForBoundMembers.Of<SimpleConversion>();
             var complex_conversion = TypeForBoundMembers.Of<ComplexConversion>();
@@ -122,29 +118,19 @@ namespace ETUS.Grammar
 
             this.Root = group;
 
-            group.Rule = namespace_usages.Bind(() => group._.NamespaceUsings) + namespaces.Bind(() => group._.Namespaces);
-            var foo = new System.Collections.ObjectModel.Collection<int>();
-
-            group.Rule = namespace_usage.StarList().Bind(() => group._.NamespaceUsings) + namespaces.Bind(() => group._.Namespaces);
-
-            namespace_usages.Rule = MakeStarRule(namespace_usages, namespace_usage);
-
-            namespaces.Rule = MakePlusRule(namespaces, @namespace);
-
-            definitions.Rule = MakePlusRule(definitions, definition);
+            group.Rule = namespace_usage.StarList().Bind(() => group._.NamespaceUsings) + @namespace.PlusList().Bind(() => group._.Namespaces);
 
             definition.Rule = quantity_definition | unit_definition | prefix_definition;
 
             namespace_usage.Rule = USE + NAMESPACE + nameref.Bind(() => namespace_usage._.NameRef);
-            @namespace.Rule = DECLARE + NAMESPACE + namespace_name.Bind(() => @namespace._.Name) + definitions.Bind(() => @namespace._.Definitions);
+            @namespace.Rule = DECLARE + NAMESPACE + namespace_name.Bind(() => @namespace._.Name) + definition.PlusList().Bind(() => @namespace._.Definitions);
 
             prefix_definition.Rule = DEFINE + PREFIX + name.Bind(() => prefix_definition._.Name) + expression.Bind(() => prefix_definition._.Factor);
             quantity_definition.Rule = DEFINE + QUANTITY + name.Bind(() => quantity_definition._.Name);
 
             unit_definition.Rule = DEFINE + UNIT + name.Bind(() => unit_definition._.Name) + OF + quantity_reference.Bind(() => unit_definition._.Quantity) +
-                conversions.Bind(() => unit_definition._.Conversions);
+                conversion.StarList().Bind(() => unit_definition._.Conversions);
 
-            conversions.Rule = MakeStarRule(conversions, conversion);
             conversion.Rule = simple_conversion | complex_conversion;
 
             simple_conversion.Rule = simple_conversion_op + unit_expression |
