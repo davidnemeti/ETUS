@@ -123,7 +123,14 @@ namespace ETUS.Grammar
             definition.Rule = quantity_definition | unit_definition | prefix_definition;
 
             namespace_usage.Rule = USE + NAMESPACE + nameref.BindMember(() => namespace_usage._.NameRef);
-            @namespace.Rule = DECLARE + NAMESPACE + namespace_name.BindMember(() => @namespace._.Name) + definition.PlusList().BindMember(() => @namespace._.Definitions);
+            @namespace.SetRule(DECLARE + NAMESPACE +
+                namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(@namespace, () => @namespace._.Definitions));
+            @namespace.SetRule(DECLARE + NAMESPACE +
+                namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(namespace_usage, () => @namespace._.Definitions));
+            @namespace.SetRule(DECLARE + NAMESPACE +
+                namespace_name.BindMember(namespace_usage, () => @namespace._.Name) + definition.PlusList().BindMember(namespace_usage, () => @namespace._.Definitions));
+            @namespace.SetRule(namespace_name.BindMember(namespace_usage, () => @namespace._.Name) + definition.PlusList().BindMember(namespace_usage, () => @namespace._.Definitions));
+            @namespace.SetRule(namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(@namespace, () => @namespace._.Definitions));
 
             prefix_definition.Rule = DEFINE + PREFIX + name.BindMember(() => prefix_definition._.Name) + expression.BindMember(() => prefix_definition._.Factor);
             quantity_definition.Rule = DEFINE + QUANTITY + name.BindMember(() => quantity_definition._.Name);
@@ -132,6 +139,7 @@ namespace ETUS.Grammar
                 conversion.StarList().BindMember(() => unit_definition._.Conversions);
 
             conversion.Rule = simple_conversion | complex_conversion;
+            conversion.SetRule(simple_conversion, complex_conversion, unit_expression);
 
             simple_conversion.Rule = simple_conversion_op + unit_expression |
                                         simple_conversion_op + expression + unit_expression;
