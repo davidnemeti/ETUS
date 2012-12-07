@@ -118,18 +118,18 @@ namespace ETUS.Grammar
 
             this.Root = group;
 
-            group.Rule = namespace_usage.StarList().Bind(() => group._.NamespaceUsings) + @namespace.PlusList().Bind(() => group._.Namespaces);
+            group.Rule = namespace_usage.StarList().BindMember(() => group._.NamespaceUsings) + @namespace.PlusList().BindMember(() => group._.Namespaces);
 
             definition.Rule = quantity_definition | unit_definition | prefix_definition;
 
-            namespace_usage.Rule = USE + NAMESPACE + nameref.Bind(() => namespace_usage._.NameRef);
-            @namespace.Rule = DECLARE + NAMESPACE + namespace_name.Bind(() => @namespace._.Name) + definition.PlusList().Bind(() => @namespace._.Definitions);
+            namespace_usage.Rule = USE + NAMESPACE + nameref.BindMember(() => namespace_usage._.NameRef);
+            @namespace.Rule = DECLARE + NAMESPACE + namespace_name.BindMember(() => @namespace._.Name) + definition.PlusList().BindMember(() => @namespace._.Definitions);
 
-            prefix_definition.Rule = DEFINE + PREFIX + name.Bind(() => prefix_definition._.Name) + expression.Bind(() => prefix_definition._.Factor);
-            quantity_definition.Rule = DEFINE + QUANTITY + name.Bind(() => quantity_definition._.Name);
+            prefix_definition.Rule = DEFINE + PREFIX + name.BindMember(() => prefix_definition._.Name) + expression.BindMember(() => prefix_definition._.Factor);
+            quantity_definition.Rule = DEFINE + QUANTITY + name.BindMember(() => quantity_definition._.Name);
 
-            unit_definition.Rule = DEFINE + UNIT + name.Bind(() => unit_definition._.Name) + OF + quantity_reference.Bind(() => unit_definition._.Quantity) +
-                conversion.StarList().Bind(() => unit_definition._.Conversions);
+            unit_definition.Rule = DEFINE + UNIT + name.BindMember(() => unit_definition._.Name) + OF + quantity_reference.BindMember(() => unit_definition._.Quantity) +
+                conversion.StarList().BindMember(() => unit_definition._.Conversions);
 
             conversion.Rule = simple_conversion | complex_conversion;
 
@@ -153,7 +153,7 @@ namespace ETUS.Grammar
             unary_operator.Rule = NEG_OP | POS_OP;
 
             expression.Rule = NUMBER | CONSTANT | external_variable | binary_expression | unary_expression | Empty;
-            binary_expression.Rule = expression.Bind(() => binary_expression._.Term1) + binary_operator.Bind(() => binary_expression._.Op) + expression.Bind(() => binary_expression._.Term2);
+            binary_expression.Rule = expression.BindMember(() => binary_expression._.Term1) + binary_operator.BindMember(() => binary_expression._.Op) + expression.BindMember(() => binary_expression._.Term2);
             unary_expression.Rule = LEFT_PAREN + expression + RIGHT_PAREN | unary_operator + expression;
 
             expression_with_unit.Rule = unit_variable | binary_expression_with_unit | binary_expression_with_unit2 | unary_expression_with_unit;
