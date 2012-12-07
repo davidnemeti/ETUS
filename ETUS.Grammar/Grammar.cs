@@ -122,8 +122,10 @@ namespace ETUS.Grammar
 
             definition.Rule = quantity_definition | unit_definition | prefix_definition;
 
+            DataForBnfTerm<int> namespace_foo = qualified_identifier.SetValue((context, parseNode) => (int)parseNode.Token.Value);
+
             namespace_usage.Rule = USE + NAMESPACE + nameref.BindMember(() => namespace_usage._.NameRef);
-            @namespace.Rule = DECLARE + NAMESPACE + namespace_name.BindMember(() => @namespace._.Name) + definition.PlusList().BindMember(() => @namespace._.Definitions);
+            @namespace.Rule = DECLARE + NAMESPACE + namespace_foo.QQ().BindMember(() => @namespace._.Foo) + namespace_name.BindMember(() => @namespace._.Name) + definition.PlusList().BindMember(() => @namespace._.Definitions);
 
             prefix_definition.Rule = DEFINE + PREFIX + name.BindMember(() => prefix_definition._.Name) + expression.BindMember(() => prefix_definition._.Factor);
             quantity_definition.Rule = DEFINE + QUANTITY + name.BindMember(() => quantity_definition._.Name);
