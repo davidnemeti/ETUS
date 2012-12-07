@@ -123,9 +123,9 @@ namespace ETUS.Grammar
             this.Root = group;
 
             group.Rule = namespace_usages.Bind(() => group._.NamespaceUsings) + namespaces.Bind(() => group._.Namespaces);
+            var foo = new System.Collections.ObjectModel.Collection<int>();
 
-//            group.Rule = namespace_usage.BindStarList(typeof(List<>), () => group._.NamespaceUsings) + namespaces.Bind(() => group._.Namespaces);
-            group.Rule = namespace_usage.BindStarList(() => group._.NamespaceUsings) + namespaces.Bind(() => group._.Namespaces);
+            group.Rule = namespace_usage.StarList().Bind(() => group._.NamespaceUsings) + namespaces.Bind(() => group._.Namespaces);
 
             namespace_usages.Rule = MakeStarRule(namespace_usages, namespace_usage);
 
