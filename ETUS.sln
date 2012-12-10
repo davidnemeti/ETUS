@@ -34,7 +34,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "010.Irony.2010", "..\Irony\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainCore", "DomainCore\DomainCore.csproj", "{FFA6152D-DA0C-4588-9CC2-A9B7E3AD5D14}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IronyExtension", "IronyExtension\IronyExtension.csproj", "{A02FB9DE-B174-4438-83AF-034F8004C724}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Irony.Extension", "IronyExtension\Irony.Extension.csproj", "{A02FB9DE-B174-4438-83AF-034F8004C724}"
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution

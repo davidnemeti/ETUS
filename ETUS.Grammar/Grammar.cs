@@ -9,7 +9,7 @@ using System.IO;
 using Irony;
 using Irony.Ast;
 using Irony.Parsing;
-using Irony.AstBinders;
+using Irony.Extension.AstBinders;
 
 using DomainCore;
 

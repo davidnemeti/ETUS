@@ -58,9 +58,9 @@
       <Project>{54970364-a9f5-4ee1-9165-4b9178fb8d25}</Project>
       <Name>ETUS.DomainModel</Name>
     </ProjectReference>
-    <ProjectReference Include="..\IronyExtension\IronyExtension.csproj">
+    <ProjectReference Include="..\IronyExtension\Irony.Extension.csproj">
       <Project>{a02fb9de-b174-4438-83af-034f8004c724}</Project>
-      <Name>IronyExtension</Name>
+      <Name>Irony.Extension</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
