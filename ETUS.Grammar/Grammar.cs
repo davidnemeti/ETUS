@@ -44,7 +44,6 @@ namespace ETUS.Grammar
             var simple_conversion = TypeForBoundMembers.Of<SimpleConversion>();
             var complex_conversion = TypeForBoundMembers.Of<ComplexConversion>();
             var simple_conversion_op = TypeForBoundMembers.Of<Direction>();
-//            NonTerminal simple_conversion_op = new NonTerminal("simple_conversion_op");
             var complex_conversion_op = TypeForBoundMembers.Of<Direction>();
             var unit_expression = TypeForTransient.Of<UnitExpression>();
             var binary_unit_expression = TypeForBoundMembers.Of<UnitExpression.Binary>();
