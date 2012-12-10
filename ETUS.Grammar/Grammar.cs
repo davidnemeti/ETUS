@@ -190,6 +190,7 @@ namespace ETUS.Grammar
             #endregion
 
             LanguageFlags = LanguageFlags.CreateAst;
+            GrammarHelper.Properties[this, BoolProperty.BrowsableAstNodes] = true;
         }
 
 
