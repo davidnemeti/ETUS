@@ -37,8 +37,8 @@ namespace ETUS.Grammar
             ValueForBnfTerm<Name> namespace_name = qualified_identifier.CreateValue((context, parseNode) => new Name { Value = parseNode.Token.ValueString });
             ValueForBnfTerm<NameRef> nameref = qualified_identifier.CreateValue((context, parseNode) => new NameRef(parseNode.Token.ValueString));
 
-            ValueForBnfTerm<Reference<QuantityDefinition>> quantity_reference = nameref.CreateValue(nameRef => Reference.Get<QuantityDefinition>(nameRef));
-            ValueForBnfTerm<Reference<UnitDefinition>> unit_reference = nameref.CreateValue(nameRef => Reference.Get<UnitDefinition>(nameRef));
+            ValueForBnfTerm<Reference<QuantityDefinition>> quantity_reference = nameref.ConvertValue(nameRef => Reference.Get<QuantityDefinition>(nameRef));
+            ValueForBnfTerm<Reference<UnitDefinition>> unit_reference = nameref.ConvertValue(nameRef => Reference.Get<UnitDefinition>(nameRef));
 
             var conversion = TypeForTransient.Of<Conversion>();
             var simple_conversion = TypeForBoundMembers.Of<SimpleConversion>();
