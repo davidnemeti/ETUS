@@ -126,6 +126,8 @@ namespace ETUS.Grammar
             @namespace.SetRule(DECLARE + NAMESPACE +
                 namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(@namespace, () => @namespace._.Definitions));
             //@namespace.SetRule(DECLARE + NAMESPACE +
+            //    namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(() => @namespace._.Definitions));
+            //@namespace.SetRule(DECLARE + NAMESPACE +
             //    namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(namespace_usage, () => @namespace._.Definitions));
             //@namespace.SetRule(DECLARE + NAMESPACE +
             //    namespace_name.BindMember(namespace_usage, () => @namespace._.Name) + definition.PlusList().BindMember(namespace_usage, () => @namespace._.Definitions));
