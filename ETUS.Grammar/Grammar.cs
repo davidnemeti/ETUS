@@ -33,12 +33,12 @@ namespace ETUS.Grammar
             IdentifierTerminal IDENTIFIER = new IdentifierTerminal("identifier");
             NonTerminal qualified_identifier = new NonTerminal("qualified_identifier");
 
-            DataForBnfTerm<Name> name = IDENTIFIER.SetValue((context, parseNode) => new Name { Value = parseNode.Token.ValueString });
-            DataForBnfTerm<Name> namespace_name = qualified_identifier.SetValue((context, parseNode) => new Name { Value = parseNode.Token.ValueString });
-            DataForBnfTerm<NameRef> nameref = qualified_identifier.SetValue((context, parseNode) => new NameRef(parseNode.Token.ValueString));
+            ValueForBnfTerm<Name> name = IDENTIFIER.CreateValue((context, parseNode) => new Name { Value = parseNode.Token.ValueString });
+            ValueForBnfTerm<Name> namespace_name = qualified_identifier.CreateValue((context, parseNode) => new Name { Value = parseNode.Token.ValueString });
+            ValueForBnfTerm<NameRef> nameref = qualified_identifier.CreateValue((context, parseNode) => new NameRef(parseNode.Token.ValueString));
 
-            DataForBnfTerm<Reference<QuantityDefinition>> quantity_reference = nameref.SetValue(nameRef => Reference.Get<QuantityDefinition>(nameRef));
-            DataForBnfTerm<Reference<UnitDefinition>> unit_reference = nameref.SetValue(nameRef => Reference.Get<UnitDefinition>(nameRef));
+            ValueForBnfTerm<Reference<QuantityDefinition>> quantity_reference = nameref.CreateValue(nameRef => Reference.Get<QuantityDefinition>(nameRef));
+            ValueForBnfTerm<Reference<UnitDefinition>> unit_reference = nameref.CreateValue(nameRef => Reference.Get<UnitDefinition>(nameRef));
 
             var conversion = TypeForTransient.Of<Conversion>();
             var simple_conversion = TypeForBoundMembers.Of<SimpleConversion>();
@@ -62,24 +62,24 @@ namespace ETUS.Grammar
             var unary_operator = TypeForTransient.Of<UnaryOperator>();
             var external_variable = TypeForBoundMembers.Of<Expression.ExternalVariable>();
 
-            DataForBnfTerm<Expression.Number<double>> NUMBER = new NumberLiteral("number")
-                .SetValue((context, parseNode) => new Expression.Number<double> { Value = Convert.ToDouble(parseNode.Token.Value) });
+            ValueForBnfTerm<Expression.Number<double>> NUMBER = new NumberLiteral("number")
+                .CreateValue((context, parseNode) => new Expression.Number<double> { Value = Convert.ToDouble(parseNode.Token.Value) });
 
-            var SIMPLE_MUTUAL_CONVERSION_OP = ToTerm("<=>").SetValue(Direction.BiDir);
-            var SIMPLE_TO_THIS_CONVERSION_OP = ToTerm("<=").SetValue(Direction.From);
-            var SIMPLE_TO_THAT_CONVERSION_OP = ToTerm("=>").SetValue(Direction.To);
-            var COMPLEX_MUTUAL_CONVERSION_OP = ToTerm("<:>").SetValue(Direction.BiDir);
-            var COMPLEX_TO_THIS_CONVERSION_OP = ToTerm("<:").SetValue(Direction.From);
-            var COMPLEX_TO_THAT_CONVERSION_OP = ToTerm(":>").SetValue(Direction.To);
+            var SIMPLE_MUTUAL_CONVERSION_OP = ToTerm("<=>").CreateValue(Direction.BiDir);
+            var SIMPLE_TO_THIS_CONVERSION_OP = ToTerm("<=").CreateValue(Direction.From);
+            var SIMPLE_TO_THAT_CONVERSION_OP = ToTerm("=>").CreateValue(Direction.To);
+            var COMPLEX_MUTUAL_CONVERSION_OP = ToTerm("<:>").CreateValue(Direction.BiDir);
+            var COMPLEX_TO_THIS_CONVERSION_OP = ToTerm("<:").CreateValue(Direction.From);
+            var COMPLEX_TO_THAT_CONVERSION_OP = ToTerm(":>").CreateValue(Direction.To);
 
-            var POS_OP = ToTerm("+").SetValue(UnaryOperator.Pos);
-            var NEG_OP = ToTerm("-").SetValue(UnaryOperator.Neg);
+            var POS_OP = ToTerm("+").CreateValue(UnaryOperator.Pos);
+            var NEG_OP = ToTerm("-").CreateValue(UnaryOperator.Neg);
 
-            var ADD_OP = ToTerm("+").SetValue(BinaryOperator.Add);
-            var SUB_OP = ToTerm("-").SetValue(BinaryOperator.Sub);
-            var MUL_OP = ToTerm("*").SetValue(BinaryOperator.Mul);
-            var DIV_OP = ToTerm("/").SetValue(BinaryOperator.Div);
-            var POW_OP = ToTerm("^").SetValue(BinaryOperator.Pow);
+            var ADD_OP = ToTerm("+").CreateValue(BinaryOperator.Add);
+            var SUB_OP = ToTerm("-").CreateValue(BinaryOperator.Sub);
+            var MUL_OP = ToTerm("*").CreateValue(BinaryOperator.Mul);
+            var DIV_OP = ToTerm("/").CreateValue(BinaryOperator.Div);
+            var POW_OP = ToTerm("^").CreateValue(BinaryOperator.Pow);
 
             ConstantTerminal CONSTANT = new ConstantTerminal("constant");
 
