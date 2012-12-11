@@ -9,6 +9,7 @@ using System.IO;
 using Irony;
 using Irony.Ast;
 using Irony.Parsing;
+using Irony.Extension;
 using Irony.Extension.AstBinders;
 
 using DomainCore;
@@ -18,7 +19,7 @@ using ETUS.DomainModel.Expressions;
 
 namespace ETUS.Grammar
 {
-    public class UDLGrammar : Irony.Parsing.Grammar
+    public class UDLGrammar : GrammarExtension
     {
         public UDLGrammar()
         {
@@ -198,13 +199,7 @@ namespace ETUS.Grammar
             #endregion
 
             LanguageFlags = LanguageFlags.CreateAst;
-            GrammarHelper.Properties[this, BoolProperty.BrowsableAstNodes] = true;
-        }
-
-
-        new private KeyTerm ToTerm(string text)
-        {
-            return base.ToTerm(text, string.Format("\"{0}\"", text));
+            BrowsableAstNodes = true;
         }
     }
 }
