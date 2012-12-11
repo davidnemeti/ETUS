@@ -53,7 +53,6 @@ namespace ETUS.Grammar
             var cube_unit_expression = TypeForBoundMembers.Of<UnitExpression.Cube>();
             var recip_unit_expression = TypeForBoundMembers.Of<UnitExpression.Recip>();
             var unit_unit_expression = TypeForBoundMembers.Of<UnitExpression.Unit>();
-            var complex_conversion_expression = TypeForTransient.Of<ExpressionWithUnit>();
             var expression = TypeForTransient.Of<Expression>();
             var binary_expression = TypeForBoundMembers.Of<Expression.Binary>();
             var unary_expression = TypeForBoundMembers.Of<Expression.Unary>();
@@ -61,7 +60,7 @@ namespace ETUS.Grammar
             var binary_expression_with_unit = TypeForBoundMembers.Of<ExpressionWithUnit.Binary>();
             var binary_expression_with_unit2 = TypeForBoundMembers.Of<ExpressionWithUnit.Binary2>();
             var unary_expression_with_unit = TypeForBoundMembers.Of<ExpressionWithUnit.Unary>();
-            var unit_variable = TypeForBoundMembers.Of<ExpressionWithUnit.Unit>();
+            var unit_variable = TypeForTransient.Of<UnitExpression>();
             var binary_operator = TypeForTransient.Of<BinaryOperator>();
             var unit_expression_binary_operator = TypeForTransient.Of<UnitExpression.Binary.Operator>();
             var unary_operator = TypeForTransient.Of<UnaryOperator>();
@@ -156,7 +155,11 @@ namespace ETUS.Grammar
 
             complex_conversion.Rule =
                 complex_conversion_op.BindMember(complex_conversion, () => complex_conversion._.Direction)
-                + complex_conversion_expression.BindMember(complex_conversion, () => complex_conversion._.Expr);
+                + expression_with_unit.BindMember(complex_conversion, () => complex_conversion._.Expr)
+                |
+                complex_conversion_op.BindMember(complex_conversion, () => complex_conversion._.Direction)
+                + expression_with_unit.BindMember(complex_conversion, () => complex_conversion._.Expr)
+                + EQUAL_STATEMENT + unit_variable.BindMember(complex_conversion, () => complex_conversion._.OtherUnit);
 
             unit_expression.SetRuleOr(
                 binary_unit_expression,
@@ -189,8 +192,6 @@ namespace ETUS.Grammar
 
             unit_unit_expression.Rule = unit_definition.ConvertValue(unitDefinition => unitDefinition.GetReference()).BindMember(unit_unit_expression, () => unit_unit_expression._.Value);
 
-            complex_conversion_expression.Rule = expression_with_unit | expression_with_unit + EQUAL_STATEMENT + unit_variable;
-
             simple_conversion_op.Rule = SIMPLE_MUTUAL_CONVERSION_OP | SIMPLE_TO_THAT_CONVERSION_OP | SIMPLE_TO_THIS_CONVERSION_OP;
             complex_conversion_op.Rule = COMPLEX_MUTUAL_CONVERSION_OP | COMPLEX_TO_THAT_CONVERSION_OP | COMPLEX_TO_THIS_CONVERSION_OP;
 
@@ -212,7 +213,7 @@ namespace ETUS.Grammar
             binary_expression_with_unit2.Rule = expression + binary_operator + expression_with_unit;
             unary_expression_with_unit.Rule = LEFT_PAREN + expression_with_unit + RIGHT_PAREN | unary_operator + expression_with_unit;
 
-            unit_variable.Rule = LEFT_BRACKET + unit_reference + RIGHT_BRACKET;
+            unit_variable.Rule = LEFT_BRACKET + unit_expression + RIGHT_BRACKET;
 
             external_variable.Rule = EXTERNAL_VARIABLE_PREFIX + qualified_identifier;
 

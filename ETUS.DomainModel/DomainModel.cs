@@ -59,12 +59,12 @@ namespace ETUS.DomainModel
 
     public abstract class Conversion
     {
+        public UnitExpression OtherUnit { get; set; }
         public Direction Direction { get; set; }
     }
 
     public class SimpleConversion : Conversion
     {
-        public UnitExpression OtherUnit { get; set; }
         public Expression Factor { get; set; }
     }
 
