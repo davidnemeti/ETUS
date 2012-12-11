@@ -118,10 +118,13 @@ namespace ETUS.Grammar
             this.Root = group;
 
             group.Rule = namespace_usage.StarList().BindMember(() => group._.NamespaceUsings) + @namespace.PlusList().BindMember(() => group._.Namespaces);
+            group.Rule = namespace_usage.StarList().BindMember(group, () => group._.NamespaceUsings) + @namespace.PlusList().BindMember(group, () => group._.Namespaces);
 
             definition.Rule = quantity_definition | unit_definition | prefix_definition;
 
             namespace_usage.Rule = USE + NAMESPACE + nameref.BindMember(() => namespace_usage._.NameRef);
+            @namespace.Rule = DECLARE + NAMESPACE +
+                namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(@namespace, () => @namespace._.Definitions);
             @namespace.SetRule(DECLARE + NAMESPACE +
                 namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(@namespace, () => @namespace._.Definitions));
 
