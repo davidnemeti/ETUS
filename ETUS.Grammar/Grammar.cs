@@ -130,28 +130,6 @@ namespace ETUS.Grammar
             @namespace.SetRuleOr(DECLARE + NAMESPACE +
                 namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(@namespace, () => @namespace._.Definitions));
 
-#if true
-            // these all should fail with compile error...
-
-            @namespace.SetRuleOr(DECLARE + NAMESPACE +
-                namespace_name.BindMember(() => @namespace._.Name) + definition.PlusList().BindMember(@namespace, () => @namespace._.Definitions));
-
-            @namespace.SetRuleOr(DECLARE + NAMESPACE +
-                namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(() => @namespace._.Definitions));
-
-            @namespace.SetRuleOr(DECLARE + NAMESPACE +
-                namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(namespace_usage, () => @namespace._.Definitions));
-
-            @namespace.SetRuleOr(DECLARE + NAMESPACE +
-                namespace_name.BindMember(namespace_usage, () => @namespace._.Name) + definition.PlusList().BindMember(namespace_usage, () => @namespace._.Definitions));
-
-            @namespace.SetRuleOr(namespace_name.BindMember(namespace_usage, () => @namespace._.Name) + definition.PlusList().BindMember(namespace_usage, () => @namespace._.Definitions));
-
-            conversion.SetRuleOr(simple_conversion, complex_conversion, unit_expression);
-
-            definition.Rule = quantity_definition | unit_definition | prefix_definition | complex_conversion;
-#endif
-
             @namespace.SetRuleOr(namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(@namespace, () => @namespace._.Definitions));
 
             prefix_definition.Rule = DEFINE + PREFIX + name.BindMember(() => prefix_definition._.Name) + expression.BindMember(() => prefix_definition._.Factor);
@@ -200,6 +178,28 @@ namespace ETUS.Grammar
 
             LanguageFlags = LanguageFlags.CreateAst;
             BrowsableAstNodes = true;
+
+#if false
+            // these all should fail with compile error...
+
+            @namespace.SetRuleOr(DECLARE + NAMESPACE +
+                namespace_name.BindMember(() => @namespace._.Name) + definition.PlusList().BindMember(@namespace, () => @namespace._.Definitions));
+
+            @namespace.SetRuleOr(DECLARE + NAMESPACE +
+                namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(() => @namespace._.Definitions));
+
+            @namespace.SetRuleOr(DECLARE + NAMESPACE +
+                namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(namespace_usage, () => @namespace._.Definitions));
+
+            @namespace.SetRuleOr(DECLARE + NAMESPACE +
+                namespace_name.BindMember(namespace_usage, () => @namespace._.Name) + definition.PlusList().BindMember(namespace_usage, () => @namespace._.Definitions));
+
+            @namespace.SetRuleOr(namespace_name.BindMember(namespace_usage, () => @namespace._.Name) + definition.PlusList().BindMember(namespace_usage, () => @namespace._.Definitions));
+
+            conversion.SetRuleOr(simple_conversion, complex_conversion, unit_expression);
+
+            definition.Rule = quantity_definition | unit_definition | prefix_definition | complex_conversion;
+#endif
         }
     }
 }
