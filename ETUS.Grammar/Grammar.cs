@@ -158,22 +158,36 @@ namespace ETUS.Grammar
                 complex_conversion_op.BindMember(complex_conversion, () => complex_conversion._.Direction)
                 + complex_conversion_expression.BindMember(complex_conversion, () => complex_conversion._.Expr);
 
-            unit_expression.SetRuleOr(binary_unit_expression, square_unit_expression, cube_unit_expression, recip_unit_expression, unit_unit_expression);
+            unit_expression.SetRuleOr(
+                binary_unit_expression,
+                square_unit_expression,
+                cube_unit_expression,
+                recip_unit_expression,
+                unit_unit_expression,
+                LEFT_PAREN + unit_expression + RIGHT_PAREN
+                );
 
             binary_unit_expression.Rule =
                 unit_expression.BindMember(binary_unit_expression, () => binary_unit_expression._.Term1)
                 + unit_expression_binary_operator.BindMember(binary_unit_expression, () => binary_unit_expression._.Op)
                 + unit_expression.BindMember(binary_unit_expression, () => binary_unit_expression._.Term2);
 
-            square_unit_expression.Rule = unit_expression.BindMember(square_unit_expression, () => square_unit_expression._.Base)
-                + POW_OP
+            square_unit_expression.Rule =
+                unit_expression.BindMember(square_unit_expression, () => square_unit_expression._.Base)
+                + POW_OP.Cast(square_unit_expression)
                 + ToTerm("2").ToType(square_unit_expression);
 
-            cube_unit_expression.Rule = unit_expression + POW_OP + ToTerm("3");
-            recip_unit_expression.Rule = "1" + DIV_OP + unit_expression;
-            unit_unit_expression.Rule = unit_expression;
+            cube_unit_expression.Rule =
+                unit_expression.BindMember(cube_unit_expression, () => cube_unit_expression._.Base)
+                + POW_OP
+                + ToTerm("3");
 
-            unary_unit_expression.Rule = LEFT_PAREN + unit_expression + RIGHT_PAREN;
+            recip_unit_expression.Rule =
+                ToTerm("1")
+                + DIV_OP
+                + unit_expression.BindMember(recip_unit_expression, () => recip_unit_expression._.Denominator);
+
+            unit_unit_expression.Rule = unit_definition.ConvertValue(unitDefinition => unitDefinition.GetReference()).BindMember(unit_unit_expression, () => unit_unit_expression._.Value);
 
             complex_conversion_expression.Rule = expression_with_unit | expression_with_unit + EQUAL_STATEMENT + unit_variable;
 
@@ -207,7 +221,7 @@ namespace ETUS.Grammar
             LanguageFlags = LanguageFlags.CreateAst;
             BrowsableAstNodes = true;
 
-#if false
+#if true
             // these all should fail with compile error...
 
             @namespace.SetRuleOr(DECLARE + NAMESPACE +
