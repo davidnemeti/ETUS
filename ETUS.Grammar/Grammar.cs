@@ -225,7 +225,13 @@ namespace ETUS.Grammar
                 + binary_operator.BindMember(binary_expression_with_unit, () => binary_expression_with_unit._.Op)
                 + expression.BindMember(binary_expression_with_unit, () => binary_expression_with_unit._.Term2);
 
+            binary_expression_with_unit2.Rule =
+                expression.BindMember(binary_expression_with_unit2, () => binary_expression_with_unit2._.Term1)
+                + binary_operator.BindMember(binary_expression_with_unit2, () => binary_expression_with_unit._.Op)
+                + expression_with_unit.BindMember(binary_expression_with_unit2, () => binary_expression_with_unit2._.Term2);
+
             binary_expression_with_unit2.Rule = expression + binary_operator + expression_with_unit;
+
             unary_expression_with_unit.Rule = LEFT_PAREN + expression_with_unit + RIGHT_PAREN | unary_operator + expression_with_unit;
 
             unit_variable_expression_with_unit.Rule = LEFT_BRACKET + unit_expression + RIGHT_BRACKET;
@@ -239,6 +245,11 @@ namespace ETUS.Grammar
 
 #if true
             // these all should fail with compile error...
+
+            binary_expression_with_unit2.Rule =
+                expression.BindMember(binary_expression_with_unit2, () => binary_expression_with_unit._.Term2)
+                + binary_operator.BindMember(binary_expression_with_unit2, () => binary_expression_with_unit._.Op)
+                + expression_with_unit.BindMember(binary_expression_with_unit2, () => binary_expression_with_unit._.Term1);
 
             @namespace.SetRuleOr(DECLARE + NAMESPACE +
                 namespace_name.BindMember(() => @namespace._.Name) + definition.PlusList().BindMember(@namespace, () => @namespace._.Definitions));
