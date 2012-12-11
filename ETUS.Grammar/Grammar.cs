@@ -60,7 +60,7 @@ namespace ETUS.Grammar
             var binary_expression_with_unit = TypeForBoundMembers.Of<ExpressionWithUnit.Binary>();
             var binary_expression_with_unit2 = TypeForBoundMembers.Of<ExpressionWithUnit.Binary2>();
             var unary_expression_with_unit = TypeForBoundMembers.Of<ExpressionWithUnit.Unary>();
-            var unit_variable = TypeForTransient.Of<UnitExpression>();
+            var unit_variable_expression_with_unit = TypeForTransient.Of<ExpressionWithUnit.Unit>();
             var binary_operator = TypeForTransient.Of<BinaryOperator>();
             var unit_expression_binary_operator = TypeForTransient.Of<UnitExpression.Binary.Operator>();
             var unary_operator = TypeForTransient.Of<UnaryOperator>();
@@ -159,7 +159,7 @@ namespace ETUS.Grammar
                 |
                 complex_conversion_op.BindMember(complex_conversion, () => complex_conversion._.Direction)
                 + expression_with_unit.BindMember(complex_conversion, () => complex_conversion._.Expr)
-                + EQUAL_STATEMENT + unit_variable.BindMember(complex_conversion, () => complex_conversion._.OtherUnit);
+                + EQUAL_STATEMENT + unit_expression.BindMember(complex_conversion, () => complex_conversion._.OtherUnit);
 
             unit_expression.SetRuleOr(
                 binary_unit_expression,
@@ -213,13 +213,22 @@ namespace ETUS.Grammar
 
             unary_expression.Rule = unary_operator.BindMember(unary_expression, () => unary_expression._.Op) + expression.BindMember(unary_expression, () => unary_expression._.Term);
 
-            expression_with_unit.Rule = unit_variable | binary_expression_with_unit | binary_expression_with_unit2 | unary_expression_with_unit;
+            expression_with_unit.SetRuleOr(
+                unit_variable_expression_with_unit,
+                binary_expression_with_unit,
+                binary_expression_with_unit2,
+                unary_expression_with_unit
+                );
 
-            binary_expression_with_unit.Rule = expression_with_unit + binary_operator + expression;
+            binary_expression_with_unit.Rule =
+                expression_with_unit.BindMember(binary_expression_with_unit, () => binary_expression_with_unit._.Term1)
+                + binary_operator.BindMember(binary_expression_with_unit, () => binary_expression_with_unit._.Op)
+                + expression.BindMember(binary_expression_with_unit, () => binary_expression_with_unit._.Term2);
+
             binary_expression_with_unit2.Rule = expression + binary_operator + expression_with_unit;
             unary_expression_with_unit.Rule = LEFT_PAREN + expression_with_unit + RIGHT_PAREN | unary_operator + expression_with_unit;
 
-            unit_variable.Rule = LEFT_BRACKET + unit_expression + RIGHT_BRACKET;
+            unit_variable_expression_with_unit.Rule = LEFT_BRACKET + unit_expression + RIGHT_BRACKET;
 
             external_variable.Rule = EXTERNAL_VARIABLE_PREFIX + qualified_identifier;
 

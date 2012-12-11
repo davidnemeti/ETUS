@@ -45,7 +45,7 @@ namespace ETUS.DomainModel.Expressions
 
         public class Unit : ExpressionWithUnit
         {
-            public Reference<UnitDefinition> Value { get; set; }
+            public UnitExpression Value { get; set; }
 
             public override string ToString()
             {
