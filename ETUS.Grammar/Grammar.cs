@@ -204,11 +204,17 @@ namespace ETUS.Grammar
 
             unary_operator.Rule = NEG_OP | POS_OP;
 
-            expression.Rule = NUMBER | CONSTANT | external_variable | binary_expression | unary_expression;
-            binary_expression.Rule = expression.BindMember(() => binary_expression._.Term1) + binary_operator.BindMember(() => binary_expression._.Op) + expression.BindMember(() => binary_expression._.Term2);
-            unary_expression.Rule = LEFT_PAREN + expression + RIGHT_PAREN | unary_operator + expression;
+            expression.SetRuleOr(NUMBER, CONSTANT.ToType(expression), external_variable, binary_expression, unary_expression, LEFT_PAREN + expression + RIGHT_PAREN);
+
+            binary_expression.Rule =
+                expression.BindMember(binary_expression, () => binary_expression._.Term1)
+                + binary_operator.BindMember(binary_expression, () => binary_expression._.Op)
+                + expression.BindMember(binary_expression, () => binary_expression._.Term2);
+
+            unary_expression.Rule = unary_operator.BindMember(unary_expression, () => unary_expression._.Op) + expression.BindMember(unary_expression, () => unary_expression._.Term);
 
             expression_with_unit.Rule = unit_variable | binary_expression_with_unit | binary_expression_with_unit2 | unary_expression_with_unit;
+
             binary_expression_with_unit.Rule = expression_with_unit + binary_operator + expression;
             binary_expression_with_unit2.Rule = expression + binary_operator + expression_with_unit;
             unary_expression_with_unit.Rule = LEFT_PAREN + expression_with_unit + RIGHT_PAREN | unary_operator + expression_with_unit;
