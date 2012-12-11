@@ -128,7 +128,7 @@ namespace ETUS.Grammar
             @namespace.SetRule(DECLARE + NAMESPACE +
                 namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(@namespace, () => @namespace._.Definitions));
 
-#if false
+#if true
             // these all should fail with compile error...
 
             @namespace.SetRule(DECLARE + NAMESPACE +
@@ -146,6 +146,8 @@ namespace ETUS.Grammar
             @namespace.SetRule(namespace_name.BindMember(namespace_usage, () => @namespace._.Name) + definition.PlusList().BindMember(namespace_usage, () => @namespace._.Definitions));
 
             conversion.SetRule(simple_conversion, complex_conversion, unit_expression);
+
+            definition.Rule = quantity_definition | unit_definition | prefix_definition | complex_conversion;
 #endif
 
             @namespace.SetRule(namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(@namespace, () => @namespace._.Definitions));
