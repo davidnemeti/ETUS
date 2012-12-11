@@ -118,83 +118,83 @@ namespace ETUS.Grammar
 
             this.Root = group;
 
-            group.Rule = namespace_usage.StarList().BindMember(() => group._.NamespaceUsings) + @namespace.PlusList().BindMember(() => group._.Namespaces);
-            group.Rule = namespace_usage.StarList().BindMember(group, () => group._.NamespaceUsings) + @namespace.PlusList().BindMember(group, () => group._.Namespaces);
+//            group.Rule = namespace_usage.StarList().BindMember(() => group._.NamespaceUsings) + @namespace.PlusList().BindMember(() => group._.Namespaces);
+//            group.Rule = namespace_usage.StarList().BindMember(group, () => group._.NamespaceUsings) + @namespace.PlusList().BindMember(group, () => group._.Namespaces);
 
-            definition.Rule = quantity_definition | unit_definition | prefix_definition;
-            definition.SetRule(quantity_definition, unit_definition, prefix_definition);
+//            definition.Rule = quantity_definition | unit_definition | prefix_definition;
+//            definition.SetRule(quantity_definition, unit_definition, prefix_definition);
 
-            namespace_usage.Rule = USE + NAMESPACE + nameref.BindMember(() => namespace_usage._.NameRef);
-            @namespace.Rule = DECLARE + NAMESPACE +
-                namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(@namespace, () => @namespace._.Definitions);
-            @namespace.SetRule(DECLARE + NAMESPACE +
-                namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(@namespace, () => @namespace._.Definitions));
+//            namespace_usage.Rule = USE + NAMESPACE + nameref.BindMember(() => namespace_usage._.NameRef);
+//            @namespace.Rule = DECLARE + NAMESPACE +
+//                namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(@namespace, () => @namespace._.Definitions);
+//            @namespace.SetRule(DECLARE + NAMESPACE +
+//                namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(@namespace, () => @namespace._.Definitions));
 
-#if true
-            // these all should fail with compile error...
+//#if true
+//            // these all should fail with compile error...
 
-            @namespace.SetRule(DECLARE + NAMESPACE +
-                namespace_name.BindMember(() => @namespace._.Name) + definition.PlusList().BindMember(@namespace, () => @namespace._.Definitions));
+//            @namespace.SetRule(DECLARE + NAMESPACE +
+//                namespace_name.BindMember(() => @namespace._.Name) + definition.PlusList().BindMember(@namespace, () => @namespace._.Definitions));
 
-            @namespace.SetRule(DECLARE + NAMESPACE +
-                namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(() => @namespace._.Definitions));
+//            @namespace.SetRule(DECLARE + NAMESPACE +
+//                namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(() => @namespace._.Definitions));
 
-            @namespace.SetRule(DECLARE + NAMESPACE +
-                namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(namespace_usage, () => @namespace._.Definitions));
+//            @namespace.SetRule(DECLARE + NAMESPACE +
+//                namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(namespace_usage, () => @namespace._.Definitions));
 
-            @namespace.SetRule(DECLARE + NAMESPACE +
-                namespace_name.BindMember(namespace_usage, () => @namespace._.Name) + definition.PlusList().BindMember(namespace_usage, () => @namespace._.Definitions));
+//            @namespace.SetRule(DECLARE + NAMESPACE +
+//                namespace_name.BindMember(namespace_usage, () => @namespace._.Name) + definition.PlusList().BindMember(namespace_usage, () => @namespace._.Definitions));
 
-            @namespace.SetRule(namespace_name.BindMember(namespace_usage, () => @namespace._.Name) + definition.PlusList().BindMember(namespace_usage, () => @namespace._.Definitions));
+//            @namespace.SetRule(namespace_name.BindMember(namespace_usage, () => @namespace._.Name) + definition.PlusList().BindMember(namespace_usage, () => @namespace._.Definitions));
 
-            conversion.SetRule(simple_conversion, complex_conversion, unit_expression);
+//            conversion.SetRule(simple_conversion, complex_conversion, unit_expression);
 
-            definition.Rule = quantity_definition | unit_definition | prefix_definition | complex_conversion;
-#endif
+//            definition.Rule = quantity_definition | unit_definition | prefix_definition | complex_conversion;
+//#endif
 
-            @namespace.SetRule(namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(@namespace, () => @namespace._.Definitions));
+//            @namespace.SetRule(namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(@namespace, () => @namespace._.Definitions));
 
-            prefix_definition.Rule = DEFINE + PREFIX + name.BindMember(() => prefix_definition._.Name) + expression.BindMember(() => prefix_definition._.Factor);
-            quantity_definition.Rule = DEFINE + QUANTITY + name.BindMember(() => quantity_definition._.Name);
+//            prefix_definition.Rule = DEFINE + PREFIX + name.BindMember(() => prefix_definition._.Name) + expression.BindMember(() => prefix_definition._.Factor);
+//            quantity_definition.Rule = DEFINE + QUANTITY + name.BindMember(() => quantity_definition._.Name);
 
-            unit_definition.Rule = DEFINE + UNIT + name.BindMember(() => unit_definition._.Name) + OF + quantity_reference.BindMember(() => unit_definition._.Quantity) +
-                conversion.StarList().BindMember(() => unit_definition._.Conversions);
+//            unit_definition.Rule = DEFINE + UNIT + name.BindMember(() => unit_definition._.Name) + OF + quantity_reference.BindMember(() => unit_definition._.Quantity) +
+//                conversion.StarList().BindMember(() => unit_definition._.Conversions);
 
-            conversion.Rule = simple_conversion | complex_conversion;
+//            conversion.Rule = simple_conversion | complex_conversion;
 
-            simple_conversion.Rule = simple_conversion_op + unit_expression |
-                                        simple_conversion_op + expression + unit_expression;
-            complex_conversion.Rule = complex_conversion_op + complex_conversion_expression;
+//            simple_conversion.Rule = simple_conversion_op + unit_expression |
+//                                        simple_conversion_op + expression + unit_expression;
+//            complex_conversion.Rule = complex_conversion_op + complex_conversion_expression;
 
-            unit_expression.Rule = name | binary_unit_expression | unary_unit_expression;
-            binary_unit_expression.Rule =   unit_expression + MUL_OP + unit_expression |
-                                            "1" + DIV_OP + unit_expression |
-                                            unit_expression + DIV_OP + unit_expression |
-                                            unit_expression + POW_OP + NUMBER;
-            unary_unit_expression.Rule = LEFT_PAREN + unit_expression + RIGHT_PAREN;
+//            unit_expression.Rule = name | binary_unit_expression | unary_unit_expression;
+//            binary_unit_expression.Rule =   unit_expression + MUL_OP + unit_expression |
+//                                            "1" + DIV_OP + unit_expression |
+//                                            unit_expression + DIV_OP + unit_expression |
+//                                            unit_expression + POW_OP + NUMBER;
+//            unary_unit_expression.Rule = LEFT_PAREN + unit_expression + RIGHT_PAREN;
 
-            complex_conversion_expression.Rule = expression_with_unit | expression_with_unit + EQUAL_STATEMENT + unit_variable;
+//            complex_conversion_expression.Rule = expression_with_unit | expression_with_unit + EQUAL_STATEMENT + unit_variable;
 
-            simple_conversion_op.Rule = SIMPLE_MUTUAL_CONVERSION_OP | SIMPLE_TO_THAT_CONVERSION_OP | SIMPLE_TO_THIS_CONVERSION_OP;
-            complex_conversion_op.Rule = COMPLEX_MUTUAL_CONVERSION_OP | COMPLEX_TO_THAT_CONVERSION_OP | COMPLEX_TO_THIS_CONVERSION_OP;
+//            simple_conversion_op.Rule = SIMPLE_MUTUAL_CONVERSION_OP | SIMPLE_TO_THAT_CONVERSION_OP | SIMPLE_TO_THIS_CONVERSION_OP;
+//            complex_conversion_op.Rule = COMPLEX_MUTUAL_CONVERSION_OP | COMPLEX_TO_THAT_CONVERSION_OP | COMPLEX_TO_THIS_CONVERSION_OP;
 
-            binary_operator.Rule = ADD_OP | SUB_OP | MUL_OP | DIV_OP | POW_OP;
-            unary_operator.Rule = NEG_OP | POS_OP;
+//            binary_operator.Rule = ADD_OP | SUB_OP | MUL_OP | DIV_OP | POW_OP;
+//            unary_operator.Rule = NEG_OP | POS_OP;
 
-            expression.Rule = NUMBER | CONSTANT | external_variable | binary_expression | unary_expression | Empty;
-            binary_expression.Rule = expression.BindMember(() => binary_expression._.Term1) + binary_operator.BindMember(() => binary_expression._.Op) + expression.BindMember(() => binary_expression._.Term2);
-            unary_expression.Rule = LEFT_PAREN + expression + RIGHT_PAREN | unary_operator + expression;
+//            expression.Rule = NUMBER | CONSTANT | external_variable | binary_expression | unary_expression | Empty;
+//            binary_expression.Rule = expression.BindMember(() => binary_expression._.Term1) + binary_operator.BindMember(() => binary_expression._.Op) + expression.BindMember(() => binary_expression._.Term2);
+//            unary_expression.Rule = LEFT_PAREN + expression + RIGHT_PAREN | unary_operator + expression;
 
-            expression_with_unit.Rule = unit_variable | binary_expression_with_unit | binary_expression_with_unit2 | unary_expression_with_unit;
-            binary_expression_with_unit.Rule = expression_with_unit + binary_operator + expression;
-            binary_expression_with_unit2.Rule = expression + binary_operator + expression_with_unit;
-            unary_expression_with_unit.Rule = LEFT_PAREN + expression_with_unit + RIGHT_PAREN | unary_operator + expression_with_unit;
+//            expression_with_unit.Rule = unit_variable | binary_expression_with_unit | binary_expression_with_unit2 | unary_expression_with_unit;
+//            binary_expression_with_unit.Rule = expression_with_unit + binary_operator + expression;
+//            binary_expression_with_unit2.Rule = expression + binary_operator + expression_with_unit;
+//            unary_expression_with_unit.Rule = LEFT_PAREN + expression_with_unit + RIGHT_PAREN | unary_operator + expression_with_unit;
 
-            unit_variable.Rule = LEFT_BRACKET + unit_reference + RIGHT_BRACKET;
+//            unit_variable.Rule = LEFT_BRACKET + unit_reference + RIGHT_BRACKET;
 
-            qualified_identifier.Rule = MakePlusRule(qualified_identifier, DOT, IDENTIFIER);
+//            qualified_identifier.Rule = MakePlusRule(qualified_identifier, DOT, IDENTIFIER);
 
-            external_variable.Rule = EXTERNAL_VARIABLE_PREFIX + qualified_identifier;
+//            external_variable.Rule = EXTERNAL_VARIABLE_PREFIX + qualified_identifier;
 
             #endregion
 
