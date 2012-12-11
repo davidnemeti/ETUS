@@ -194,7 +194,7 @@ namespace ETUS.Grammar
             simple_conversion_op.Rule = SIMPLE_MUTUAL_CONVERSION_OP | SIMPLE_TO_THAT_CONVERSION_OP | SIMPLE_TO_THIS_CONVERSION_OP;
             complex_conversion_op.Rule = COMPLEX_MUTUAL_CONVERSION_OP | COMPLEX_TO_THAT_CONVERSION_OP | COMPLEX_TO_THIS_CONVERSION_OP;
 
-            binary_operator.SetRuleOr(ADD_OP, SUB_OP, MUL_OP, DIV_OP, POW_OP);
+            binary_operator.Rule = ADD_OP | SUB_OP | MUL_OP | DIV_OP | POW_OP;
 
             unit_expression_binary_operator.SetRuleOr(
                 MUL_OP.Cast<UnitExpression.Binary.Operator>(),
@@ -203,7 +203,7 @@ namespace ETUS.Grammar
 
             unary_operator.Rule = NEG_OP | POS_OP;
 
-            expression.Rule = NUMBER | CONSTANT | external_variable | binary_expression | unary_expression | Empty;
+            expression.Rule = NUMBER | CONSTANT | external_variable | binary_expression | unary_expression;
             binary_expression.Rule = expression.BindMember(() => binary_expression._.Term1) + binary_operator.BindMember(() => binary_expression._.Op) + expression.BindMember(() => binary_expression._.Term2);
             unary_expression.Rule = LEFT_PAREN + expression + RIGHT_PAREN | unary_operator + expression;
 
