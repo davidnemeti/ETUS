@@ -129,6 +129,9 @@ namespace ETUS.Grammar
             // these all should fail with compile error...
 
             @namespace.SetRule(DECLARE + NAMESPACE +
+                namespace_name.BindMember(() => @namespace._.Name) + definition.PlusList().BindMember(@namespace, () => @namespace._.Definitions));
+
+            @namespace.SetRule(DECLARE + NAMESPACE +
                 namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(() => @namespace._.Definitions));
 
             @namespace.SetRule(DECLARE + NAMESPACE +
