@@ -31,12 +31,13 @@ namespace ETUS.Grammar
             var prefix_definition = TypeForBoundMembers.Of<PrefixDefinition>();
             var unit_definition = TypeForBoundMembers.Of<UnitDefinition>();
 
+            KeyTerm DOT = ToTerm(".");
             IdentifierTerminal IDENTIFIER = new IdentifierTerminal("identifier");
-            NonTerminal qualified_identifier = new NonTerminal("qualified_identifier");
+            IBnfTerm<string> qualified_identifier = IDENTIFIER.PlusList<string>(DOT).ConvertValue(identifiers => string.Join(DOT.Text, identifiers));
 
             ValueForBnfTerm<Name> name = IDENTIFIER.CreateValue((context, parseNode) => new Name { Value = parseNode.Token.ValueString });
-            ValueForBnfTerm<Name> namespace_name = qualified_identifier.CreateValue((context, parseNode) => new Name { Value = parseNode.Token.ValueString });
-            ValueForBnfTerm<NameRef> nameref = qualified_identifier.CreateValue((context, parseNode) => new NameRef(parseNode.Token.ValueString));
+            ValueForBnfTerm<Name> namespace_name = qualified_identifier.ConvertValue(qual_id => new Name {Value = qual_id});
+            ValueForBnfTerm<NameRef> nameref = qualified_identifier.ConvertValue(qual_id => new NameRef(qual_id));
 
             ValueForBnfTerm<Reference<QuantityDefinition>> quantity_reference = nameref.ConvertValue(nameRef => Reference.Get<QuantityDefinition>(nameRef));
             ValueForBnfTerm<Reference<UnitDefinition>> unit_reference = nameref.ConvertValue(nameRef => Reference.Get<UnitDefinition>(nameRef));
@@ -48,7 +49,10 @@ namespace ETUS.Grammar
             var complex_conversion_op = TypeForBoundMembers.Of<Direction>();
             var unit_expression = TypeForTransient.Of<UnitExpression>();
             var binary_unit_expression = TypeForBoundMembers.Of<UnitExpression.Binary>();
-            NonTerminal unary_unit_expression = new NonTerminal("unary_unit_expression");
+            var square_unit_expression = TypeForBoundMembers.Of<UnitExpression.Square>();
+            var cube_unit_expression = TypeForBoundMembers.Of<UnitExpression.Cube>();
+            var recip_unit_expression = TypeForBoundMembers.Of<UnitExpression.Recip>();
+            var unit_unit_expression = TypeForBoundMembers.Of<UnitExpression.Unit>();
             var complex_conversion_expression = TypeForTransient.Of<ExpressionWithUnit>();
             var expression = TypeForTransient.Of<Expression>();
             var binary_expression = TypeForBoundMembers.Of<Expression.Binary>();
@@ -59,6 +63,7 @@ namespace ETUS.Grammar
             var unary_expression_with_unit = TypeForBoundMembers.Of<ExpressionWithUnit.Unary>();
             var unit_variable = TypeForBoundMembers.Of<ExpressionWithUnit.Unit>();
             var binary_operator = TypeForTransient.Of<BinaryOperator>();
+            var unit_expression_binary_operator = TypeForTransient.Of<UnitExpression.Binary.Operator>();
             var unary_operator = TypeForTransient.Of<UnaryOperator>();
             var external_variable = TypeForBoundMembers.Of<Expression.ExternalVariable>();
 
@@ -92,7 +97,6 @@ namespace ETUS.Grammar
             KeyTerm UNIT = ToTerm("unit");
             KeyTerm OF = ToTerm("of");
             KeyTerm EXTERNAL_VARIABLE_PREFIX = ToTerm("::");
-            KeyTerm DOT = ToTerm(".");
             KeyTerm EQUAL_STATEMENT = ToTerm("=");
             KeyTerm LEFT_PAREN = ToTerm("(");
             KeyTerm RIGHT_PAREN = ToTerm(")");
@@ -118,37 +122,57 @@ namespace ETUS.Grammar
 
             this.Root = group;
 
-            group.Rule = namespace_usage.StarList().BindMember(() => group._.NamespaceUsings) + @namespace.PlusList().BindMember(() => group._.Namespaces);
             group.Rule = namespace_usage.StarList().BindMember(group, () => group._.NamespaceUsings) + @namespace.PlusList().BindMember(group, () => group._.Namespaces);
 
-            definition.Rule = quantity_definition | unit_definition | prefix_definition;
             definition.SetRuleOr(quantity_definition, unit_definition, prefix_definition);
 
-            namespace_usage.Rule = USE + NAMESPACE + nameref.BindMember(() => namespace_usage._.NameRef);
-            @namespace.Rule = DECLARE + NAMESPACE +
-                namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(@namespace, () => @namespace._.Definitions);
-            @namespace.SetRuleOr(DECLARE + NAMESPACE +
-                namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(@namespace, () => @namespace._.Definitions));
+            namespace_usage.Rule = USE + NAMESPACE + nameref.BindMember(namespace_usage, () => namespace_usage._.NameRef);
 
-            @namespace.SetRuleOr(namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(@namespace, () => @namespace._.Definitions));
+            @namespace.Rule = DECLARE + NAMESPACE + namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(@namespace, () => @namespace._.Definitions);
 
-            prefix_definition.Rule = DEFINE + PREFIX + name.BindMember(() => prefix_definition._.Name) + expression.BindMember(() => prefix_definition._.Factor);
-            quantity_definition.Rule = DEFINE + QUANTITY + name.BindMember(() => quantity_definition._.Name);
+            prefix_definition.Rule =
+                DEFINE + PREFIX
+                + name.BindMember(prefix_definition, () => prefix_definition._.Name)
+                + expression.BindMember(prefix_definition, () => prefix_definition._.Factor);
 
-            unit_definition.Rule = DEFINE + UNIT + name.BindMember(() => unit_definition._.Name) + OF + quantity_reference.BindMember(() => unit_definition._.Quantity) +
-                conversion.StarList().BindMember(() => unit_definition._.Conversions);
+            quantity_definition.Rule = DEFINE + QUANTITY + name.BindMember(quantity_definition, () => quantity_definition._.Name);
 
-            conversion.Rule = simple_conversion | complex_conversion;
+            unit_definition.Rule =
+                DEFINE + UNIT
+                + name.BindMember(unit_definition, () => unit_definition._.Name)
+                + OF
+                + quantity_reference.BindMember(unit_definition, () => unit_definition._.Quantity)
+                + conversion.StarList().BindMember(unit_definition, () => unit_definition._.Conversions);
 
-            simple_conversion.Rule = simple_conversion_op + unit_expression |
-                                        simple_conversion_op + expression + unit_expression;
-            complex_conversion.Rule = complex_conversion_op + complex_conversion_expression;
+            conversion.SetRuleOr(simple_conversion, complex_conversion);
 
-            unit_expression.Rule = name | binary_unit_expression | unary_unit_expression;
-            binary_unit_expression.Rule =   unit_expression + MUL_OP + unit_expression |
-                                            "1" + DIV_OP + unit_expression |
-                                            unit_expression + DIV_OP + unit_expression |
-                                            unit_expression + POW_OP + NUMBER;
+            simple_conversion.Rule =
+                simple_conversion_op.BindMember(simple_conversion, () => simple_conversion._.Direction)
+                + unit_expression.BindMember(simple_conversion, () => simple_conversion._.OtherUnit)
+                |
+                simple_conversion_op.BindMember(simple_conversion, () => simple_conversion._.Direction)
+                + expression.BindMember(simple_conversion, () => simple_conversion._.Factor)
+                + unit_expression.BindMember(simple_conversion, () => simple_conversion._.OtherUnit);
+
+            complex_conversion.Rule =
+                complex_conversion_op.BindMember(complex_conversion, () => complex_conversion._.Direction)
+                + complex_conversion_expression.BindMember(complex_conversion, () => complex_conversion._.Expr);
+
+            unit_expression.SetRuleOr(binary_unit_expression, square_unit_expression, cube_unit_expression, recip_unit_expression, unit_unit_expression);
+
+            binary_unit_expression.Rule =
+                unit_expression.BindMember(binary_unit_expression, () => binary_unit_expression._.Term1)
+                + unit_expression_binary_operator.BindMember(binary_unit_expression, () => binary_unit_expression._.Op)
+                + unit_expression.BindMember(binary_unit_expression, () => binary_unit_expression._.Term2);
+
+            square_unit_expression.Rule = unit_expression.BindMember(square_unit_expression, () => square_unit_expression._.Base)
+                + POW_OP
+                + ToTerm("2").ToType(square_unit_expression);
+
+            cube_unit_expression.Rule = unit_expression + POW_OP + ToTerm("3");
+            recip_unit_expression.Rule = "1" + DIV_OP + unit_expression;
+            unit_unit_expression.Rule = unit_expression;
+
             unary_unit_expression.Rule = LEFT_PAREN + unit_expression + RIGHT_PAREN;
 
             complex_conversion_expression.Rule = expression_with_unit | expression_with_unit + EQUAL_STATEMENT + unit_variable;
@@ -156,7 +180,13 @@ namespace ETUS.Grammar
             simple_conversion_op.Rule = SIMPLE_MUTUAL_CONVERSION_OP | SIMPLE_TO_THAT_CONVERSION_OP | SIMPLE_TO_THIS_CONVERSION_OP;
             complex_conversion_op.Rule = COMPLEX_MUTUAL_CONVERSION_OP | COMPLEX_TO_THAT_CONVERSION_OP | COMPLEX_TO_THIS_CONVERSION_OP;
 
-            binary_operator.Rule = ADD_OP | SUB_OP | MUL_OP | DIV_OP | POW_OP;
+            binary_operator.SetRuleOr(ADD_OP, SUB_OP, MUL_OP, DIV_OP, POW_OP);
+
+            unit_expression_binary_operator.SetRuleOr(
+                MUL_OP.Cast<UnitExpression.Binary.Operator>(),
+                DIV_OP.Cast<UnitExpression.Binary.Operator>()
+                );
+
             unary_operator.Rule = NEG_OP | POS_OP;
 
             expression.Rule = NUMBER | CONSTANT | external_variable | binary_expression | unary_expression | Empty;
@@ -169,8 +199,6 @@ namespace ETUS.Grammar
             unary_expression_with_unit.Rule = LEFT_PAREN + expression_with_unit + RIGHT_PAREN | unary_operator + expression_with_unit;
 
             unit_variable.Rule = LEFT_BRACKET + unit_reference + RIGHT_BRACKET;
-
-            qualified_identifier.Rule = MakePlusRule(qualified_identifier, DOT, IDENTIFIER);
 
             external_variable.Rule = EXTERNAL_VARIABLE_PREFIX + qualified_identifier;
 

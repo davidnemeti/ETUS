@@ -36,14 +36,23 @@ namespace ETUS.DomainModel.Expressions
             }
         }
 
-        public class Pow : UnitExpression
+        public class Square : UnitExpression
         {
             public UnitExpression Base { get; set; }
-            public int Exponent { get; set; }
 
             public override string ToString()
             {
-                return string.Format("({0} Pow {1})", Base, Exponent);
+                return string.Format("({0}²)", Base);
+            }
+        }
+
+        public class Cube : UnitExpression
+        {
+            public UnitExpression Base { get; set; }
+
+            public override string ToString()
+            {
+                return string.Format("({0}³)", Base);
             }
         }
 
