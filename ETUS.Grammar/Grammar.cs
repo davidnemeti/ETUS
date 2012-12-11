@@ -121,6 +121,7 @@ namespace ETUS.Grammar
             group.Rule = namespace_usage.StarList().BindMember(group, () => group._.NamespaceUsings) + @namespace.PlusList().BindMember(group, () => group._.Namespaces);
 
             definition.Rule = quantity_definition | unit_definition | prefix_definition;
+            definition.SetRule(quantity_definition, unit_definition, prefix_definition);
 
             namespace_usage.Rule = USE + NAMESPACE + nameref.BindMember(() => namespace_usage._.NameRef);
             @namespace.Rule = DECLARE + NAMESPACE +
