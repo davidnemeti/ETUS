@@ -35,12 +35,12 @@ namespace ETUS.Grammar
             IdentifierTerminal IDENTIFIER = new IdentifierTerminal("identifier");
             IBnfTerm<string> qualified_identifier = IDENTIFIER.PlusList<string>(DOT).ConvertValue(identifiers => string.Join(DOT.Text, identifiers));
 
-            ValueForBnfTerm<Name> name = IDENTIFIER.CreateValue((context, parseNode) => new Name { Value = parseNode.Token.ValueString });
-            ValueForBnfTerm<Name> namespace_name = qualified_identifier.ConvertValue(qual_id => new Name {Value = qual_id});
-            ValueForBnfTerm<NameRef> nameref = qualified_identifier.ConvertValue(qual_id => new NameRef(qual_id));
+            TypeForValue<Name> name = IDENTIFIER.CreateValue((context, parseNode) => new Name { Value = parseNode.Token.ValueString });
+            TypeForValue<Name> namespace_name = qualified_identifier.ConvertValue(qual_id => new Name {Value = qual_id});
+            TypeForValue<NameRef> nameref = qualified_identifier.ConvertValue(qual_id => new NameRef(qual_id));
 
-            ValueForBnfTerm<Reference<QuantityDefinition>> quantity_reference = nameref.ConvertValue(nameRef => Reference.Get<QuantityDefinition>(nameRef));
-            ValueForBnfTerm<Reference<UnitDefinition>> unit_reference = nameref.ConvertValue(nameRef => Reference.Get<UnitDefinition>(nameRef));
+            TypeForValue<Reference<QuantityDefinition>> quantity_reference = nameref.ConvertValue(nameRef => Reference.Get<QuantityDefinition>(nameRef));
+            TypeForValue<Reference<UnitDefinition>> unit_reference = nameref.ConvertValue(nameRef => Reference.Get<UnitDefinition>(nameRef));
 
             var conversion = TypeForTransient.Of<Conversion>();
             var simple_conversion = TypeForBoundMembers.Of<SimpleConversion>();
@@ -66,7 +66,7 @@ namespace ETUS.Grammar
             var unary_operator = TypeForTransient.Of<UnaryOperator>();
             var external_variable = TypeForBoundMembers.Of<Expression.ExternalVariable>();
 
-            ValueForBnfTerm<Expression.Number<double>> NUMBER = new NumberLiteral("number")
+            TypeForValue<Expression.Number<double>> NUMBER = new NumberLiteral("number")
                 .CreateValue((context, parseNode) => new Expression.Number<double> { Value = Convert.ToDouble(parseNode.Token.Value) });
 
             var SIMPLE_MUTUAL_CONVERSION_OP = ToTerm("<=>").CreateValue(Direction.BiDir);
@@ -249,7 +249,7 @@ namespace ETUS.Grammar
             LanguageFlags = LanguageFlags.CreateAst;
             BrowsableAstNodes = true;
 
-#if false
+#if true
             // these all should fail with compile error...
 
             binary_expression_with_unit2.Rule =
