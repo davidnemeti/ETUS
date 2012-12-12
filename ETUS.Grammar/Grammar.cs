@@ -121,45 +121,45 @@ namespace ETUS.Grammar
 
             this.Root = group;
 
-            group.Rule = namespace_usage.StarList().BindMember(group, () => group._.NamespaceUsings) + @namespace.PlusList().BindMember(group, () => group._.Namespaces);
+            group.Rule = namespace_usage.StarList().BindMember(group, t => t.NamespaceUsings) + @namespace.PlusList().BindMember(group, t => t.Namespaces);
 
             definition.SetRuleOr(quantity_definition, unit_definition, prefix_definition);
 
-            namespace_usage.Rule = USE + NAMESPACE + nameref.BindMember(namespace_usage, () => namespace_usage._.NameRef);
+            namespace_usage.Rule = USE + NAMESPACE + nameref.BindMember(namespace_usage, t => t.NameRef);
 
-            @namespace.Rule = DECLARE + NAMESPACE + namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(@namespace, () => @namespace._.Definitions);
+            @namespace.Rule = DECLARE + NAMESPACE + namespace_name.BindMember(@namespace, t => t.Name) + definition.PlusList().BindMember(@namespace, t => t.Definitions);
 
             prefix_definition.Rule =
                 DEFINE + PREFIX
-                + name.BindMember(prefix_definition, () => prefix_definition._.Name)
-                + expression.BindMember(prefix_definition, () => prefix_definition._.Factor);
+                + name.BindMember(prefix_definition, t => t.Name)
+                + expression.BindMember(prefix_definition, t => t.Factor);
 
-            quantity_definition.Rule = DEFINE + QUANTITY + name.BindMember(quantity_definition, () => quantity_definition._.Name);
+            quantity_definition.Rule = DEFINE + QUANTITY + name.BindMember(quantity_definition, t => t.Name);
 
             unit_definition.Rule =
                 DEFINE + UNIT
-                + name.BindMember(unit_definition, () => unit_definition._.Name)
+                + name.BindMember(unit_definition, t => t.Name)
                 + OF
-                + quantity_reference.BindMember(unit_definition, () => unit_definition._.Quantity)
-                + conversion.StarList().BindMember(unit_definition, () => unit_definition._.Conversions);
+                + quantity_reference.BindMember(unit_definition, t => t.Quantity)
+                + conversion.StarList().BindMember(unit_definition, t => t.Conversions);
 
             conversion.SetRuleOr(simple_conversion, complex_conversion);
 
             simple_conversion.Rule =
-                simple_conversion_op.BindMember(simple_conversion, () => simple_conversion._.Direction)
-                + unit_expression.BindMember(simple_conversion, () => simple_conversion._.OtherUnit)
+                simple_conversion_op.BindMember(simple_conversion, t => t.Direction)
+                + unit_expression.BindMember(simple_conversion, t => t.OtherUnit)
                 |
-                simple_conversion_op.BindMember(simple_conversion, () => simple_conversion._.Direction)
-                + expression.BindMember(simple_conversion, () => simple_conversion._.Factor)
-                + unit_expression.BindMember(simple_conversion, () => simple_conversion._.OtherUnit);
+                simple_conversion_op.BindMember(simple_conversion, t => t.Direction)
+                + expression.BindMember(simple_conversion, t => t.Factor)
+                + unit_expression.BindMember(simple_conversion, t => t.OtherUnit);
 
             complex_conversion.Rule =
-                complex_conversion_op.BindMember(complex_conversion, () => complex_conversion._.Direction)
-                + expression_with_unit.BindMember(complex_conversion, () => complex_conversion._.Expr)
+                complex_conversion_op.BindMember(complex_conversion, t => t.Direction)
+                + expression_with_unit.BindMember(complex_conversion, t => t.Expr)
                 |
-                complex_conversion_op.BindMember(complex_conversion, () => complex_conversion._.Direction)
-                + expression_with_unit.BindMember(complex_conversion, () => complex_conversion._.Expr)
-                + EQUAL_STATEMENT + unit_expression.BindMember(complex_conversion, () => complex_conversion._.OtherUnit);
+                complex_conversion_op.BindMember(complex_conversion, t => t.Direction)
+                + expression_with_unit.BindMember(complex_conversion, t => t.Expr)
+                + EQUAL_STATEMENT + unit_expression.BindMember(complex_conversion, t => t.OtherUnit);
 
             unit_expression.SetRuleOr(
                 binary_unit_expression,
@@ -171,26 +171,26 @@ namespace ETUS.Grammar
                 );
 
             binary_unit_expression.Rule =
-                unit_expression.BindMember(binary_unit_expression, () => binary_unit_expression._.Term1)
-                + unit_expression_binary_operator.BindMember(binary_unit_expression, () => binary_unit_expression._.Op)
-                + unit_expression.BindMember(binary_unit_expression, () => binary_unit_expression._.Term2);
+                unit_expression.BindMember(binary_unit_expression, t => t.Term1)
+                + unit_expression_binary_operator.BindMember(binary_unit_expression, t => t.Op)
+                + unit_expression.BindMember(binary_unit_expression, t => t.Term2);
 
             square_unit_expression.Rule =
-                unit_expression.BindMember(square_unit_expression, () => square_unit_expression._.Base)
+                unit_expression.BindMember(square_unit_expression, t => t.Base)
                 + POW_OP.Cast(square_unit_expression)
                 + ToTerm("2").ToType(square_unit_expression);
 
             cube_unit_expression.Rule =
-                unit_expression.BindMember(cube_unit_expression, () => cube_unit_expression._.Base)
+                unit_expression.BindMember(cube_unit_expression, t => t.Base)
                 + POW_OP
                 + ToTerm("3");
 
             recip_unit_expression.Rule =
                 ToTerm("1")
                 + DIV_OP
-                + unit_expression.BindMember(recip_unit_expression, () => recip_unit_expression._.Denominator);
+                + unit_expression.BindMember(recip_unit_expression, t => t.Denominator);
 
-            unit_unit_expression.Rule = unit_definition.ConvertValue(unitDefinition => unitDefinition.GetReference()).BindMember(unit_unit_expression, () => unit_unit_expression._.Value);
+            unit_unit_expression.Rule = unit_definition.ConvertValue(unitDefinition => unitDefinition.GetReference()).BindMember(unit_unit_expression, t => t.Value);
 
             simple_conversion_op.Rule = SIMPLE_MUTUAL_CONVERSION_OP | SIMPLE_TO_THAT_CONVERSION_OP | SIMPLE_TO_THIS_CONVERSION_OP;
             complex_conversion_op.Rule = COMPLEX_MUTUAL_CONVERSION_OP | COMPLEX_TO_THAT_CONVERSION_OP | COMPLEX_TO_THIS_CONVERSION_OP;
@@ -207,11 +207,11 @@ namespace ETUS.Grammar
             expression.SetRuleOr(NUMBER, CONSTANT.ToType(expression), external_variable, binary_expression, unary_expression, LEFT_PAREN + expression + RIGHT_PAREN);
 
             binary_expression.Rule =
-                expression.BindMember(binary_expression, () => binary_expression._.Term1)
-                + binary_operator.BindMember(binary_expression, () => binary_expression._.Op)
-                + expression.BindMember(binary_expression, () => binary_expression._.Term2);
+                expression.BindMember(binary_expression, t => t.Term1)
+                + binary_operator.BindMember(binary_expression, t => t.Op)
+                + expression.BindMember(binary_expression, t => t.Term2);
 
-            unary_expression.Rule = unary_operator.BindMember(unary_expression, () => unary_expression._.Op) + expression.BindMember(unary_expression, () => unary_expression._.Term);
+            unary_expression.Rule = unary_operator.BindMember(unary_expression, t => t.Op) + expression.BindMember(unary_expression, t => t.Term);
 
             expression_with_unit.SetRuleOr(
                 unit_variable_expression_with_unit,
@@ -221,14 +221,14 @@ namespace ETUS.Grammar
                 );
 
             binary_expression_with_unit.Rule =
-                expression_with_unit.BindMember(binary_expression_with_unit, () => binary_expression_with_unit._.Term1)
-                + binary_operator.BindMember(binary_expression_with_unit, () => binary_expression_with_unit._.Op)
-                + expression.BindMember(binary_expression_with_unit, () => binary_expression_with_unit._.Term2);
+                expression_with_unit.BindMember(binary_expression_with_unit, t => t.Term1)
+                + binary_operator.BindMember(binary_expression_with_unit, t => t.Op)
+                + expression.BindMember(binary_expression_with_unit, t => t.Term2);
 
             binary_expression_with_unit2.Rule =
-                expression.BindMember(binary_expression_with_unit2, () => binary_expression_with_unit2._.Term1)
-                + binary_operator.BindMember(binary_expression_with_unit2, () => binary_expression_with_unit._.Op)
-                + expression_with_unit.BindMember(binary_expression_with_unit2, () => binary_expression_with_unit2._.Term2);
+                expression.BindMember(binary_expression_with_unit2, t => t.Term1)
+                + binary_operator.BindMember(binary_expression_with_unit2, t => t.Op)
+                + expression_with_unit.BindMember(binary_expression_with_unit2, t => t.Term2);
 
             binary_expression_with_unit2.Rule = expression + binary_operator + expression_with_unit;
 
@@ -247,23 +247,23 @@ namespace ETUS.Grammar
             // these all should fail with compile error...
 
             binary_expression_with_unit2.Rule =
-                expression.BindMember(binary_expression_with_unit2, () => binary_expression_with_unit._.Term2)
-                + binary_operator.BindMember(binary_expression_with_unit2, () => binary_expression_with_unit._.Op)
-                + expression_with_unit.BindMember(binary_expression_with_unit2, () => binary_expression_with_unit._.Term1);
+                expression.BindMember(binary_expression_with_unit2, t => t.Term2)
+                + binary_operator.BindMember(binary_expression_with_unit2, t => t.Op)
+                + expression_with_unit.BindMember(binary_expression_with_unit2, t => t.Term1);
 
             @namespace.SetRuleOr(DECLARE + NAMESPACE +
-                namespace_name.BindMember(() => @namespace._.Name) + definition.PlusList().BindMember(@namespace, () => @namespace._.Definitions));
+                namespace_name.BindMember(t => t.Name) + definition.PlusList().BindMember(@namespace, t => t.Definitions));
 
             @namespace.SetRuleOr(DECLARE + NAMESPACE +
-                namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(() => @namespace._.Definitions));
+                namespace_name.BindMember(@namespace, t => t.Name) + definition.PlusList().BindMember(t => t.Definitions));
 
             @namespace.SetRuleOr(DECLARE + NAMESPACE +
-                namespace_name.BindMember(@namespace, () => @namespace._.Name) + definition.PlusList().BindMember(namespace_usage, () => @namespace._.Definitions));
+                namespace_name.BindMember(@namespace, t => t.Name) + definition.PlusList().BindMember(namespace_usage, t => t.Definitions));
 
             @namespace.SetRuleOr(DECLARE + NAMESPACE +
-                namespace_name.BindMember(namespace_usage, () => @namespace._.Name) + definition.PlusList().BindMember(namespace_usage, () => @namespace._.Definitions));
+                namespace_name.BindMember(namespace_usage, t => t.Name) + definition.PlusList().BindMember(namespace_usage, t => t.Definitions));
 
-            @namespace.SetRuleOr(namespace_name.BindMember(namespace_usage, () => @namespace._.Name) + definition.PlusList().BindMember(namespace_usage, () => @namespace._.Definitions));
+            @namespace.SetRuleOr(namespace_name.BindMember(namespace_usage, t => t.Name) + definition.PlusList().BindMember(namespace_usage, t => t.Definitions));
 
             conversion.SetRuleOr(simple_conversion, complex_conversion, unit_expression);
 
