@@ -33,7 +33,7 @@ namespace ETUS.Grammar
 
             KeyTerm DOT = ToTerm(".");
             IdentifierTerminal IDENTIFIER = new IdentifierTerminal("identifier");
-            IBnfTerm<string> qualified_identifier = IDENTIFIER.PlusList<string>(DOT).ConvertValue(identifiers => string.Join(DOT.Text, identifiers));
+            TypeForValue<string> qualified_identifier = IDENTIFIER.PlusList<string>(DOT).ConvertValue(identifiers => string.Join(DOT.Text, identifiers));
 
             TypeForValue<Name> name = IDENTIFIER.CreateValue((context, parseNode) => new Name { Value = parseNode.Token.ValueString });
             TypeForValue<Name> namespace_name = qualified_identifier.ConvertValue(qual_id => new Name {Value = qual_id});
