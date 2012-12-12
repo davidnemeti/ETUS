@@ -247,9 +247,9 @@ namespace ETUS.Grammar
             #endregion
 
             LanguageFlags = LanguageFlags.CreateAst;
-            BrowsableAstNodes = true;
+//            BrowsableAstNodes = true;
 
-#if true
+#if false
             // these all should fail with compile error...
 
             binary_expression_with_unit2.Rule =
