@@ -85,7 +85,7 @@ namespace ETUS.Grammar
             var DIV_OP = ToTerm("/").CreateValue(BinaryOperator.Div);
             var POW_OP = ToTerm("^").CreateValue(BinaryOperator.Pow);
 
-            ConstantTerminal CONSTANT = new ConstantTerminal("constant");
+            var CONSTANT = TypeForConstant.Of<Expression.Constant>();
 
             KeyTerm USE = ToTerm("use");
             KeyTerm DECLARE = ToTerm("declare");
@@ -112,8 +112,8 @@ namespace ETUS.Grammar
 
             #region Constants
 
-            CONSTANT.Add("PI", Constant.PI);
-            CONSTANT.Add("π", Constant.PI);
+            CONSTANT.Add("PI", Constants.PI);
+            CONSTANT.Add("π", Constants.PI);
 
             #endregion
 
@@ -177,7 +177,7 @@ namespace ETUS.Grammar
 
             square_unit_expression.Rule =
                 unit_expression.BindMember(square_unit_expression, t => t.Base)
-                + POW_OP.Cast(square_unit_expression)
+                + POW_OP
                 + ToTerm("2").ToType(square_unit_expression);
 
             cube_unit_expression.Rule =
@@ -204,7 +204,7 @@ namespace ETUS.Grammar
 
             unary_operator.Rule = NEG_OP | POS_OP;
 
-            expression.SetRuleOr(NUMBER, CONSTANT.ToType(expression), external_variable, binary_expression, unary_expression, LEFT_PAREN + expression + RIGHT_PAREN);
+            expression.SetRuleOr(NUMBER, CONSTANT, external_variable, binary_expression, unary_expression, LEFT_PAREN + expression + RIGHT_PAREN);
 
             binary_expression.Rule =
                 expression.BindMember(binary_expression, t => t.Term1)

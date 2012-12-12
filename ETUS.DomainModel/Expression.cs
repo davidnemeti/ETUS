@@ -45,6 +45,10 @@ namespace ETUS.DomainModel.Expressions
         {
             public NameRef NameRef { get; set; }
         }
+
+        public class Constant : Expression
+        {
+        }
     }
 
     public enum BinaryOperator

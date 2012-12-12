@@ -80,8 +80,8 @@ namespace ETUS.DomainModel
         From
     }
 
-    public enum Constant
+    public static class Constants
     {
-        PI
+        public static readonly Expression.Constant PI = new Expression.Constant();
     }
 }
