@@ -217,7 +217,8 @@ namespace ETUS.Grammar
                 unit_variable_expression_with_unit,
                 binary_expression_with_unit,
                 binary_expression_with_unit2,
-                unary_expression_with_unit
+                unary_expression_with_unit,
+                LEFT_PAREN + expression_with_unit + RIGHT_PAREN
                 );
 
             binary_expression_with_unit.Rule =
@@ -230,20 +231,25 @@ namespace ETUS.Grammar
                 + binary_operator.BindMember(binary_expression_with_unit2, t => t.Op)
                 + expression_with_unit.BindMember(binary_expression_with_unit2, t => t.Term2);
 
-            binary_expression_with_unit2.Rule = expression + binary_operator + expression_with_unit;
+            unary_expression_with_unit.Rule =
+                unary_operator.BindMember(unary_expression_with_unit, t => t.Op)
+                + expression_with_unit.BindMember(unary_expression_with_unit, t => t.Term);
 
-            unary_expression_with_unit.Rule = LEFT_PAREN + expression_with_unit + RIGHT_PAREN | unary_operator + expression_with_unit;
+            unit_variable_expression_with_unit.Rule =
+                LEFT_BRACKET
+                + unit_expression.BindMember(unit_variable_expression_with_unit, t => t.Value)
+                + RIGHT_BRACKET;
 
-            unit_variable_expression_with_unit.Rule = LEFT_BRACKET + unit_expression + RIGHT_BRACKET;
-
-            external_variable.Rule = EXTERNAL_VARIABLE_PREFIX + qualified_identifier;
+            external_variable.Rule =
+                EXTERNAL_VARIABLE_PREFIX
+                + nameref.BindMember(external_variable, t => t.NameRef);
 
             #endregion
 
             LanguageFlags = LanguageFlags.CreateAst;
             BrowsableAstNodes = true;
 
-#if true
+#if false
             // these all should fail with compile error...
 
             binary_expression_with_unit2.Rule =
