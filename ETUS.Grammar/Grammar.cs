@@ -178,7 +178,7 @@ namespace ETUS.Grammar
             square_unit_expression.Rule =
                 unit_expression.BindMember(square_unit_expression, t => t.Base)
                 + POW_OP
-                + ToTerm("2").ToType(square_unit_expression);
+                + ToTerm("2");
 
             cube_unit_expression.Rule =
                 unit_expression.BindMember(cube_unit_expression, t => t.Base)
