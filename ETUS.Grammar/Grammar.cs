@@ -31,9 +31,13 @@ namespace ETUS.Grammar
             var prefix_definition = TypeForBoundMembers.Of<PrefixDefinition>();
             var unit_definition = TypeForBoundMembers.Of<UnitDefinition>();
 
+            TypeForValue<string> IDENTIFIER = new IdentifierTerminal("identifier")
+                .CreateValue<string>((context, parseNode) => parseNode.Token.ValueString);
+            TypeForValue<Expression.Number<double>> NUMBER = new NumberLiteral("number")
+                .CreateValue((context, parseNode) => new Expression.Number<double> { Value = Convert.ToDouble(parseNode.Token.Value) });
+
             KeyTerm DOT = ToTerm(".");
-            TypeForValue<string> IDENTIFIER = new IdentifierTerminal("identifier").Cast<string>();
-//                .CreateValue((context, parseNode) => new Expression.Number<double> { Value = Convert.ToDouble(parseNode.Token.Value) });
+
             TypeForValue<string> qualified_identifier = IDENTIFIER.PlusList(DOT).ConvertValue(identifiers => string.Join(DOT.Text, identifiers));
 
             TypeForValue<Name> name = IDENTIFIER.CreateValue((context, parseNode) => new Name { Value = parseNode.Token.ValueString });
@@ -68,9 +72,6 @@ namespace ETUS.Grammar
             var unit_expression_binary_operator = TypeForTransient.Of<UnitExpression.Binary.Operator>();
             var unary_operator = TypeForTransient.Of<UnaryOperator>();
             var external_variable = TypeForBoundMembers.Of<Expression.ExternalVariable>();
-
-            TypeForValue<Expression.Number<double>> NUMBER = new NumberLiteral("number")
-                .CreateValue((context, parseNode) => new Expression.Number<double> { Value = Convert.ToDouble(parseNode.Token.Value) });
 
             var SIMPLE_MUTUAL_CONVERSION_OP = ToTerm("<=>").CreateValue(Direction.BiDir);
             var SIMPLE_TO_THIS_CONVERSION_OP = ToTerm("<=").CreateValue(Direction.From);
