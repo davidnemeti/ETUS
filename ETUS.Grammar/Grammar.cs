@@ -32,8 +32,9 @@ namespace ETUS.Grammar
             var unit_definition = TypeForBoundMembers.Of<UnitDefinition>();
 
             KeyTerm DOT = ToTerm(".");
-            IdentifierTerminal IDENTIFIER = new IdentifierTerminal("identifier");
-            TypeForValue<string> qualified_identifier = IDENTIFIER.PlusList<string>(DOT).ConvertValue(identifiers => string.Join(DOT.Text, identifiers));
+            TypeForValue<string> IDENTIFIER = new IdentifierTerminal("identifier").Cast<string>();
+//                .CreateValue((context, parseNode) => new Expression.Number<double> { Value = Convert.ToDouble(parseNode.Token.Value) });
+            TypeForValue<string> qualified_identifier = IDENTIFIER.PlusList(DOT).ConvertValue(identifiers => string.Join(DOT.Text, identifiers));
 
             TypeForValue<Name> name = IDENTIFIER.CreateValue((context, parseNode) => new Name { Value = parseNode.Token.ValueString });
             TypeForValue<Name> namespace_name = qualified_identifier.ConvertValue(qual_id => new Name {Value = qual_id});
@@ -44,7 +45,9 @@ namespace ETUS.Grammar
 
             var conversion = TypeForTransient.Of<Conversion>();
             var simple_conversion = TypeForBoundMembers.Of<SimpleConversion>();
-            var complex_conversion = TypeForBoundMembers.Of<ComplexConversion>();
+            var complex_conversion = TypeForTransient.Of<ComplexConversion>();
+            var complex_conversion_without_equal = TypeForBoundMembers.Of<ComplexConversion>();
+            var complex_conversion_with_equal = TypeForBoundMembers.Of<ComplexConversion>();
             var simple_conversion_op = TypeForBoundMembers.Of<Direction>();
             var complex_conversion_op = TypeForBoundMembers.Of<Direction>();
             var unit_expression = TypeForTransient.Of<UnitExpression>();
@@ -157,13 +160,19 @@ namespace ETUS.Grammar
                 + unit_expression.BindMember(simple_conversion, t => t.OtherUnit)
                 ;
 
-            complex_conversion.Rule =
+            complex_conversion.Rule = complex_conversion_with_equal | complex_conversion_without_equal;
+
+            complex_conversion_without_equal.Rule =
                 complex_conversion_op.BindMember(complex_conversion, t => t.Direction)
                 + expression_with_unit.BindMember(complex_conversion, t => t.Expr)
-                |
-                complex_conversion_op.BindMember(complex_conversion, t => t.Direction)
-                + expression_with_unit.BindMember(complex_conversion, t => t.Expr)
-                + EQUAL_STATEMENT + unit_expression.BindMember(complex_conversion, t => t.OtherUnit)
+                ;
+
+            complex_conversion_with_equal.Rule =
+                //complex_conversion_op.BindMember(complex_conversion, t => t.Direction)
+                //+ expression_with_unit.BindMember(complex_conversion, t => t.Expr)
+                complex_conversion_without_equal
+                + PreferShiftHere()
+                + EQUAL_STATEMENT + unit_variable_expression_with_unit.ConvertValue(unit_variable => unit_variable.Value).BindMember(complex_conversion, t => t.OtherUnit)
                 ;
 
             unit_expression.SetRuleOr(
