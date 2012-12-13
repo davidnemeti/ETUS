@@ -40,7 +40,7 @@ namespace ETUS.Grammar
 
             TypeForValue<string> qualified_identifier = IDENTIFIER.PlusList(DOT).ConvertValue(identifiers => string.Join(DOT.Text, identifiers));
 
-            TypeForValue<Name> name = IDENTIFIER.CreateValue((context, parseNode) => new Name { Value = parseNode.Token.ValueString });
+            TypeForValue<Name> name = IDENTIFIER.ConvertValue(identifier => new Name { Value = identifier });
             TypeForValue<Name> namespace_name = qualified_identifier.ConvertValue(qual_id => new Name {Value = qual_id});
             TypeForValue<NameRef> nameref = qualified_identifier.ConvertValue(qual_id => new NameRef(qual_id));
 
@@ -214,8 +214,8 @@ namespace ETUS.Grammar
             binary_operator.Rule = ADD_OP | SUB_OP | MUL_OP | DIV_OP | POW_OP;
 
             unit_expression_binary_operator.SetRuleOr(
-                MUL_OP.Cast<UnitExpression.Binary.Operator>(),
-                DIV_OP.Cast<UnitExpression.Binary.Operator>()
+                MUL_OP.Cast(unit_expression_binary_operator),
+                DIV_OP.Cast(unit_expression_binary_operator)
                 );
 
             unary_operator.Rule = NEG_OP | POS_OP;
