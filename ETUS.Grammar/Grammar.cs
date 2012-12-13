@@ -107,8 +107,10 @@ namespace ETUS.Grammar
             RegisterOperators(40, NEG_OP, POS_OP);
             RegisterOperators(50, Associativity.Right, POW_OP);
 
-            RegisterBracePair(LEFT_PAREN.Text, RIGHT_PAREN.Text);
-            RegisterBracePair(LEFT_BRACKET.Text, RIGHT_BRACKET.Text);
+            RegisterBracePair(LEFT_PAREN, RIGHT_PAREN);
+            RegisterBracePair(LEFT_BRACKET, RIGHT_BRACKET);
+
+            MarkPunctuation(LEFT_PAREN, RIGHT_PAREN, LEFT_BRACKET, RIGHT_BRACKET);
 
             #region Constants
 
@@ -247,7 +249,7 @@ namespace ETUS.Grammar
             #endregion
 
             LanguageFlags = LanguageFlags.CreateAst;
-//            BrowsableAstNodes = true;
+            BrowsableAstNodes = true;
 
 #if false
             // these all should fail with compile error...
