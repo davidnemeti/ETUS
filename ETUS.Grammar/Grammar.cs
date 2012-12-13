@@ -33,8 +33,8 @@ namespace ETUS.Grammar
 
             TypeForValue<string> IDENTIFIER = new IdentifierTerminal("identifier")
                 .CreateValue<string>((context, parseNode) => parseNode.Token.ValueString);
-            TypeForValue<Expression.Number<double>> NUMBER = new NumberLiteral("number")
-                .CreateValue((context, parseNode) => new Expression.Number<double> { Value = Convert.ToDouble(parseNode.Token.Value) });
+            TypeForValue<double> NUMBER = new NumberLiteral("number")
+                .CreateValue((context, parseNode) => Convert.ToDouble(parseNode.Token.Value));
 
             KeyTerm DOT = ToTerm(".");
 
@@ -62,6 +62,7 @@ namespace ETUS.Grammar
             var unit_unit_expression = TypeForBoundMembers.Of<UnitExpression.Unit>();
             var expression = TypeForTransient.Of<Expression>();
             var binary_expression = TypeForBoundMembers.Of<Expression.Binary>();
+            var number_expression = TypeForBoundMembers.Of<Expression.Number<double>>();
             var unary_expression = TypeForBoundMembers.Of<Expression.Unary>();
             var expression_with_unit = TypeForTransient.Of<ExpressionWithUnit>();
             var binary_expression_with_unit = TypeForBoundMembers.Of<ExpressionWithUnit.Binary>();
@@ -219,7 +220,9 @@ namespace ETUS.Grammar
 
             unary_operator.Rule = NEG_OP | POS_OP;
 
-            expression.SetRuleOr(NUMBER, CONSTANT, external_variable, binary_expression, unary_expression, LEFT_PAREN + expression + RIGHT_PAREN);
+            expression.SetRuleOr(number_expression, CONSTANT, external_variable, binary_expression, unary_expression, LEFT_PAREN + expression + RIGHT_PAREN);
+
+            number_expression.Rule = NUMBER.ConvertValue(number => Expression.Number.Create(number));
 
             binary_expression.Rule =
                 expression.BindMember(binary_expression, t => t.Term1)
@@ -227,6 +230,10 @@ namespace ETUS.Grammar
                 + expression.BindMember(binary_expression, t => t.Term2);
 
             unary_expression.Rule = unary_operator.BindMember(unary_expression, t => t.Op) + expression.BindMember(unary_expression, t => t.Term);
+
+            external_variable.Rule =
+                EXTERNAL_VARIABLE_PREFIX
+                + nameref.BindMember(external_variable, t => t.NameRef);
 
             expression_with_unit.SetRuleOr(
                 unit_variable_expression_with_unit,
@@ -254,10 +261,6 @@ namespace ETUS.Grammar
                 LEFT_BRACKET
                 + unit_expression.BindMember(unit_variable_expression_with_unit, t => t.Value)
                 + RIGHT_BRACKET;
-
-            external_variable.Rule =
-                EXTERNAL_VARIABLE_PREFIX
-                + nameref.BindMember(external_variable, t => t.NameRef);
 
             #endregion
 

@@ -33,11 +33,26 @@ namespace ETUS.DomainModel.Expressions
 
         public class Number<T> : Expression
         {
-            public T Value;
+            public Number() {}
+
+            public Number(T value)
+            {
+                this.Value = value;
+            }
+
+            public T Value { get; set; }
 
             public override string ToString()
             {
                 return Value.ToString();
+            }
+        }
+
+        public static class Number
+        {
+            public static Number<T> Create<T>(T value)
+            {
+                return new Number<T>(value);
             }
         }
 
