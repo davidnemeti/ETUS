@@ -170,8 +170,6 @@ namespace ETUS.Grammar
                 ;
 
             complex_conversion_with_equal.Rule =
-                //complex_conversion_op.BindMember(complex_conversion, t => t.Direction)
-                //+ expression_with_unit.BindMember(complex_conversion, t => t.Expr)
                 complex_conversion_without_equal
                 + PreferShiftHere()
                 + EQUAL_STATEMENT + unit_variable_expression_with_unit.ConvertValue(unit_variable => unit_variable.Value).BindMember(complex_conversion, t => t.OtherUnit)
@@ -264,7 +262,7 @@ namespace ETUS.Grammar
 
             #endregion
 
-//            LanguageFlags = LanguageFlags.CreateAst;
+            LanguageFlags = LanguageFlags.CreateAst;
 //            BrowsableAstNodes = true;
 
 #if false
