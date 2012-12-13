@@ -143,17 +143,19 @@ namespace ETUS.Grammar
                 + name.BindMember(unit_definition, t => t.Name)
                 + OF
                 + quantity_reference.BindMember(unit_definition, t => t.Quantity)
-                + conversion.StarList().BindMember(unit_definition, t => t.Conversions);
+                + conversion.StarList().BindMember(unit_definition, t => t.Conversions)
+                ;
 
             conversion.SetRuleOr(simple_conversion, complex_conversion);
 
             simple_conversion.Rule =
                 simple_conversion_op.BindMember(simple_conversion, t => t.Direction)
+                + expression.BindMember(simple_conversion, t => t.Factor)
                 + unit_expression.BindMember(simple_conversion, t => t.OtherUnit)
                 |
                 simple_conversion_op.BindMember(simple_conversion, t => t.Direction)
-                + expression.BindMember(simple_conversion, t => t.Factor)
-                + unit_expression.BindMember(simple_conversion, t => t.OtherUnit);
+                + unit_expression.BindMember(simple_conversion, t => t.OtherUnit)
+                ;
 
             complex_conversion.Rule =
                 complex_conversion_op.BindMember(complex_conversion, t => t.Direction)
@@ -161,7 +163,8 @@ namespace ETUS.Grammar
                 |
                 complex_conversion_op.BindMember(complex_conversion, t => t.Direction)
                 + expression_with_unit.BindMember(complex_conversion, t => t.Expr)
-                + EQUAL_STATEMENT + unit_expression.BindMember(complex_conversion, t => t.OtherUnit);
+                + EQUAL_STATEMENT + unit_expression.BindMember(complex_conversion, t => t.OtherUnit)
+                ;
 
             unit_expression.SetRuleOr(
                 binary_unit_expression,
@@ -192,7 +195,7 @@ namespace ETUS.Grammar
                 + DIV_OP
                 + unit_expression.BindMember(recip_unit_expression, t => t.Denominator);
 
-            unit_unit_expression.Rule = unit_definition.ConvertValue(unitDefinition => unitDefinition.GetReference()).BindMember(unit_unit_expression, t => t.Value);
+            unit_unit_expression.Rule = nameref.ConvertValue(namerefForUnitDef => Reference.Get<UnitDefinition>(namerefForUnitDef)).BindMember(unit_unit_expression, t => t.Value);
 
             simple_conversion_op.Rule = SIMPLE_MUTUAL_CONVERSION_OP | SIMPLE_TO_THAT_CONVERSION_OP | SIMPLE_TO_THIS_CONVERSION_OP;
             complex_conversion_op.Rule = COMPLEX_MUTUAL_CONVERSION_OP | COMPLEX_TO_THAT_CONVERSION_OP | COMPLEX_TO_THIS_CONVERSION_OP;
@@ -249,7 +252,7 @@ namespace ETUS.Grammar
             #endregion
 
             LanguageFlags = LanguageFlags.CreateAst;
-            BrowsableAstNodes = true;
+//            BrowsableAstNodes = true;
 
 #if false
             // these all should fail with compile error...
