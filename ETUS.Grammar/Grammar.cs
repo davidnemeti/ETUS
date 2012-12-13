@@ -33,8 +33,8 @@ namespace ETUS.Grammar
 
             TypeForValue<string> IDENTIFIER = ToIdentifier("identifier")
                 .CreateValue<string>((context, parseNode) => parseNode.FindTokenAndGetText());
-            TypeForValue<double> NUMBER = ToNumber("number")
-                .CreateValue((context, parseNode) => Convert.ToDouble(parseNode.FindToken().Value));
+            TypeForValue<object> NUMBER = ToNumber("number")
+                .CreateValue<object>((context, parseNode) => parseNode.FindToken().Value);
 
             KeyTerm DOT = ToTerm(".");
 
@@ -62,7 +62,7 @@ namespace ETUS.Grammar
             var unit_unit_expression = TypeForBoundMembers.Of<UnitExpression.Unit>();
             var expression = TypeForTransient.Of<Expression>();
             var binary_expression = TypeForBoundMembers.Of<Expression.Binary>();
-            var number_expression = TypeForBoundMembers.Of<Expression.Number<double>>();
+            var number_expression = TypeForBoundMembers.Of<Expression.Number>();
             var unary_expression = TypeForBoundMembers.Of<Expression.Unary>();
             var expression_with_unit = TypeForTransient.Of<ExpressionWithUnit>();
             var binary_expression_with_unit = TypeForBoundMembers.Of<ExpressionWithUnit.Binary>();
@@ -220,7 +220,7 @@ namespace ETUS.Grammar
 
             expression.SetRuleOr(number_expression, CONSTANT, external_variable, binary_expression, unary_expression, LEFT_PAREN + expression + RIGHT_PAREN);
 
-            number_expression.Rule = NUMBER.ConvertValue(number => Expression.Number.Create(number));
+            number_expression.Rule = NUMBER.ConvertValue(number => new Expression.Number(number));
 
             binary_expression.Rule =
                 expression.BindMember(binary_expression, t => t.Term1)
