@@ -31,10 +31,10 @@ namespace ETUS.Grammar
             var prefix_definition = TypeForBoundMembers.Of<PrefixDefinition>();
             var unit_definition = TypeForBoundMembers.Of<UnitDefinition>();
 
-            TypeForValue<string> IDENTIFIER = new IdentifierTerminal("identifier")
-                .CreateValue<string>((context, parseNode) => parseNode.Token.ValueString);
-            TypeForValue<double> NUMBER = new NumberLiteral("number")
-                .CreateValue((context, parseNode) => Convert.ToDouble(parseNode.Token.Value));
+            TypeForValue<string> IDENTIFIER = ToIdentifier("identifier")
+                .CreateValue<string>((context, parseNode) => parseNode.FindTokenAndGetText());
+            TypeForValue<double> NUMBER = ToNumber("number")
+                .CreateValue((context, parseNode) => Convert.ToDouble(parseNode.FindToken().Value));
 
             KeyTerm DOT = ToTerm(".");
 
