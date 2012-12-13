@@ -264,7 +264,7 @@ namespace ETUS.Grammar
 
             #endregion
 
-            LanguageFlags = LanguageFlags.CreateAst;
+//            LanguageFlags = LanguageFlags.CreateAst;
 //            BrowsableAstNodes = true;
 
 #if false
