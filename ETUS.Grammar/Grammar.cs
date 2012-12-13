@@ -33,8 +33,8 @@ namespace ETUS.Grammar
 
             TypeForValue<string> IDENTIFIER = ToIdentifier("identifier")
                 .CreateValue<string>((context, parseNode) => parseNode.FindTokenAndGetText());
-            TypeForValue<object> NUMBER = ToNumber("number")
-                .CreateValue<object>((context, parseNode) => parseNode.FindToken().Value);
+            TypeForValue<dynamic> NUMBER = ToNumber("number")
+                .CreateValue<dynamic>((context, parseNode) => parseNode.FindToken().Value);
 
             KeyTerm DOT = ToTerm(".");
 
