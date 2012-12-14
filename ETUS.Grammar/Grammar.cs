@@ -68,7 +68,7 @@ namespace ETUS.Grammar
             var binary_expression_with_unit = TypeForBoundMembers.Of<ExpressionWithUnit.Binary>();
             var binary_expression_with_unit2 = TypeForBoundMembers.Of<ExpressionWithUnit.Binary2>();
             var unary_expression_with_unit = TypeForBoundMembers.Of<ExpressionWithUnit.Unary>();
-            var unit_variable_expression_with_unit = TypeForTransient.Of<ExpressionWithUnit.Unit>();
+            var unit_variable_expression_with_unit = TypeForBoundMembers.Of<ExpressionWithUnit.Unit>();
             var binary_operator = TypeForTransient.Of<BinaryOperator>();
             var unit_expression_binary_operator = TypeForTransient.Of<UnitExpression.Binary.Operator>();
             var unary_operator = TypeForTransient.Of<UnaryOperator>();
@@ -204,7 +204,7 @@ namespace ETUS.Grammar
                 + DIV_OP
                 + unit_expression.BindMember(recip_unit_expression, t => t.Denominator);
 
-            unit_unit_expression.Rule = nameref.ConvertValue(namerefForUnitDef => Reference.Get<UnitDefinition>(namerefForUnitDef)).BindMember(unit_unit_expression, t => t.Value);
+            unit_unit_expression.Rule = unit_reference.BindMember(unit_unit_expression, t => t.Value);
 
             simple_conversion_op.Rule = SIMPLE_MUTUAL_CONVERSION_OP | SIMPLE_TO_THAT_CONVERSION_OP | SIMPLE_TO_THIS_CONVERSION_OP;
             complex_conversion_op.Rule = COMPLEX_MUTUAL_CONVERSION_OP | COMPLEX_TO_THAT_CONVERSION_OP | COMPLEX_TO_THIS_CONVERSION_OP;

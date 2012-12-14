@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Irony;
-using Irony.Ast;
-using Irony.Parsing;
 using DomainCore;
 using ETUS.DomainModel.Expressions;
 

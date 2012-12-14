@@ -63,7 +63,7 @@ namespace ETUS.DomainModel.Expressions
 
             public override string ToString()
             {
-                return Value.ToString();
+                return string.Format("{{UnitExpression: {0}}}", Value);
             }
         }
     }
