@@ -102,10 +102,10 @@ namespace ETUS.Grammar
             KeyTerm OF = ToTerm("of");
             KeyTerm EXTERNAL_VARIABLE_PREFIX = ToTerm("::");
             KeyTerm EQUAL_STATEMENT = ToTerm("=");
-            KeyTerm LEFT_PAREN = ToTerm("(");
-            KeyTerm RIGHT_PAREN = ToTerm(")");
-            KeyTerm LEFT_BRACKET = ToTerm("[");
-            KeyTerm RIGHT_BRACKET = ToTerm("]");
+            KeyTermPunctuation LEFT_PAREN = ToPunctuation("(");
+            KeyTermPunctuation RIGHT_PAREN = ToPunctuation(")");
+            KeyTermPunctuation LEFT_BRACKET = ToPunctuation("[");
+            KeyTermPunctuation RIGHT_BRACKET = ToPunctuation("]");
 
             RegisterOperators(20, ADD_OP, SUB_OP);
             RegisterOperators(30, MUL_OP, DIV_OP);
@@ -114,8 +114,6 @@ namespace ETUS.Grammar
 
             RegisterBracePair(LEFT_PAREN, RIGHT_PAREN);
             RegisterBracePair(LEFT_BRACKET, RIGHT_BRACKET);
-
-            MarkPunctuation(LEFT_PAREN, RIGHT_PAREN, LEFT_BRACKET, RIGHT_BRACKET);
 
             #region Constants
 
@@ -267,6 +265,18 @@ namespace ETUS.Grammar
 
 #if false
             // these all should fail with compile error...
+
+            unit_expression.SetRuleOr(
+                binary_unit_expression,
+                square_unit_expression,
+                cube_unit_expression,
+                recip_unit_expression,
+                unit_unit_expression,
+                USE + unit_expression + DEFINE
+                );
+
+            unit_expression.SetRule(USE + unit_expression + DEFINE);
+            unit_expression.Rule = USE + unit_expression + DEFINE;
 
             binary_expression_with_unit2.Rule =
                 expression.BindMember(binary_expression_with_unit2, t => t.Term2)
