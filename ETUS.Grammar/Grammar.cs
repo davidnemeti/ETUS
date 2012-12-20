@@ -23,13 +23,13 @@ namespace ETUS.Grammar
         public UDLGrammar()
             : base(AstCreation.CreateAst)
         {
-            var group = BnfiTermType.Of<Group>();
-            var namespace_usage = BnfiTermType.Of<NamespaceUsing>();
-            var @namespace = BnfiTermType.Of<Namespace>();
-            var definition = BnfiTermTransient.Of<Definition>();
-            var quantity_definition = BnfiTermType.Of<QuantityDefinition>();
-            var prefix_definition = BnfiTermType.Of<PrefixDefinition>();
-            var unit_definition = BnfiTermType.Of<UnitDefinition>();
+            var group = new BnfiTermType<Group>();
+            var namespace_usage = new BnfiTermType<NamespaceUsing>();
+            var @namespace = new BnfiTermType<Namespace>();
+            var definition = new BnfiTermTransient<Definition>();
+            var quantity_definition = new BnfiTermType<QuantityDefinition>();
+            var prefix_definition = new BnfiTermType<PrefixDefinition>();
+            var unit_definition = new BnfiTermType<UnitDefinition>();
 
             BnfiTermValue<string> IDENTIFIER = ToIdentifier("identifier")
                 .CreateValue<string>((context, parseNode) => parseNode.FindTokenAndGetText());
@@ -47,32 +47,32 @@ namespace ETUS.Grammar
             BnfiTermValue<Reference<QuantityDefinition>> quantity_reference = nameref.ConvertValue(nameRef => Reference.Get<QuantityDefinition>(nameRef));
             BnfiTermValue<Reference<UnitDefinition>> unit_reference = nameref.ConvertValue(nameRef => Reference.Get<UnitDefinition>(nameRef));
 
-            var conversion = BnfiTermTransient.Of<Conversion>();
-            var simple_conversion = BnfiTermType.Of<SimpleConversion>();
-            var complex_conversion = BnfiTermTransient.Of<ComplexConversion>();
-            var complex_conversion_without_equal = BnfiTermType.Of<ComplexConversion>();
-            var complex_conversion_with_equal = BnfiTermType.Of<ComplexConversion>();
-            var simple_conversion_op = BnfiTermTransient.Of<Direction>();
-            var complex_conversion_op = BnfiTermTransient.Of<Direction>();
-            var unit_expression = BnfiTermTransient.Of<UnitExpression>();
-            var binary_unit_expression = BnfiTermType.Of<UnitExpression.Binary>();
-            var square_unit_expression = BnfiTermType.Of<UnitExpression.Square>();
-            var cube_unit_expression = BnfiTermType.Of<UnitExpression.Cube>();
-            var recip_unit_expression = BnfiTermType.Of<UnitExpression.Recip>();
-            var unit_unit_expression = BnfiTermType.Of<UnitExpression.Unit>();
-            var expression = BnfiTermTransient.Of<Expression>();
-            var binary_expression = BnfiTermType.Of<Expression.Binary>();
-            var number_expression = BnfiTermValue.Of<Expression.Number>();
-            var unary_expression = BnfiTermType.Of<Expression.Unary>();
-            var expression_with_unit = BnfiTermTransient.Of<ExpressionWithUnit>();
-            var binary_expression_with_unit = BnfiTermType.Of<ExpressionWithUnit.Binary>();
-            var binary_expression_with_unit2 = BnfiTermType.Of<ExpressionWithUnit.Binary2>();
-            var unary_expression_with_unit = BnfiTermType.Of<ExpressionWithUnit.Unary>();
-            var unit_variable_expression_with_unit = BnfiTermType.Of<ExpressionWithUnit.Unit>();
-            var binary_operator = BnfiTermTransient.Of<BinaryOperator>();
-            var unit_expression_binary_operator = BnfiTermTransient.Of<UnitExpression.Binary.Operator>();
-            var unary_operator = BnfiTermTransient.Of<UnaryOperator>();
-            var external_variable = BnfiTermType.Of<Expression.ExternalVariable>();
+            var conversion = new BnfiTermTransient<Conversion>();
+            var simple_conversion = new BnfiTermType<SimpleConversion>();
+            var complex_conversion = new BnfiTermTransient<ComplexConversion>();
+            var complex_conversion_without_equal = new BnfiTermType<ComplexConversion>();
+            var complex_conversion_with_equal = new BnfiTermType<ComplexConversion>();
+            var simple_conversion_op = new BnfiTermTransient<Direction>();
+            var complex_conversion_op = new BnfiTermTransient<Direction>();
+            var unit_expression = new BnfiTermTransient<UnitExpression>();
+            var binary_unit_expression = new BnfiTermType<UnitExpression.Binary>();
+            var square_unit_expression = new BnfiTermType<UnitExpression.Square>();
+            var cube_unit_expression = new BnfiTermType<UnitExpression.Cube>();
+            var recip_unit_expression = new BnfiTermType<UnitExpression.Recip>();
+            var unit_unit_expression = new BnfiTermType<UnitExpression.Unit>();
+            var expression = new BnfiTermTransient<Expression>();
+            var binary_expression = new BnfiTermType<Expression.Binary>();
+            var number_expression = new BnfiTermValue<Expression.Number>();
+            var unary_expression = new BnfiTermType<Expression.Unary>();
+            var expression_with_unit = new BnfiTermTransient<ExpressionWithUnit>();
+            var binary_expression_with_unit = new BnfiTermType<ExpressionWithUnit.Binary>();
+            var binary_expression_with_unit2 = new BnfiTermType<ExpressionWithUnit.Binary2>();
+            var unary_expression_with_unit = new BnfiTermType<ExpressionWithUnit.Unary>();
+            var unit_variable_expression_with_unit = new BnfiTermType<ExpressionWithUnit.Unit>();
+            var binary_operator = new BnfiTermTransient<BinaryOperator>();
+            var unit_expression_binary_operator = new BnfiTermTransient<UnitExpression.Binary.Operator>();
+            var unary_operator = new BnfiTermTransient<UnaryOperator>();
+            var external_variable = new BnfiTermType<Expression.ExternalVariable>();
 
             var SIMPLE_MUTUAL_CONVERSION_OP = ToTerm("<=>").CreateValue(Direction.BiDir);
             var SIMPLE_TO_THIS_CONVERSION_OP = ToTerm("<=").CreateValue(Direction.From);
@@ -89,8 +89,6 @@ namespace ETUS.Grammar
             var MUL_OP = ToTerm("*").CreateValue(BinaryOperator.Mul);
             var DIV_OP = ToTerm("/").CreateValue(BinaryOperator.Div);
             var POW_OP = ToTerm("^").CreateValue(BinaryOperator.Pow);
-
-            var CONSTANT = BnfiTermConstant.Of<Expression.Constant>();
 
             KeyTerm USE = ToTerm("use");
             KeyTerm DECLARE = ToTerm("declare");
@@ -115,12 +113,11 @@ namespace ETUS.Grammar
             RegisterBracePair(LEFT_PAREN, RIGHT_PAREN);
             RegisterBracePair(LEFT_BRACKET, RIGHT_BRACKET);
 
-            #region Constants
-
-            CONSTANT.Add("PI", Constants.PI);
-            CONSTANT.Add("π", Constants.PI);
-
-            #endregion
+            var CONSTANT = new BnfiTermConstant<Expression.Constant>()
+            {
+                { "PI", Constants.PI },
+                { "π", Constants.PI }
+            };
 
             #region Rules
 
@@ -263,7 +260,7 @@ namespace ETUS.Grammar
 #if false
             // these all should fail with compile error...
 
-            var xxx_transient = TypeForTransient.Of<ExpressionWithUnit.Unit>();
+            var xxx_transient = new TypeForTransient<ExpressionWithUnit.Unit>();
             xxx_transient.Rule =
                 LEFT_BRACKET
                 + unit_expression.BindMember(unit_variable_expression_with_unit, t => t.Value)
