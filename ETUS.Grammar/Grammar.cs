@@ -18,9 +18,10 @@ using ETUS.DomainModel.Expressions;
 
 namespace ETUS.Grammar
 {
-    public class UDLGrammar : GrammarExtension
+    public class UDLGrammar : Irony.ITG.Grammar
     {
         public UDLGrammar()
+            : base(AstCreation.CreateAst)
         {
             var group = TypeForBoundMembers.Of<Group>();
             var namespace_usage = TypeForBoundMembers.Of<NamespaceUsing>();
@@ -258,9 +259,6 @@ namespace ETUS.Grammar
                 + RIGHT_BRACKET;
 
             #endregion
-
-            LanguageFlags = LanguageFlags.CreateAst;
-//            BrowsableAstNodes = true;
 
 #if false
             // these all should fail with compile error...
