@@ -9,8 +9,7 @@ using System.IO;
 using Irony;
 using Irony.Ast;
 using Irony.Parsing;
-using Irony.Extension;
-using Irony.Extension.AstBinders;
+using Irony.ITG;
 
 using DomainCore;
 
@@ -52,8 +51,8 @@ namespace ETUS.Grammar
             var complex_conversion = TypeForTransient.Of<ComplexConversion>();
             var complex_conversion_without_equal = TypeForBoundMembers.Of<ComplexConversion>();
             var complex_conversion_with_equal = TypeForBoundMembers.Of<ComplexConversion>();
-            var simple_conversion_op = TypeForBoundMembers.Of<Direction>();
-            var complex_conversion_op = TypeForBoundMembers.Of<Direction>();
+            var simple_conversion_op = TypeForTransient.Of<Direction>();
+            var complex_conversion_op = TypeForTransient.Of<Direction>();
             var unit_expression = TypeForTransient.Of<UnitExpression>();
             var binary_unit_expression = TypeForBoundMembers.Of<UnitExpression.Binary>();
             var square_unit_expression = TypeForBoundMembers.Of<UnitExpression.Square>();
@@ -62,7 +61,7 @@ namespace ETUS.Grammar
             var unit_unit_expression = TypeForBoundMembers.Of<UnitExpression.Unit>();
             var expression = TypeForTransient.Of<Expression>();
             var binary_expression = TypeForBoundMembers.Of<Expression.Binary>();
-            var number_expression = TypeForBoundMembers.Of<Expression.Number>();
+            var number_expression = TypeForValue.Of<Expression.Number>();
             var unary_expression = TypeForBoundMembers.Of<Expression.Unary>();
             var expression_with_unit = TypeForTransient.Of<ExpressionWithUnit>();
             var binary_expression_with_unit = TypeForBoundMembers.Of<ExpressionWithUnit.Binary>();
@@ -266,6 +265,12 @@ namespace ETUS.Grammar
 #if false
             // these all should fail with compile error...
 
+            var xxx_transient = TypeForTransient.Of<ExpressionWithUnit.Unit>();
+            xxx_transient.Rule =
+                LEFT_BRACKET
+                + unit_expression.BindMember(unit_variable_expression_with_unit, t => t.Value)
+                + RIGHT_BRACKET;
+
             unit_expression.SetRuleOr(
                 binary_unit_expression,
                 square_unit_expression,
@@ -275,7 +280,7 @@ namespace ETUS.Grammar
                 USE + unit_expression + DEFINE
                 );
 
-            unit_expression.SetRule(USE + unit_expression + DEFINE);
+            unit_expression.SetRuleOr(USE + unit_expression + DEFINE);
             unit_expression.Rule = USE + unit_expression + DEFINE;
 
             binary_expression_with_unit2.Rule =
