@@ -23,56 +23,56 @@ namespace ETUS.Grammar
         public UDLGrammar()
             : base(AstCreation.CreateAst)
         {
-            var group = TypeForBoundMembers.Of<Group>();
-            var namespace_usage = TypeForBoundMembers.Of<NamespaceUsing>();
-            var @namespace = TypeForBoundMembers.Of<Namespace>();
-            var definition = TypeForTransient.Of<Definition>();
-            var quantity_definition = TypeForBoundMembers.Of<QuantityDefinition>();
-            var prefix_definition = TypeForBoundMembers.Of<PrefixDefinition>();
-            var unit_definition = TypeForBoundMembers.Of<UnitDefinition>();
+            var group = BnfiTermType.Of<Group>();
+            var namespace_usage = BnfiTermType.Of<NamespaceUsing>();
+            var @namespace = BnfiTermType.Of<Namespace>();
+            var definition = BnfiTermTransient.Of<Definition>();
+            var quantity_definition = BnfiTermType.Of<QuantityDefinition>();
+            var prefix_definition = BnfiTermType.Of<PrefixDefinition>();
+            var unit_definition = BnfiTermType.Of<UnitDefinition>();
 
-            TypeForValue<string> IDENTIFIER = ToIdentifier("identifier")
+            BnfiTermValue<string> IDENTIFIER = ToIdentifier("identifier")
                 .CreateValue<string>((context, parseNode) => parseNode.FindTokenAndGetText());
-            TypeForValue<dynamic> NUMBER = ToNumber("number")
+            BnfiTermValue<dynamic> NUMBER = ToNumber("number")
                 .CreateValue<dynamic>((context, parseNode) => parseNode.FindToken().Value);
 
             KeyTerm DOT = ToTerm(".");
 
-            TypeForValue<string> qualified_identifier = IDENTIFIER.PlusList(DOT).ConvertValue(identifiers => string.Join(DOT.Text, identifiers));
+            BnfiTermValue<string> qualified_identifier = IDENTIFIER.PlusList(DOT).ConvertValue(identifiers => string.Join(DOT.Text, identifiers));
 
-            TypeForValue<Name> name = IDENTIFIER.ConvertValue(identifier => new Name { Value = identifier });
-            TypeForValue<Name> namespace_name = qualified_identifier.ConvertValue(qual_id => new Name {Value = qual_id});
-            TypeForValue<NameRef> nameref = qualified_identifier.ConvertValue(qual_id => new NameRef(qual_id));
+            BnfiTermValue<Name> name = IDENTIFIER.ConvertValue(identifier => new Name { Value = identifier });
+            BnfiTermValue<Name> namespace_name = qualified_identifier.ConvertValue(qual_id => new Name {Value = qual_id});
+            BnfiTermValue<NameRef> nameref = qualified_identifier.ConvertValue(qual_id => new NameRef(qual_id));
 
-            TypeForValue<Reference<QuantityDefinition>> quantity_reference = nameref.ConvertValue(nameRef => Reference.Get<QuantityDefinition>(nameRef));
-            TypeForValue<Reference<UnitDefinition>> unit_reference = nameref.ConvertValue(nameRef => Reference.Get<UnitDefinition>(nameRef));
+            BnfiTermValue<Reference<QuantityDefinition>> quantity_reference = nameref.ConvertValue(nameRef => Reference.Get<QuantityDefinition>(nameRef));
+            BnfiTermValue<Reference<UnitDefinition>> unit_reference = nameref.ConvertValue(nameRef => Reference.Get<UnitDefinition>(nameRef));
 
-            var conversion = TypeForTransient.Of<Conversion>();
-            var simple_conversion = TypeForBoundMembers.Of<SimpleConversion>();
-            var complex_conversion = TypeForTransient.Of<ComplexConversion>();
-            var complex_conversion_without_equal = TypeForBoundMembers.Of<ComplexConversion>();
-            var complex_conversion_with_equal = TypeForBoundMembers.Of<ComplexConversion>();
-            var simple_conversion_op = TypeForTransient.Of<Direction>();
-            var complex_conversion_op = TypeForTransient.Of<Direction>();
-            var unit_expression = TypeForTransient.Of<UnitExpression>();
-            var binary_unit_expression = TypeForBoundMembers.Of<UnitExpression.Binary>();
-            var square_unit_expression = TypeForBoundMembers.Of<UnitExpression.Square>();
-            var cube_unit_expression = TypeForBoundMembers.Of<UnitExpression.Cube>();
-            var recip_unit_expression = TypeForBoundMembers.Of<UnitExpression.Recip>();
-            var unit_unit_expression = TypeForBoundMembers.Of<UnitExpression.Unit>();
-            var expression = TypeForTransient.Of<Expression>();
-            var binary_expression = TypeForBoundMembers.Of<Expression.Binary>();
-            var number_expression = TypeForValue.Of<Expression.Number>();
-            var unary_expression = TypeForBoundMembers.Of<Expression.Unary>();
-            var expression_with_unit = TypeForTransient.Of<ExpressionWithUnit>();
-            var binary_expression_with_unit = TypeForBoundMembers.Of<ExpressionWithUnit.Binary>();
-            var binary_expression_with_unit2 = TypeForBoundMembers.Of<ExpressionWithUnit.Binary2>();
-            var unary_expression_with_unit = TypeForBoundMembers.Of<ExpressionWithUnit.Unary>();
-            var unit_variable_expression_with_unit = TypeForBoundMembers.Of<ExpressionWithUnit.Unit>();
-            var binary_operator = TypeForTransient.Of<BinaryOperator>();
-            var unit_expression_binary_operator = TypeForTransient.Of<UnitExpression.Binary.Operator>();
-            var unary_operator = TypeForTransient.Of<UnaryOperator>();
-            var external_variable = TypeForBoundMembers.Of<Expression.ExternalVariable>();
+            var conversion = BnfiTermTransient.Of<Conversion>();
+            var simple_conversion = BnfiTermType.Of<SimpleConversion>();
+            var complex_conversion = BnfiTermTransient.Of<ComplexConversion>();
+            var complex_conversion_without_equal = BnfiTermType.Of<ComplexConversion>();
+            var complex_conversion_with_equal = BnfiTermType.Of<ComplexConversion>();
+            var simple_conversion_op = BnfiTermTransient.Of<Direction>();
+            var complex_conversion_op = BnfiTermTransient.Of<Direction>();
+            var unit_expression = BnfiTermTransient.Of<UnitExpression>();
+            var binary_unit_expression = BnfiTermType.Of<UnitExpression.Binary>();
+            var square_unit_expression = BnfiTermType.Of<UnitExpression.Square>();
+            var cube_unit_expression = BnfiTermType.Of<UnitExpression.Cube>();
+            var recip_unit_expression = BnfiTermType.Of<UnitExpression.Recip>();
+            var unit_unit_expression = BnfiTermType.Of<UnitExpression.Unit>();
+            var expression = BnfiTermTransient.Of<Expression>();
+            var binary_expression = BnfiTermType.Of<Expression.Binary>();
+            var number_expression = BnfiTermValue.Of<Expression.Number>();
+            var unary_expression = BnfiTermType.Of<Expression.Unary>();
+            var expression_with_unit = BnfiTermTransient.Of<ExpressionWithUnit>();
+            var binary_expression_with_unit = BnfiTermType.Of<ExpressionWithUnit.Binary>();
+            var binary_expression_with_unit2 = BnfiTermType.Of<ExpressionWithUnit.Binary2>();
+            var unary_expression_with_unit = BnfiTermType.Of<ExpressionWithUnit.Unary>();
+            var unit_variable_expression_with_unit = BnfiTermType.Of<ExpressionWithUnit.Unit>();
+            var binary_operator = BnfiTermTransient.Of<BinaryOperator>();
+            var unit_expression_binary_operator = BnfiTermTransient.Of<UnitExpression.Binary.Operator>();
+            var unary_operator = BnfiTermTransient.Of<UnaryOperator>();
+            var external_variable = BnfiTermType.Of<Expression.ExternalVariable>();
 
             var SIMPLE_MUTUAL_CONVERSION_OP = ToTerm("<=>").CreateValue(Direction.BiDir);
             var SIMPLE_TO_THIS_CONVERSION_OP = ToTerm("<=").CreateValue(Direction.From);
@@ -90,7 +90,7 @@ namespace ETUS.Grammar
             var DIV_OP = ToTerm("/").CreateValue(BinaryOperator.Div);
             var POW_OP = ToTerm("^").CreateValue(BinaryOperator.Pow);
 
-            var CONSTANT = TypeForConstant.Of<Expression.Constant>();
+            var CONSTANT = BnfiTermConstant.Of<Expression.Constant>();
 
             KeyTerm USE = ToTerm("use");
             KeyTerm DECLARE = ToTerm("declare");
@@ -102,10 +102,10 @@ namespace ETUS.Grammar
             KeyTerm OF = ToTerm("of");
             KeyTerm EXTERNAL_VARIABLE_PREFIX = ToTerm("::");
             KeyTerm EQUAL_STATEMENT = ToTerm("=");
-            KeyTermPunctuation LEFT_PAREN = ToPunctuation("(");
-            KeyTermPunctuation RIGHT_PAREN = ToPunctuation(")");
-            KeyTermPunctuation LEFT_BRACKET = ToPunctuation("[");
-            KeyTermPunctuation RIGHT_BRACKET = ToPunctuation("]");
+            BnfiTermKeyTermPunctuation LEFT_PAREN = ToPunctuation("(");
+            BnfiTermKeyTermPunctuation RIGHT_PAREN = ToPunctuation(")");
+            BnfiTermKeyTermPunctuation LEFT_BRACKET = ToPunctuation("[");
+            BnfiTermKeyTermPunctuation RIGHT_BRACKET = ToPunctuation("]");
 
             RegisterOperators(20, ADD_OP, SUB_OP);
             RegisterOperators(30, MUL_OP, DIV_OP);
