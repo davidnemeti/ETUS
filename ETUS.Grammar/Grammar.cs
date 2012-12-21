@@ -21,7 +21,7 @@ namespace ETUS.Grammar
     public class UDLGrammar : Irony.ITG.Grammar
     {
         public UDLGrammar()
-            : base(AstCreation.CreateAst)
+            : base(AstCreation.CreateAstWithAutoBrowsableAstNodes)
         {
             var group = new BnfiTermType<Group>();
             var namespace_usage = new BnfiTermType<NamespaceUsing>();
