@@ -79,14 +79,14 @@ namespace ETUS.Grammar
             var COMPLEX_TO_THIS_CONVERSION_OP = ToTerm("<:").CreateValue(Direction.From);
             var COMPLEX_TO_THAT_CONVERSION_OP = ToTerm(":>").CreateValue(Direction.To);
 
-            var POS_OP = ToTerm("+").CreateValue(UnaryOperator.Pos);
-            var NEG_OP = ToTerm("-").CreateValue(UnaryOperator.Neg);
+            var POS_OP = ToTerm("+", UnaryOperator.Pos);
+            var NEG_OP = ToTerm("-", UnaryOperator.Neg);
 
-            var ADD_OP = ToTerm("+").CreateValue(BinaryOperator.Add);
-            var SUB_OP = ToTerm("-").CreateValue(BinaryOperator.Sub);
-            var MUL_OP = ToTerm("*").CreateValue(BinaryOperator.Mul);
-            var DIV_OP = ToTerm("/").CreateValue(BinaryOperator.Div);
-            var POW_OP = ToTerm("^").CreateValue(BinaryOperator.Pow);
+            var ADD_OP = ToTerm("+", BinaryOperator.Add);
+            var SUB_OP = ToTerm("-", BinaryOperator.Sub);
+            var MUL_OP = ToTerm("*", BinaryOperator.Mul);
+            var DIV_OP = ToTerm("/", BinaryOperator.Div);
+            var POW_OP = ToTerm("^", BinaryOperator.Pow);
 
             KeyTerm USE = ToTerm("use");
             KeyTerm DECLARE = ToTerm("declare");
