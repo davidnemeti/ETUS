@@ -32,7 +32,7 @@ namespace ETUS.Grammar
             var unit_definition = new BnfiTermType<UnitDefinition>();
 
             BnfiTermValue<string> IDENTIFIER = ToIdentifier();
-            BnfiTermValue<dynamic> NUMBER = ToNumber<dynamic>("number");
+            BnfiTermValue<dynamic> NUMBER = ToNumber<dynamic>();
 
             KeyTerm DOT = ToTerm(".");
 
