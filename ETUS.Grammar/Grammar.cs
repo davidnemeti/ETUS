@@ -31,8 +31,8 @@ namespace ETUS.Grammar
             var prefix_definition = new BnfiTermType<PrefixDefinition>();
             var unit_definition = new BnfiTermType<UnitDefinition>();
 
-            BnfiTermValue<string> IDENTIFIER = ToIdentifier();
-            BnfiTermValue<dynamic> NUMBER = ToNumber<dynamic>();
+            BnfiTermValue<string> IDENTIFIER = CreateIdentifier();
+            BnfiTermValue<dynamic> NUMBER = CreateNumber<dynamic>();
 
             KeyTerm DOT = ToTerm(".");
 
