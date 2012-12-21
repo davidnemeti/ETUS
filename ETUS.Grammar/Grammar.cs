@@ -258,7 +258,7 @@ namespace ETUS.Grammar
 #if false
             // these all should fail with compile error...
 
-            var xxx_transient = new TypeForTransient<ExpressionWithUnit.Unit>();
+            var xxx_transient = new BnfiTermTransient<ExpressionWithUnit.Unit>();
             xxx_transient.Rule =
                 LEFT_BRACKET
                 + unit_expression.BindMember(unit_variable_expression_with_unit, t => t.Value)
