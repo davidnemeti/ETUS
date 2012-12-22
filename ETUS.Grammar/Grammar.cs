@@ -34,7 +34,7 @@ namespace ETUS.Grammar
             BnfiTermValue<string> IDENTIFIER = CreateIdentifier();
             BnfiTermValue NUMBER = CreateNumber();
 
-            KeyTerm DOT = ToTerm(".");
+            BnfiTermKeyTerm DOT = ToTerm(".");
 
             BnfiTermValue<string> qualified_identifier = IDENTIFIER.PlusList(DOT).ConvertValue(identifiers => string.Join(DOT.Text, identifiers));
 
@@ -88,16 +88,16 @@ namespace ETUS.Grammar
             var DIV_OP = ToTerm("/", BinaryOperator.Div);
             var POW_OP = ToTerm("^", BinaryOperator.Pow);
 
-            KeyTerm USE = ToTerm("use");
-            KeyTerm DECLARE = ToTerm("declare");
-            KeyTerm DEFINE = ToTerm("define");
-            KeyTerm PREFIX = ToTerm("prefix");
-            KeyTerm NAMESPACE = ToTerm("namespace");
-            KeyTerm QUANTITY = ToTerm("quantity");
-            KeyTerm UNIT = ToTerm("unit");
-            KeyTerm OF = ToTerm("of");
-            KeyTerm EXTERNAL_VARIABLE_PREFIX = ToTerm("::");
-            KeyTerm EQUAL_STATEMENT = ToTerm("=");
+            BnfiTermKeyTerm USE = ToTerm("use");
+            BnfiTermKeyTerm DECLARE = ToTerm("declare");
+            BnfiTermKeyTerm DEFINE = ToTerm("define");
+            BnfiTermKeyTerm PREFIX = ToTerm("prefix");
+            BnfiTermKeyTerm NAMESPACE = ToTerm("namespace");
+            BnfiTermKeyTerm QUANTITY = ToTerm("quantity");
+            BnfiTermKeyTerm UNIT = ToTerm("unit");
+            BnfiTermKeyTerm OF = ToTerm("of");
+            BnfiTermKeyTerm EXTERNAL_VARIABLE_PREFIX = ToTerm("::");
+            BnfiTermKeyTerm EQUAL_STATEMENT = ToTerm("=");
             BnfiTermKeyTermPunctuation LEFT_PAREN = ToPunctuation("(");
             BnfiTermKeyTermPunctuation RIGHT_PAREN = ToPunctuation(")");
             BnfiTermKeyTermPunctuation LEFT_BRACKET = ToPunctuation("[");
@@ -163,9 +163,10 @@ namespace ETUS.Grammar
                 ;
 
             complex_conversion_with_equal.Rule =
-                complex_conversion_without_equal
+                complex_conversion_without_equal.Copy()
                 + PreferShiftHere()
-                + EQUAL_STATEMENT + unit_variable_expression_with_unit.ConvertValue(unit_variable => unit_variable.Value).BindMember(complex_conversion, t => t.OtherUnit)
+                + EQUAL_STATEMENT
+                + unit_variable_expression_with_unit.ConvertValue(unit_variable => unit_variable.Value).BindMember(complex_conversion, t => t.OtherUnit)
                 ;
 
             unit_expression.SetRuleOr(
@@ -184,17 +185,17 @@ namespace ETUS.Grammar
 
             square_unit_expression.Rule =
                 unit_expression.BindMember(square_unit_expression, t => t.Base)
-                + POW_OP
+                + POW_OP.BindToNone(square_unit_expression)
                 + ToTerm("2");
 
             cube_unit_expression.Rule =
                 unit_expression.BindMember(cube_unit_expression, t => t.Base)
-                + POW_OP
+                + POW_OP.BindToNone(cube_unit_expression)
                 + ToTerm("3");
 
             recip_unit_expression.Rule =
                 ToTerm("1")
-                + DIV_OP
+                + DIV_OP.BindToNone(recip_unit_expression)
                 + unit_expression.BindMember(recip_unit_expression, t => t.Denominator);
 
             unit_unit_expression.Rule = unit_reference.BindMember(unit_unit_expression, t => t.Value);
