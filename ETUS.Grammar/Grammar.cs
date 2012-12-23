@@ -185,17 +185,17 @@ namespace ETUS.Grammar
 
             square_unit_expression.Rule =
                 unit_expression.BindMember(square_unit_expression, t => t.Base)
-                + POW_OP.BindToNone(square_unit_expression)
+                + POW_OP.NoAst()
                 + ToTerm("2");
 
             cube_unit_expression.Rule =
                 unit_expression.BindMember(cube_unit_expression, t => t.Base)
-                + POW_OP.BindToNone(cube_unit_expression)
+                + POW_OP.NoAst()
                 + ToTerm("3");
 
             recip_unit_expression.Rule =
                 ToTerm("1")
-                + DIV_OP.BindToNone(recip_unit_expression)
+                + DIV_OP.NoAst()
                 + unit_expression.BindMember(recip_unit_expression, t => t.Denominator);
 
             unit_unit_expression.Rule = unit_reference.BindMember(unit_unit_expression, t => t.Value);
