@@ -10,6 +10,8 @@ using Irony;
 using Irony.Ast;
 using Irony.Parsing;
 using Irony.ITG;
+using Irony.ITG.Ast;
+using Irony.ITG.Unparsing;
 
 using DomainCore;
 
@@ -18,7 +20,7 @@ using ETUS.DomainModel.Expressions;
 
 namespace ETUS.Grammar
 {
-    public class UDLGrammar : Irony.ITG.Grammar
+    public class UDLGrammar : Irony.ITG.Ast.Grammar
     {
         public UDLGrammar()
             : base(AstCreation.CreateAst)
