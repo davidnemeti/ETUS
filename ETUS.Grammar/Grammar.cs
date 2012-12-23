@@ -221,7 +221,8 @@ namespace ETUS.Grammar
                 + binary_operator.BindMember(binary_expression, t => t.Op)
                 + expression.BindMember(binary_expression, t => t.Term2);
 
-            unary_expression.Rule = unary_operator.BindMember(unary_expression, t => t.Op) + expression.BindMember(unary_expression, t => t.Term);
+            unary_expression.Rule = unary_operator.BindMember(unary_expression, t => t.Op)
+                + expression.BindMember(unary_expression, t => t.Term);
 
             external_variable.Rule =
                 EXTERNAL_VARIABLE_PREFIX
