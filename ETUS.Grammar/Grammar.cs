@@ -80,21 +80,21 @@ namespace ETUS.Grammar
             var DIV_OP = ToTerm("/", BinaryOperator.Div);
             var POW_OP = ToTerm("^", BinaryOperator.Pow);
 
-            BnfiTermKeyTerm USE = ToTerm("use");
-            BnfiTermKeyTerm DECLARE = ToTerm("declare");
-            BnfiTermKeyTerm DEFINE = ToTerm("define");
-            BnfiTermKeyTerm PREFIX = ToTerm("prefix");
-            BnfiTermKeyTerm NAMESPACE = ToTerm("namespace");
-            BnfiTermKeyTerm QUANTITY = ToTerm("quantity");
-            BnfiTermKeyTerm UNIT = ToTerm("unit");
-            BnfiTermKeyTerm OF = ToTerm("of");
-            BnfiTermKeyTerm EXTERNAL_VARIABLE_PREFIX = ToTerm("::");
-            BnfiTermKeyTerm EQUAL_STATEMENT = ToTerm("=");
-            BnfiTermKeyTerm DOT = ToTerm(".");
-            BnfiTermKeyTermPunctuation LEFT_PAREN = ToPunctuation("(");
-            BnfiTermKeyTermPunctuation RIGHT_PAREN = ToPunctuation(")");
-            BnfiTermKeyTermPunctuation LEFT_BRACKET = ToPunctuation("[");
-            BnfiTermKeyTermPunctuation RIGHT_BRACKET = ToPunctuation("]");
+            var USE = ToTerm("use");
+            var DECLARE = ToTerm("declare");
+            var DEFINE = ToTerm("define");
+            var PREFIX = ToTerm("prefix");
+            var NAMESPACE = ToTerm("namespace");
+            var QUANTITY = ToTerm("quantity");
+            var UNIT = ToTerm("unit");
+            var OF = ToTerm("of");
+            var EXTERNAL_VARIABLE_PREFIX = ToTerm("::");
+            var EQUAL_STATEMENT = ToTerm("=");
+            var DOT = ToTerm(".");
+            var LEFT_PAREN = ToPunctuation("(");
+            var RIGHT_PAREN = ToPunctuation(")");
+            var LEFT_BRACKET = ToPunctuation("[");
+            var RIGHT_BRACKET = ToPunctuation("]");
 
             RegisterOperators(20, ADD_OP, SUB_OP);
             RegisterOperators(30, MUL_OP, DIV_OP);
