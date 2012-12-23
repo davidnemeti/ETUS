@@ -110,16 +110,16 @@ namespace ETUS.Grammar
                 { "π", Constants.PI }
             };
 
-            BnfiTermValue<string> IDENTIFIER = CreateIdentifier();
-            BnfiTermValue<string> qualified_identifier = IDENTIFIER.PlusList(DOT).ConvertValue(identifiers => string.Join(DOT.Text, identifiers));
-            BnfiTermValue NUMBER = CreateNumber();
+            var NUMBER = new BnfiTermValue();
+            var IDENTIFIER = new BnfiTermValue<string>();
+            var qualified_identifier = new BnfiTermValue<string>();
 
-            BnfiTermValue<Name> name = IDENTIFIER.ConvertValue(identifier => new Name { Value = identifier });
-            BnfiTermValue<Name> namespace_name = qualified_identifier.ConvertValue(qual_id => new Name { Value = qual_id });
-            BnfiTermValue<NameRef> nameref = qualified_identifier.ConvertValue(qual_id => new NameRef(qual_id));
+            var name = new BnfiTermValue<Name>();
+            var namespace_name = new BnfiTermValue<Name>();
+            var nameref = new BnfiTermValue<NameRef>();
 
-            BnfiTermValue<Reference<QuantityDefinition>> quantity_reference = nameref.ConvertValue(nameRef => Reference.Get<QuantityDefinition>(nameRef));
-            BnfiTermValue<Reference<UnitDefinition>> unit_reference = nameref.ConvertValue(nameRef => Reference.Get<UnitDefinition>(nameRef));
+            var quantity_reference = new BnfiTermValue<Reference<QuantityDefinition>>();
+            var unit_reference = new BnfiTermValue<Reference<UnitDefinition>>();
 
             #region Rules
 
@@ -258,6 +258,17 @@ namespace ETUS.Grammar
                 LEFT_BRACKET
                 + unit_expression.BindMember(unit_variable_expression_with_unit, t => t.Value)
                 + RIGHT_BRACKET;
+
+            NUMBER.Rule = CreateNumber();
+            IDENTIFIER.Rule = CreateIdentifier();
+            qualified_identifier.Rule = IDENTIFIER.PlusList(DOT).ConvertValue(identifiers => string.Join(DOT.Text, identifiers));
+
+            name.Rule = IDENTIFIER.ConvertValue(identifier => new Name { Value = identifier });
+            namespace_name.Rule = qualified_identifier.ConvertValue(qual_id => new Name { Value = qual_id });
+            nameref.Rule = qualified_identifier.ConvertValue(qual_id => new NameRef(qual_id));
+
+            quantity_reference.Rule = nameref.ConvertValue(nameRef => Reference.Get<QuantityDefinition>(nameRef));
+            unit_reference.Rule = nameref.ConvertValue(nameRef => Reference.Get<UnitDefinition>(nameRef));
 
             #endregion
 
