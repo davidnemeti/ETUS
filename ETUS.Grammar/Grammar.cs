@@ -71,20 +71,6 @@ namespace ETUS.Grammar
             var COMPLEX_TO_THIS_CONVERSION_OP = ToTerm("<:", Direction.From);
             var COMPLEX_TO_THAT_CONVERSION_OP = ToTerm(":>", Direction.To);
 
-            BnfiTermValue<string> IDENTIFIER = CreateIdentifier();
-            BnfiTermValue NUMBER = CreateNumber();
-
-            BnfiTermKeyTerm DOT = ToTerm(".");
-
-            BnfiTermValue<string> qualified_identifier = IDENTIFIER.PlusList(DOT).ConvertValue(identifiers => string.Join(DOT.Text, identifiers));
-
-            BnfiTermValue<Name> name = IDENTIFIER.ConvertValue(identifier => new Name { Value = identifier });
-            BnfiTermValue<Name> namespace_name = qualified_identifier.ConvertValue(qual_id => new Name { Value = qual_id });
-            BnfiTermValue<NameRef> nameref = qualified_identifier.ConvertValue(qual_id => new NameRef(qual_id));
-
-            BnfiTermValue<Reference<QuantityDefinition>> quantity_reference = nameref.ConvertValue(nameRef => Reference.Get<QuantityDefinition>(nameRef));
-            BnfiTermValue<Reference<UnitDefinition>> unit_reference = nameref.ConvertValue(nameRef => Reference.Get<UnitDefinition>(nameRef));
-
             var POS_OP = ToTerm("+", UnaryOperator.Pos);
             var NEG_OP = ToTerm("-", UnaryOperator.Neg);
 
@@ -104,6 +90,7 @@ namespace ETUS.Grammar
             BnfiTermKeyTerm OF = ToTerm("of");
             BnfiTermKeyTerm EXTERNAL_VARIABLE_PREFIX = ToTerm("::");
             BnfiTermKeyTerm EQUAL_STATEMENT = ToTerm("=");
+            BnfiTermKeyTerm DOT = ToTerm(".");
             BnfiTermKeyTermPunctuation LEFT_PAREN = ToPunctuation("(");
             BnfiTermKeyTermPunctuation RIGHT_PAREN = ToPunctuation(")");
             BnfiTermKeyTermPunctuation LEFT_BRACKET = ToPunctuation("[");
@@ -122,6 +109,17 @@ namespace ETUS.Grammar
                 { "PI", Constants.PI },
                 { "π", Constants.PI }
             };
+
+            BnfiTermValue<string> IDENTIFIER = CreateIdentifier();
+            BnfiTermValue<string> qualified_identifier = IDENTIFIER.PlusList(DOT).ConvertValue(identifiers => string.Join(DOT.Text, identifiers));
+            BnfiTermValue NUMBER = CreateNumber();
+
+            BnfiTermValue<Name> name = IDENTIFIER.ConvertValue(identifier => new Name { Value = identifier });
+            BnfiTermValue<Name> namespace_name = qualified_identifier.ConvertValue(qual_id => new Name { Value = qual_id });
+            BnfiTermValue<NameRef> nameref = qualified_identifier.ConvertValue(qual_id => new NameRef(qual_id));
+
+            BnfiTermValue<Reference<QuantityDefinition>> quantity_reference = nameref.ConvertValue(nameRef => Reference.Get<QuantityDefinition>(nameRef));
+            BnfiTermValue<Reference<UnitDefinition>> unit_reference = nameref.ConvertValue(nameRef => Reference.Get<UnitDefinition>(nameRef));
 
             #region Rules
 
