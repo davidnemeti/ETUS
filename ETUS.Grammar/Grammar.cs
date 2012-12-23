@@ -33,6 +33,44 @@ namespace ETUS.Grammar
             var prefix_definition = new BnfiTermType<PrefixDefinition>();
             var unit_definition = new BnfiTermType<UnitDefinition>();
 
+            var conversion = new BnfiTermTransient<Conversion>();
+            var simple_conversion = new BnfiTermType<SimpleConversion>();
+            var complex_conversion = new BnfiTermTransient<ComplexConversion>();
+            var complex_conversion_without_equal = new BnfiTermType<ComplexConversion>();
+            var complex_conversion_with_equal = new BnfiTermType<ComplexConversion>();
+            var simple_conversion_op = new BnfiTermTransient<Direction>();
+            var complex_conversion_op = new BnfiTermTransient<Direction>();
+
+            var unit_expression = new BnfiTermTransient<UnitExpression>();
+            var binary_unit_expression = new BnfiTermType<UnitExpression.Binary>();
+            var square_unit_expression = new BnfiTermType<UnitExpression.Square>();
+            var cube_unit_expression = new BnfiTermType<UnitExpression.Cube>();
+            var recip_unit_expression = new BnfiTermType<UnitExpression.Recip>();
+            var unit_unit_expression = new BnfiTermType<UnitExpression.Unit>();
+
+            var expression = new BnfiTermTransient<Expression>();
+            var binary_expression = new BnfiTermType<Expression.Binary>();
+            var number_expression = new BnfiTermValue<Expression.Number>();
+            var unary_expression = new BnfiTermType<Expression.Unary>();
+
+            var expression_with_unit = new BnfiTermTransient<ExpressionWithUnit>();
+            var binary_expression_with_unit = new BnfiTermType<ExpressionWithUnit.Binary>();
+            var binary_expression_with_unit2 = new BnfiTermType<ExpressionWithUnit.Binary2>();
+            var unary_expression_with_unit = new BnfiTermType<ExpressionWithUnit.Unary>();
+            var unit_variable_expression_with_unit = new BnfiTermType<ExpressionWithUnit.Unit>();
+
+            var binary_operator = new BnfiTermTransient<BinaryOperator>();
+            var unit_expression_binary_operator = new BnfiTermTransient<UnitExpression.Binary.Operator>();
+            var unary_operator = new BnfiTermTransient<UnaryOperator>();
+            var external_variable = new BnfiTermType<Expression.ExternalVariable>();
+
+            var SIMPLE_MUTUAL_CONVERSION_OP = ToTerm("<=>", Direction.BiDir);
+            var SIMPLE_TO_THIS_CONVERSION_OP = ToTerm("<=", Direction.From);
+            var SIMPLE_TO_THAT_CONVERSION_OP = ToTerm("=>", Direction.To);
+            var COMPLEX_MUTUAL_CONVERSION_OP = ToTerm("<:>", Direction.BiDir);
+            var COMPLEX_TO_THIS_CONVERSION_OP = ToTerm("<:", Direction.From);
+            var COMPLEX_TO_THAT_CONVERSION_OP = ToTerm(":>", Direction.To);
+
             BnfiTermValue<string> IDENTIFIER = CreateIdentifier();
             BnfiTermValue NUMBER = CreateNumber();
 
@@ -41,45 +79,11 @@ namespace ETUS.Grammar
             BnfiTermValue<string> qualified_identifier = IDENTIFIER.PlusList(DOT).ConvertValue(identifiers => string.Join(DOT.Text, identifiers));
 
             BnfiTermValue<Name> name = IDENTIFIER.ConvertValue(identifier => new Name { Value = identifier });
-            BnfiTermValue<Name> namespace_name = qualified_identifier.ConvertValue(qual_id => new Name {Value = qual_id});
+            BnfiTermValue<Name> namespace_name = qualified_identifier.ConvertValue(qual_id => new Name { Value = qual_id });
             BnfiTermValue<NameRef> nameref = qualified_identifier.ConvertValue(qual_id => new NameRef(qual_id));
 
             BnfiTermValue<Reference<QuantityDefinition>> quantity_reference = nameref.ConvertValue(nameRef => Reference.Get<QuantityDefinition>(nameRef));
             BnfiTermValue<Reference<UnitDefinition>> unit_reference = nameref.ConvertValue(nameRef => Reference.Get<UnitDefinition>(nameRef));
-
-            var conversion = new BnfiTermTransient<Conversion>();
-            var simple_conversion = new BnfiTermType<SimpleConversion>();
-            var complex_conversion = new BnfiTermTransient<ComplexConversion>();
-            var complex_conversion_without_equal = new BnfiTermType<ComplexConversion>();
-            var complex_conversion_with_equal = new BnfiTermType<ComplexConversion>();
-            var simple_conversion_op = new BnfiTermTransient<Direction>();
-            var complex_conversion_op = new BnfiTermTransient<Direction>();
-            var unit_expression = new BnfiTermTransient<UnitExpression>();
-            var binary_unit_expression = new BnfiTermType<UnitExpression.Binary>();
-            var square_unit_expression = new BnfiTermType<UnitExpression.Square>();
-            var cube_unit_expression = new BnfiTermType<UnitExpression.Cube>();
-            var recip_unit_expression = new BnfiTermType<UnitExpression.Recip>();
-            var unit_unit_expression = new BnfiTermType<UnitExpression.Unit>();
-            var expression = new BnfiTermTransient<Expression>();
-            var binary_expression = new BnfiTermType<Expression.Binary>();
-            var number_expression = new BnfiTermValue<Expression.Number>();
-            var unary_expression = new BnfiTermType<Expression.Unary>();
-            var expression_with_unit = new BnfiTermTransient<ExpressionWithUnit>();
-            var binary_expression_with_unit = new BnfiTermType<ExpressionWithUnit.Binary>();
-            var binary_expression_with_unit2 = new BnfiTermType<ExpressionWithUnit.Binary2>();
-            var unary_expression_with_unit = new BnfiTermType<ExpressionWithUnit.Unary>();
-            var unit_variable_expression_with_unit = new BnfiTermType<ExpressionWithUnit.Unit>();
-            var binary_operator = new BnfiTermTransient<BinaryOperator>();
-            var unit_expression_binary_operator = new BnfiTermTransient<UnitExpression.Binary.Operator>();
-            var unary_operator = new BnfiTermTransient<UnaryOperator>();
-            var external_variable = new BnfiTermType<Expression.ExternalVariable>();
-
-            var SIMPLE_MUTUAL_CONVERSION_OP = ToTerm("<=>").CreateValue(Direction.BiDir);
-            var SIMPLE_TO_THIS_CONVERSION_OP = ToTerm("<=").CreateValue(Direction.From);
-            var SIMPLE_TO_THAT_CONVERSION_OP = ToTerm("=>").CreateValue(Direction.To);
-            var COMPLEX_MUTUAL_CONVERSION_OP = ToTerm("<:>").CreateValue(Direction.BiDir);
-            var COMPLEX_TO_THIS_CONVERSION_OP = ToTerm("<:").CreateValue(Direction.From);
-            var COMPLEX_TO_THAT_CONVERSION_OP = ToTerm(":>").CreateValue(Direction.To);
 
             var POS_OP = ToTerm("+", UnaryOperator.Pos);
             var NEG_OP = ToTerm("-", UnaryOperator.Neg);
