@@ -110,8 +110,9 @@ namespace ETUS.Grammar
                 { "π", Constants.PI }
             };
 
-            var NUMBER = new BnfiTermValue();
-            var IDENTIFIER = new BnfiTermValue<string>();
+            var NUMBER = CreateNumber();
+            var IDENTIFIER = CreateIdentifier();
+
             var qualified_identifier = new BnfiTermValue<string>();
 
             var name = new BnfiTermValue<Name>();
@@ -259,8 +260,6 @@ namespace ETUS.Grammar
                 + unit_expression.BindMember(unit_variable_expression_with_unit, t => t.Value)
                 + RIGHT_BRACKET;
 
-            NUMBER.Rule = CreateNumber();
-            IDENTIFIER.Rule = CreateIdentifier();
             qualified_identifier.Rule = IDENTIFIER.PlusList(DOT).ConvertValue(identifiers => string.Join(DOT.Text, identifiers));
 
             name.Rule = IDENTIFIER.ConvertValue(identifier => new Name { Value = identifier });
