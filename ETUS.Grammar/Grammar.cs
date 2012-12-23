@@ -23,7 +23,7 @@ namespace ETUS.Grammar
     public class UDLGrammar : Irony.ITG.Ast.Grammar
     {
         public UDLGrammar()
-            : base(AstCreation.CreateAst)
+            : base(AstCreation.CreateAst, returnNullInsteadOfEmptyCollection: true)
         {
             var group = new BnfiTermType<Group>();
             var namespace_usage = new BnfiTermType<NamespaceUsing>();
