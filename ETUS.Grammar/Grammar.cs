@@ -96,20 +96,6 @@ namespace ETUS.Grammar
             var LEFT_BRACKET = ToPunctuation("[");
             var RIGHT_BRACKET = ToPunctuation("]");
 
-            RegisterOperators(20, ADD_OP, SUB_OP);
-            RegisterOperators(30, MUL_OP, DIV_OP);
-            RegisterOperators(40, NEG_OP, POS_OP);
-            RegisterOperators(50, Associativity.Right, POW_OP);
-
-            RegisterBracePair(LEFT_PAREN, RIGHT_PAREN);
-            RegisterBracePair(LEFT_BRACKET, RIGHT_BRACKET);
-
-            var CONSTANT = new BnfiTermConstant<Expression.Constant>()
-            {
-                { "PI", Constants.PI },
-                { "π", Constants.PI }
-            };
-
             var NUMBER = CreateNumber();
             var IDENTIFIER = CreateIdentifier();
 
@@ -121,6 +107,20 @@ namespace ETUS.Grammar
 
             var quantity_reference = new BnfiTermValue<Reference<QuantityDefinition>>();
             var unit_reference = new BnfiTermValue<Reference<UnitDefinition>>();
+
+            var CONSTANT = new BnfiTermConstant<Expression.Constant>()
+            {
+                { "PI", Constants.PI },
+                { "π", Constants.PI }
+            };
+
+            RegisterOperators(20, ADD_OP, SUB_OP);
+            RegisterOperators(30, MUL_OP, DIV_OP);
+            RegisterOperators(40, NEG_OP, POS_OP);
+            RegisterOperators(50, Associativity.Right, POW_OP);
+
+            RegisterBracePair(LEFT_PAREN, RIGHT_PAREN);
+            RegisterBracePair(LEFT_BRACKET, RIGHT_BRACKET);
 
             #region Rules
 
