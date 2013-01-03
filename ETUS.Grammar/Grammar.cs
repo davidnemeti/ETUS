@@ -271,6 +271,16 @@ namespace ETUS.Grammar
 
             #endregion
 
+            #region Unparse
+
+            nameref.UtokenizerForUnparse = obj =>
+                {
+                    NameRef nameRef = (NameRef)obj;
+                    return new Utoken[] { nameRef.Value };
+                };
+
+            #endregion
+
 #if false
             // these all should fail with compile error...
 
