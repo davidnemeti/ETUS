@@ -37,14 +37,14 @@ namespace DomainCore
     }
 
     public interface Reference<out TId>
-            where TId : Identity
+        where TId : Identity
     {
         NameRef NameRef { get; }
         TId Identity { get; }
     }
 
     internal class ReferenceImpl<TId> : Reference<TId>
-            where TId : Identity
+        where TId : Identity
     {
         public NameRef NameRef { get; private set; }
         public TId Identity { get; set; }

@@ -276,6 +276,9 @@ namespace ETUS.Grammar
             name.UtokenizerForUnparse = obj => new Utoken[] { ((Name)obj).Value };
             namespace_name.UtokenizerForUnparse = obj => new Utoken[] { ((Name)obj).Value };
             nameref.UtokenizerForUnparse = obj => new Utoken[] { ((NameRef)obj).Value };
+            number_expression.UtokenizerForUnparse = obj => new Utoken[] { ((Expression.Number)obj).Value.ToString() };
+            quantity_reference.UtokenizerForUnparse = obj => new Utoken[] { ((Reference<QuantityDefinition>)obj).NameRef.Value };
+            unit_reference.UtokenizerForUnparse = obj => new Utoken[] { ((Reference<UnitDefinition>)obj).NameRef.Value };
 
             #endregion
 
