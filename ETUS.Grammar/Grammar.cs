@@ -273,11 +273,8 @@ namespace ETUS.Grammar
 
             #region Unparse
 
-            nameref.UtokenizerForUnparse = obj =>
-                {
-                    NameRef nameRef = (NameRef)obj;
-                    return new Utoken[] { nameRef.Value };
-                };
+            nameref.UtokenizerForUnparse = obj => new Utoken[] { ((NameRef)obj).Value };
+            name.UtokenizerForUnparse = obj => new Utoken[] { ((Name)obj).Value };
 
             #endregion
 
