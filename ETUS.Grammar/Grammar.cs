@@ -167,11 +167,13 @@ namespace ETUS.Grammar
                 + expression_with_unit.BindMember(complex_conversion, t => t.Expr)
                 ;
 
+            BnfiTermValue<UnitExpression> xxx;
+
             complex_conversion_with_equal.Rule =
                 complex_conversion_without_equal.Copy()
                 + PreferShiftHere()
                 + EQUAL_STATEMENT
-                + unit_variable_expression_with_unit.ConvertValue(unit_variable => unit_variable.Value).BindMember(complex_conversion, t => t.OtherUnit)
+                + (xxx = unit_variable_expression_with_unit.ConvertValue(unit_variable => unit_variable.Value)).BindMember(complex_conversion, t => t.OtherUnit)
                 ;
 
             unit_expression.SetRuleOr(
@@ -279,6 +281,7 @@ namespace ETUS.Grammar
             number_expression.UtokenizerForUnparse = obj => new Utoken[] { ((Expression.Number)obj).Value.ToString() };
             quantity_reference.UtokenizerForUnparse = obj => new Utoken[] { ((Reference<QuantityDefinition>)obj).NameRef.Value };
             unit_reference.UtokenizerForUnparse = obj => new Utoken[] { ((Reference<UnitDefinition>)obj).NameRef.Value };
+            xxx.InverseValueConverterForUnparse = obj => new ExpressionWithUnit.Unit { Value = ((UnitExpression)obj) };
 
             #endregion
 
