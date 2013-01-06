@@ -126,20 +126,42 @@ namespace ETUS.Grammar
 
             this.Root = group;
 
-            group.Rule = namespace_usage.StarList().BindMember(group, t => t.NamespaceUsings) + @namespace.PlusList().BindMember(group, t => t.Namespaces);
+            group.Rule =
+                namespace_usage.StarList().BindMember(group, t => t.NamespaceUsings)
+                + @namespace.PlusList().BindMember(group, t => t.Namespaces)
+                ;
 
-            definition.SetRuleOr(quantity_definition, unit_definition, prefix_definition);
+            definition.SetRuleOr(
+                quantity_definition,
+                unit_definition,
+                prefix_definition
+                );
 
-            namespace_usage.Rule = USE + NAMESPACE + nameref.BindMember(namespace_usage, t => t.NameRef);
+            namespace_usage.Rule =
+                USE
+                + NAMESPACE
+                + nameref.BindMember(namespace_usage, t => t.NameRef)
+                ;
 
-            @namespace.Rule = DECLARE + NAMESPACE + namespace_name.BindMember(@namespace, t => t.Name) + definition.PlusList().BindMember(@namespace, t => t.Definitions);
+            @namespace.Rule =
+                DECLARE
+                + NAMESPACE
+                + namespace_name.BindMember(@namespace, t => t.Name)
+                + definition.PlusList().BindMember(@namespace, t => t.Definitions)
+                ;
 
             prefix_definition.Rule =
-                DEFINE + PREFIX
+                DEFINE
+                + PREFIX
                 + name.BindMember(prefix_definition, t => t.Name)
-                + expression.BindMember(prefix_definition, t => t.Factor);
+                + expression.BindMember(prefix_definition, t => t.Factor)
+                ;
 
-            quantity_definition.Rule = DEFINE + QUANTITY + name.BindMember(quantity_definition, t => t.Name);
+            quantity_definition.Rule =
+                DEFINE
+                + QUANTITY
+                + name.BindMember(quantity_definition, t => t.Name)
+                ;
 
             unit_definition.Rule =
                 DEFINE + UNIT
@@ -149,7 +171,10 @@ namespace ETUS.Grammar
                 + conversion.StarList().BindMember(unit_definition, t => t.Conversions)
                 ;
 
-            conversion.SetRuleOr(simple_conversion, complex_conversion);
+            conversion.SetRuleOr(
+                simple_conversion,
+                complex_conversion
+                );
 
             simple_conversion.Rule =
                 simple_conversion_op.BindMember(simple_conversion, t => t.Direction)
@@ -282,6 +307,9 @@ namespace ETUS.Grammar
             quantity_reference.UtokenizerForUnparse = obj => new Utoken[] { ((Reference<QuantityDefinition>)obj).NameRef.Value };
             unit_reference.UtokenizerForUnparse = obj => new Utoken[] { ((Reference<UnitDefinition>)obj).NameRef.Value };
             xxx.InverseValueConverterForUnparse = obj => new ExpressionWithUnit.Unit { Value = ((UnitExpression)obj) };
+
+            Formatting.InsertUtokensAroundAny(Utoken.Space);
+            Formatting.InsertUtokensAfter(definition, Utoken.NewLine);
 
             #endregion
 
