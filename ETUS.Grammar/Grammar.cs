@@ -23,7 +23,7 @@ namespace ETUS.Grammar
     public class UDLGrammar : Irony.ITG.Ast.Grammar
     {
         public UDLGrammar()
-            : base(AstCreation.CreateAst, EmptyCollectionHandling.ReturnNull)
+            : base(AstCreation.CreateAst, EmptyCollectionHandling.ReturnNull, ErrorHandling.ThrowException)
         {
             var group = new BnfiTermType<Group>();
             var namespace_usage = new BnfiTermType<NamespaceUsing>();
@@ -33,6 +33,7 @@ namespace ETUS.Grammar
             var prefix_definition = new BnfiTermType<PrefixDefinition>();
             var unit_definition = new BnfiTermType<UnitDefinition>();
 
+            var conversions = new BnfiTermCollection<List<Conversion>, Conversion>();
             var conversion = new BnfiTermTransient<Conversion>();
             var simple_conversion = new BnfiTermType<SimpleConversion>();
             var complex_conversion = new BnfiTermTransient<ComplexConversion>();
@@ -168,8 +169,10 @@ namespace ETUS.Grammar
                 + name.BindMember(unit_definition, t => t.Name)
                 + OF
                 + quantity_reference.BindMember(unit_definition, t => t.Quantity)
-                + conversion.StarList().BindMember(unit_definition, t => t.Conversions)
+                + conversions.BindMember(unit_definition, t => t.Conversions)
                 ;
+
+            conversions.Rule = conversion.StarList();
 
             conversion.SetRuleOr(
                 simple_conversion,
@@ -310,6 +313,9 @@ namespace ETUS.Grammar
 
             Formatting.InsertUtokensAroundAny(Utoken.Space);
             Formatting.InsertUtokensAfter(definition, Utoken.NewLine);
+            Formatting.InsertUtokensBefore(conversions, Utoken.NewLine, Utoken.IncreaseIndentLevel);
+            Formatting.InsertUtokensAfter(conversion, Utoken.NewLine);
+            Formatting.InsertUtokensAfter(conversions, Utoken.NewLine, Utoken.DecreaseIndentLevel);
 
             #endregion
 
