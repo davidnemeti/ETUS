@@ -28,6 +28,7 @@ namespace ETUS.Grammar
             var group = new BnfiTermType<Group>();
             var namespace_usage = new BnfiTermType<NamespaceUsing>();
             var @namespace = new BnfiTermType<Namespace>();
+            var definitions = new BnfiTermCollection<List<Definition>, Definition>();
             var definition = new BnfiTermTransient<Definition>();
             var quantity_definition = new BnfiTermType<QuantityDefinition>();
             var prefix_definition = new BnfiTermType<PrefixDefinition>();
@@ -132,12 +133,6 @@ namespace ETUS.Grammar
                 + @namespace.PlusList().BindMember(group, t => t.Namespaces)
                 ;
 
-            definition.SetRuleOr(
-                quantity_definition,
-                unit_definition,
-                prefix_definition
-                );
-
             namespace_usage.Rule =
                 USE
                 + NAMESPACE
@@ -148,8 +143,16 @@ namespace ETUS.Grammar
                 DECLARE
                 + NAMESPACE
                 + namespace_name.BindMember(@namespace, t => t.Name)
-                + definition.PlusList().BindMember(@namespace, t => t.Definitions)
+                + definitions.BindMember(@namespace, t => t.Definitions)
                 ;
+
+            definitions.Rule = definition.PlusList();
+
+            definition.SetRuleOr(
+                prefix_definition,
+                quantity_definition,
+                unit_definition
+                );
 
             prefix_definition.Rule =
                 DEFINE
@@ -312,6 +315,7 @@ namespace ETUS.Grammar
             xxx.InverseValueConverterForUnparse = obj => new ExpressionWithUnit.Unit { Value = ((UnitExpression)obj) };
 
             Formatting.InsertUtokensAroundAny(Utoken.Space);
+            Formatting.InsertUtokensBefore(definitions, Utoken.EmptyLine);
             Formatting.InsertUtokensAfter(definition, Utoken.NewLine);
             Formatting.InsertUtokensBefore(conversions, Utoken.NewLine, Utoken.IncreaseIndentLevel);
             Formatting.InsertUtokensAfter(conversion, Utoken.NewLine);
