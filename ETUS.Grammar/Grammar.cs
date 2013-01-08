@@ -321,6 +321,10 @@ namespace ETUS.Grammar
             Formatting.InsertUtokensAfter(conversions, 1, true, Utoken.EmptyLine);
             Formatting.InsertUtokensAfter(conversion, Utoken.NewLine);
 
+            Formatting.InsertUtokensBetweenUnordered(prefix_definition, unit_definition, Utoken.EmptyLine);
+            Formatting.InsertUtokensBetweenUnordered(prefix_definition, quantity_definition, Utoken.EmptyLine);
+            Formatting.InsertUtokensBetweenUnordered(unit_definition, quantity_definition, Utoken.EmptyLine);
+
             #endregion
 
 #if false
