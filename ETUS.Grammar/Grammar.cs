@@ -326,8 +326,6 @@ namespace ETUS.Grammar
             Formatting.InsertUtokensBetweenUnordered(prefix_definition, quantity_definition, Utoken.EmptyLine);
             Formatting.InsertUtokensBetweenUnordered(unit_definition, quantity_definition, Utoken.EmptyLine);
 
-            qualified_identifier.Name = "qualified_identifier";
-
             #endregion
 
 #if false
