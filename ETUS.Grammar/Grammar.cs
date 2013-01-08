@@ -313,7 +313,6 @@ namespace ETUS.Grammar
             quantity_reference.UtokenizerForUnparse = _quantity_reference => new Utoken[] { _quantity_reference.NameRef.Value };
             unit_reference.UtokenizerForUnparse = _unit_reference => new Utoken[] { _unit_reference.NameRef.Value };
             xxx.InverseValueConverterForUnparse = _unit_expression => new ExpressionWithUnit.Unit { Value = _unit_expression };
-            qualified_identifier.UtokenizerForUnparse = _qualified_identifier => new Utoken[] { _qualified_identifier };
 
             Formatting.InsertUtokensBefore(@namespace, Utoken.EmptyLine);
             Formatting.InsertUtokensBefore(definitions, Utoken.EmptyLine);
