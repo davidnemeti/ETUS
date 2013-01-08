@@ -318,7 +318,6 @@ namespace ETUS.Grammar
             Formatting.InsertUtokensAfter(definition, Utoken.NewLine);
             Formatting.InsertUtokensBefore(conversions, Utoken.NewLine, Utoken.Indent);
             Formatting.InsertUtokensAfter(conversion, Utoken.NewLine);
-            Formatting.InsertUtokensAfter(conversions, Utoken.NewLine);
 
             #endregion
 
