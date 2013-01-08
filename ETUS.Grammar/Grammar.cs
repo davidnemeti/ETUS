@@ -306,13 +306,14 @@ namespace ETUS.Grammar
 
             #region Unparse
 
-            name.UtokenizerForUnparse = obj => new Utoken[] { ((Name)obj).Value };
-            namespace_name.UtokenizerForUnparse = obj => new Utoken[] { ((Name)obj).Value };
-            nameref.UtokenizerForUnparse = obj => new Utoken[] { ((NameRef)obj).Value };
-            number_expression.UtokenizerForUnparse = obj => new Utoken[] { ((Expression.Number)obj).Value.ToString() };
-            quantity_reference.UtokenizerForUnparse = obj => new Utoken[] { ((Reference<QuantityDefinition>)obj).NameRef.Value };
-            unit_reference.UtokenizerForUnparse = obj => new Utoken[] { ((Reference<UnitDefinition>)obj).NameRef.Value };
-            xxx.InverseValueConverterForUnparse = obj => new ExpressionWithUnit.Unit { Value = ((UnitExpression)obj) };
+            name.UtokenizerForUnparse = _name => new Utoken[] { _name.Value };
+            namespace_name.UtokenizerForUnparse = _name => new Utoken[] { _name.Value };
+            nameref.UtokenizerForUnparse = _nameref => new Utoken[] { _nameref.Value };
+            number_expression.UtokenizerForUnparse = _number_expression => new Utoken[] { _number_expression.Value.ToString() };
+            quantity_reference.UtokenizerForUnparse = _quantity_reference => new Utoken[] { _quantity_reference.NameRef.Value };
+            unit_reference.UtokenizerForUnparse = _unit_reference => new Utoken[] { _unit_reference.NameRef.Value };
+            xxx.InverseValueConverterForUnparse = _unit_expression => new ExpressionWithUnit.Unit { Value = _unit_expression };
+            qualified_identifier.UtokenizerForUnparse = _qualified_identifier => new Utoken[] { _qualified_identifier };
 
             Formatting.InsertUtokensBefore(@namespace, Utoken.EmptyLine);
             Formatting.InsertUtokensBefore(definitions, Utoken.EmptyLine);
@@ -324,6 +325,8 @@ namespace ETUS.Grammar
             Formatting.InsertUtokensBetweenUnordered(prefix_definition, unit_definition, Utoken.EmptyLine);
             Formatting.InsertUtokensBetweenUnordered(prefix_definition, quantity_definition, Utoken.EmptyLine);
             Formatting.InsertUtokensBetweenUnordered(unit_definition, quantity_definition, Utoken.EmptyLine);
+
+            qualified_identifier.Name = "qualified_identifier";
 
             #endregion
 
