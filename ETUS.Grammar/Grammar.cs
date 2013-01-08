@@ -314,7 +314,6 @@ namespace ETUS.Grammar
             unit_reference.UtokenizerForUnparse = obj => new Utoken[] { ((Reference<UnitDefinition>)obj).NameRef.Value };
             xxx.InverseValueConverterForUnparse = obj => new ExpressionWithUnit.Unit { Value = ((UnitExpression)obj) };
 
-            Formatting.InsertUtokensAroundAny(Utoken.Space);
             Formatting.InsertUtokensBefore(definitions, Utoken.EmptyLine);
             Formatting.InsertUtokensAfter(definition, Utoken.NewLine);
             Formatting.InsertUtokensBefore(conversions, Utoken.NewLine, Utoken.IncreaseIndentLevel);
