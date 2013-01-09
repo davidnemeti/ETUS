@@ -29,41 +29,41 @@ namespace ETUS.Grammar
             var namespace_usage = new BnfiTermType<NamespaceUsing>();
             var @namespace = new BnfiTermType<Namespace>();
             var definitions = new BnfiTermCollection<List<Definition>, Definition>();
-            var definition = new BnfiTermTransient<Definition>();
+            var definition = new BnfiTermChoice<Definition>();
             var quantity_definition = new BnfiTermType<QuantityDefinition>();
             var prefix_definition = new BnfiTermType<PrefixDefinition>();
             var unit_definition = new BnfiTermType<UnitDefinition>();
 
             var conversions = new BnfiTermCollection<List<Conversion>, Conversion>();
-            var conversion = new BnfiTermTransient<Conversion>();
+            var conversion = new BnfiTermChoice<Conversion>();
             var simple_conversion = new BnfiTermType<SimpleConversion>();
-            var complex_conversion = new BnfiTermTransient<ComplexConversion>();
+            var complex_conversion = new BnfiTermChoice<ComplexConversion>();
             var complex_conversion_without_equal = new BnfiTermType<ComplexConversion>();
             var complex_conversion_with_equal = new BnfiTermType<ComplexConversion>();
-            var simple_conversion_op = new BnfiTermTransient<Direction>();
-            var complex_conversion_op = new BnfiTermTransient<Direction>();
+            var simple_conversion_op = new BnfiTermChoice<Direction>();
+            var complex_conversion_op = new BnfiTermChoice<Direction>();
 
-            var unit_expression = new BnfiTermTransient<UnitExpression>();
+            var unit_expression = new BnfiTermChoice<UnitExpression>();
             var binary_unit_expression = new BnfiTermType<UnitExpression.Binary>();
             var square_unit_expression = new BnfiTermType<UnitExpression.Square>();
             var cube_unit_expression = new BnfiTermType<UnitExpression.Cube>();
             var recip_unit_expression = new BnfiTermType<UnitExpression.Recip>();
             var unit_unit_expression = new BnfiTermType<UnitExpression.Unit>();
 
-            var expression = new BnfiTermTransient<Expression>();
+            var expression = new BnfiTermChoice<Expression>();
             var binary_expression = new BnfiTermType<Expression.Binary>();
             var number_expression = new BnfiTermValue<Expression.Number>();
             var unary_expression = new BnfiTermType<Expression.Unary>();
 
-            var expression_with_unit = new BnfiTermTransient<ExpressionWithUnit>();
+            var expression_with_unit = new BnfiTermChoice<ExpressionWithUnit>();
             var binary_expression_with_unit = new BnfiTermType<ExpressionWithUnit.Binary>();
             var binary_expression_with_unit2 = new BnfiTermType<ExpressionWithUnit.Binary2>();
             var unary_expression_with_unit = new BnfiTermType<ExpressionWithUnit.Unary>();
             var unit_variable_expression_with_unit = new BnfiTermType<ExpressionWithUnit.Unit>();
 
-            var binary_operator = new BnfiTermTransient<BinaryOperator>();
-            var unit_expression_binary_operator = new BnfiTermTransient<UnitExpression.Binary.Operator>();
-            var unary_operator = new BnfiTermTransient<UnaryOperator>();
+            var binary_operator = new BnfiTermChoice<BinaryOperator>();
+            var unit_expression_binary_operator = new BnfiTermChoice<UnitExpression.Binary.Operator>();
+            var unary_operator = new BnfiTermChoice<UnaryOperator>();
             var external_variable = new BnfiTermType<Expression.ExternalVariable>();
 
             var SIMPLE_MUTUAL_CONVERSION_OP = ToTerm("<=>", Direction.BiDir);
@@ -330,7 +330,7 @@ namespace ETUS.Grammar
 #if false
             // these all should fail with compile error...
 
-            var xxx_transient = new BnfiTermTransient<ExpressionWithUnit.Unit>();
+            var xxx_transient = new BnfiTermChoice<ExpressionWithUnit.Unit>();
             xxx_transient.Rule =
                 LEFT_BRACKET
                 + unit_expression.BindMember(unit_variable_expression_with_unit, t => t.Value)
