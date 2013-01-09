@@ -317,7 +317,7 @@ namespace ETUS.Grammar
             Formatting.InsertUtokensBefore(@namespace, Utoken.EmptyLine);
             Formatting.InsertUtokensBefore(definitions, Utoken.EmptyLine);
             Formatting.InsertUtokensAfter(definition, Utoken.NewLine);
-            Formatting.InsertUtokensBefore(conversions, Utoken.NewLine, Utoken.Indent);
+            Formatting.InsertUtokensBefore(conversions, Utoken.NewLine, Utoken.IndentBlock);
             Formatting.InsertUtokensAfter(conversions, 1, true, Utoken.EmptyLine);
             Formatting.InsertUtokensAfter(conversion, Utoken.NewLine);
 
