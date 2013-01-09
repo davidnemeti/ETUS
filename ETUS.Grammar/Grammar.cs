@@ -330,8 +330,8 @@ namespace ETUS.Grammar
 #if false
             // these all should fail with compile error...
 
-            var xxx_transient = new BnfiTermChoice<ExpressionWithUnit.Unit>();
-            xxx_transient.Rule =
+            var xxx_choice = new BnfiTermChoice<ExpressionWithUnit.Unit>();
+            xxx_choice.Rule =
                 LEFT_BRACKET
                 + unit_expression.BindMember(unit_variable_expression_with_unit, t => t.Value)
                 + RIGHT_BRACKET;
