@@ -306,12 +306,13 @@ namespace ETUS.Grammar
 
             #region Unparse
 
-            name.UtokenizerForUnparse = _name => new Utoken[] { _name.Value };
-            namespace_name.UtokenizerForUnparse = _name => new Utoken[] { _name.Value };
-            nameref.UtokenizerForUnparse = _nameref => new Utoken[] { _nameref.Value };
-            number_expression.UtokenizerForUnparse = _number_expression => new Utoken[] { _number_expression.Value.ToString() };
-            quantity_reference.UtokenizerForUnparse = _quantity_reference => new Utoken[] { _quantity_reference.NameRef.Value };
-            unit_reference.UtokenizerForUnparse = _unit_reference => new Utoken[] { _unit_reference.NameRef.Value };
+            name.UtokenizerForUnparse = (formatProvider, _name) => new Utoken[] { Unparser.ToString(formatProvider, _name.Value) };
+            namespace_name.UtokenizerForUnparse = (formatProvider, _name) => new Utoken[] { Unparser.ToString(formatProvider, _name.Value) };
+            nameref.UtokenizerForUnparse = (formatProvider, _nameref) => new Utoken[] { Unparser.ToString(formatProvider, _nameref.Value) };
+            number_expression.UtokenizerForUnparse = (formatProvider, _number_expression) => new Utoken[] { Unparser.ToString(formatProvider, _number_expression.Value.ToString()) };
+            quantity_reference.UtokenizerForUnparse = (formatProvider, _quantity_reference) => new Utoken[] { Unparser.ToString(formatProvider, _quantity_reference.NameRef.Value) };
+            unit_reference.UtokenizerForUnparse = (formatProvider, _unit_reference) => new Utoken[] { Unparser.ToString(formatProvider, _unit_reference.NameRef.Value) };
+
             xxx.InverseValueConverterForUnparse = _unit_expression => new ExpressionWithUnit.Unit { Value = _unit_expression };
 
             Formatting.InsertUtokensBefore(@namespace, Utoken.EmptyLine);
