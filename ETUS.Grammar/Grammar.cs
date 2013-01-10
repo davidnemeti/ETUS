@@ -315,16 +315,16 @@ namespace ETUS.Grammar
 
             xxx.InverseValueConverterForUnparse = _unit_expression => new ExpressionWithUnit.Unit { Value = _unit_expression };
 
-            Formatting.InsertUtokensBefore(@namespace, Utoken.EmptyLine);
-            Formatting.InsertUtokensBefore(definitions, Utoken.EmptyLine);
-            Formatting.InsertUtokensAfter(definition, Utoken.NewLine);
-            Formatting.InsertUtokensBefore(conversions, Utoken.NewLine, Utoken.IndentBlock);
-            Formatting.InsertUtokensAfter(conversions, 1, true, Utoken.EmptyLine);
-            Formatting.InsertUtokensAfter(conversion, Utoken.NewLine);
+            DefaultFormatting.InsertUtokensBefore(@namespace, Utoken.EmptyLine);
+            DefaultFormatting.InsertUtokensBefore(definitions, Utoken.EmptyLine);
+            DefaultFormatting.InsertUtokensAfter(definition, Utoken.NewLine);
+            DefaultFormatting.InsertUtokensBefore(conversions, Utoken.NewLine, Utoken.IndentBlock);
+            DefaultFormatting.InsertUtokensAfter(conversions, 1, true, Utoken.EmptyLine);
+            DefaultFormatting.InsertUtokensAfter(conversion, Utoken.NewLine);
 
-            Formatting.InsertUtokensBetweenUnordered(prefix_definition, unit_definition, Utoken.EmptyLine);
-            Formatting.InsertUtokensBetweenUnordered(prefix_definition, quantity_definition, Utoken.EmptyLine);
-            Formatting.InsertUtokensBetweenUnordered(unit_definition, quantity_definition, Utoken.EmptyLine);
+            DefaultFormatting.InsertUtokensBetweenUnordered(prefix_definition, unit_definition, Utoken.EmptyLine);
+            DefaultFormatting.InsertUtokensBetweenUnordered(prefix_definition, quantity_definition, Utoken.EmptyLine);
+            DefaultFormatting.InsertUtokensBetweenUnordered(unit_definition, quantity_definition, Utoken.EmptyLine);
 
             #endregion
 
