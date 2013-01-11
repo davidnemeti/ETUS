@@ -24,10 +24,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ETUS.CSharp", "ETUS.CSharp", "{A47BD37B-2C2A-4421-9502-423AEE93DFA6}"
 EndProject
-Project("{EDCC3B85-0BAD-11DB-BC1A-00112FDE8B61}") = "ETUS.DomainModel2", "ETUS.DomainModel2\ETUS.DomainModel2.nproj", "{A4D801B6-3609-43BE-A669-1FD9FD4277BF}"
-EndProject
-Project("{EDCC3B85-0BAD-11DB-BC1A-00112FDE8B61}") = "SchemaLanguage", "SchemaLanguage\SchemaLanguage.nproj", "{38A73282-3F0B-40F0-9D74-7C7E0D016C08}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication1", "ConsoleApplication1\ConsoleApplication1.csproj", "{65B89830-A608-40DC-96AF-D87C30FED087}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "010.Irony.2010", "..\Irony\Irony\010.Irony.2010.csproj", "{D81F5C91-D7DB-46E5-BC99-49488FB6814C}"
