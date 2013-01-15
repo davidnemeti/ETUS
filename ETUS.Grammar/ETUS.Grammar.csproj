@@ -91,9 +91,9 @@
       <Project>{54970364-a9f5-4ee1-9165-4b9178fb8d25}</Project>
       <Name>ETUS.DomainModel</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Irony.ITG\Irony.ITG.csproj">
+    <ProjectReference Include="..\Sarcasm\Sarcasm.csproj">
       <Project>{a02fb9de-b174-4438-83af-034f8004c724}</Project>
-      <Name>Irony.ITG</Name>
+      <Name>Sarcasm</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

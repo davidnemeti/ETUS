@@ -9,9 +9,9 @@ using System.IO;
 using Irony;
 using Irony.Ast;
 using Irony.Parsing;
-using Irony.ITG;
-using Irony.ITG.Ast;
-using Irony.ITG.Unparsing;
+using Sarcasm;
+using Sarcasm.Ast;
+using Sarcasm.Unparsing;
 
 using DomainCore;
 
@@ -20,7 +20,7 @@ using ETUS.DomainModel.Expressions;
 
 namespace ETUS.Grammar
 {
-    public class UDLGrammar : Irony.ITG.Ast.Grammar
+    public class UDLGrammar : Sarcasm.Ast.Grammar
     {
         public UDLGrammar()
             : base(AstCreation.CreateAst, EmptyCollectionHandling.ReturnNull, ErrorHandling.ThrowException)
