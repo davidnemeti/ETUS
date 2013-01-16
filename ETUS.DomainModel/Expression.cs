@@ -35,12 +35,12 @@ namespace ETUS.DomainModel.Expressions
         {
             public Number() {}
 
-            public Number(dynamic value)
+            public Number(object value)
             {
                 this.Value = value;
             }
 
-            public dynamic Value { get; set; }
+            public object Value { get; set; }
 
             public override string ToString()
             {

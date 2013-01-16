@@ -52,7 +52,7 @@ namespace ETUS.Grammar
 
             var expression = new BnfiTermChoice<Expression>();
             var binary_expression = new BnfiTermType<Expression.Binary>();
-            var number_expression = new BnfiTermValue<Expression.Number>();
+            var number_expression = new BnfiTermType<Expression.Number>();
             var unary_expression = new BnfiTermType<Expression.Unary>();
 
             var expression_with_unit = new BnfiTermChoice<ExpressionWithUnit>();
@@ -103,8 +103,8 @@ namespace ETUS.Grammar
 
             var qualified_identifier = new BnfiTermValue<string>();
 
-            var name = new BnfiTermValue<Name>();
-            var namespace_name = new BnfiTermValue<Name>();
+            var name = new BnfiTermType<Name>();
+            var namespace_name = new BnfiTermType<Name>();
             var nameref = new BnfiTermValue<NameRef>();
 
             var quantity_reference = new BnfiTermValue<Reference<QuantityDefinition>>();
@@ -250,7 +250,7 @@ namespace ETUS.Grammar
 
             expression.SetRuleOr(number_expression, CONSTANT, external_variable, binary_expression, unary_expression, LEFT_PAREN + expression + RIGHT_PAREN);
 
-            number_expression.Rule = NUMBER.ConvertValue(number => new Expression.Number(number));
+            number_expression.Rule = NUMBER.BindMember(number_expression, t => t.Value);
 
             binary_expression.Rule =
                 expression.BindMember(binary_expression, t => t.Term1)
@@ -291,28 +291,31 @@ namespace ETUS.Grammar
                 + unit_expression.BindMember(unit_variable_expression_with_unit, t => t.Value)
                 + RIGHT_BRACKET;
 
-            qualified_identifier.Rule = IDENTIFIER.PlusList(DOT).ConvertValue(identifiers => string.Join(DOT.Text, identifiers));
+            qualified_identifier.Rule =
+                IDENTIFIER
+                .PlusList(DOT)
+                .ConvertValue(
+                    _identifiers => string.Join(DOT.Text, _identifiers),
+                    _qualifiedIdentifier => _qualifiedIdentifier.Split(new string[] { DOT.Text }, StringSplitOptions.None).ToList()
+                );
 
-            name.Rule = IDENTIFIER.ConvertValue(identifier => new Name { Value = identifier });
-            namespace_name.Rule = qualified_identifier.ConvertValue(qual_id => new Name { Value = qual_id });
-            nameref.Rule = qualified_identifier.ConvertValue(qual_id => new NameRef(qual_id));
+            name.Rule = IDENTIFIER.BindMember(name, t => t.Value);
+            namespace_name.Rule = qualified_identifier.BindMember(namespace_name, t => t.Value);
+            nameref.Rule = qualified_identifier.ConvertValue(_qualifiedIdentifier => new NameRef(_qualifiedIdentifier), _nameRef => _nameRef.Value);
 
-            quantity_reference.Rule = nameref.ConvertValue(nameRef => Reference.Get<QuantityDefinition>(nameRef));
-            unit_reference.Rule = nameref.ConvertValue(nameRef => Reference.Get<UnitDefinition>(nameRef));
-
-            //quantity_reference.Rule = nameref.ConvertValue(nameRef => Reference.Get<QuantityDefinition>(nameRef), NoUnparse<Reference<QuantityDefinition>, NameRef>());
-            //unit_reference.Rule = nameref.ConvertValue(nameRef => Reference.Get<UnitDefinition>(nameRef), unitReference => unitReference.NameRef);
+            quantity_reference.Rule = nameref.ConvertValue(_nameRef => Reference.Get<QuantityDefinition>(_nameRef), _quantityReference => _quantityReference.NameRef);
+            unit_reference.Rule = nameref.ConvertValue(_nameRef => Reference.Get<UnitDefinition>(_nameRef), _unitReference => _unitReference.NameRef);
 
             #endregion
 
             #region Unparse
 
-            name.UtokenizerForUnparse = (formatProvider, _name) => new Utoken[] { Utoken.CreateText(_name.Value) };
-            namespace_name.UtokenizerForUnparse = (formatProvider, _name) => new Utoken[] { Utoken.CreateText(_name.Value) };
-            nameref.UtokenizerForUnparse = (formatProvider, _nameref) => new Utoken[] { Utoken.CreateText(_nameref.Value) };
-            number_expression.UtokenizerForUnparse = (formatProvider, _number_expression) => new Utoken[] { Utoken.CreateText(_number_expression.Value.ToString()) };
-            quantity_reference.UtokenizerForUnparse = (formatProvider, _quantity_reference) => new Utoken[] { Utoken.CreateText(_quantity_reference.NameRef.Value) };
-            unit_reference.UtokenizerForUnparse = (formatProvider, _unit_reference) => new Utoken[] { Utoken.CreateText(_unit_reference.NameRef.Value) };
+//            number_expression.UtokenizerForUnparse = (formatProvider, _numberExpression) => new Utoken[] { Utoken.CreateText(_numberExpression.Value.ToString()) };
+            quantity_reference.UtokenizerForUnparse = (formatProvider, _quantityReference) => new Utoken[] { Utoken.CreateText(_quantityReference.NameRef.Value) };
+            unit_reference.UtokenizerForUnparse = (formatProvider, _unitReference) => new Utoken[] { Utoken.CreateText(_unitReference.NameRef.Value) };
+
+            // this is not really needed, it is only here for performance reasons
+            qualified_identifier.UtokenizerForUnparse = (formatProvider, _qualifiedIdentifier) => new Utoken[] { Utoken.CreateText(_qualifiedIdentifier) };
 
             DefaultFormatting.InsertUtokensBefore(@namespace, Utoken.EmptyLine);
             DefaultFormatting.InsertUtokensBefore(definitions, Utoken.EmptyLine);
@@ -345,7 +348,6 @@ namespace ETUS.Grammar
                 USE + unit_expression + DEFINE
                 );
 
-            unit_expression.SetRuleOr(USE + unit_expression + DEFINE);
             unit_expression.Rule = USE + unit_expression + DEFINE;
 
             binary_expression_with_unit2.Rule =
@@ -353,19 +355,22 @@ namespace ETUS.Grammar
                 + binary_operator.BindMember(binary_expression_with_unit2, t => t.Op)
                 + expression_with_unit.BindMember(binary_expression_with_unit2, t => t.Term1);
 
-            @namespace.SetRuleOr(DECLARE + NAMESPACE +
-                namespace_name.BindMember(t => t.Name) + definition.PlusList().BindMember(@namespace, t => t.Definitions));
+            @namespace.Rule = DECLARE + NAMESPACE +
+                namespace_name.BindMember(t => t.Name) + definition.PlusList().BindMember(@namespace, t => t.Definitions);
 
-            @namespace.SetRuleOr(DECLARE + NAMESPACE +
-                namespace_name.BindMember(@namespace, t => t.Name) + definition.PlusList().BindMember(t => t.Definitions));
+            @namespace.Rule = DECLARE + NAMESPACE +
+                namespace_name.BindMember(@namespace, t => t.Name) + definition.PlusList().BindMember(t => t.Definitions);
 
-            @namespace.SetRuleOr(DECLARE + NAMESPACE +
-                namespace_name.BindMember(@namespace, t => t.Name) + definition.PlusList().BindMember(namespace_usage, t => t.Definitions));
+            @namespace.Rule = DECLARE + NAMESPACE +
+                namespace_name.BindMember(@namespace, t => t.Name) + definition.PlusList().BindMember(namespace_usage, t => t.Definitions);
 
-            @namespace.SetRuleOr(DECLARE + NAMESPACE +
-                namespace_name.BindMember(namespace_usage, t => t.Name) + definition.PlusList().BindMember(namespace_usage, t => t.Definitions));
+            @namespace.Rule = DECLARE + NAMESPACE +
+                definition.BindMember(@namespace, t => t.Name) + definition.PlusList().BindMember(@namespace, t => t.Definitions);
 
-            @namespace.SetRuleOr(namespace_name.BindMember(namespace_usage, t => t.Name) + definition.PlusList().BindMember(namespace_usage, t => t.Definitions));
+            @namespace.Rule = DECLARE + NAMESPACE +
+                namespace_name.BindMember(namespace_usage, t => t.Name) + definition.PlusList().BindMember(namespace_usage, t => t.Definitions);
+
+            @namespace.Rule = namespace_name.BindMember(namespace_usage, t => t.Name) + definition.PlusList().BindMember(namespace_usage, t => t.Definitions);
 
             conversion.SetRuleOr(simple_conversion, complex_conversion, unit_expression);
 

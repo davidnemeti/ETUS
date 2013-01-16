@@ -23,9 +23,9 @@ namespace DomainCore
 
     public class NameRef
     {
-        public NameRef(string Value)
+        public NameRef(string value)
         {
-            this.Value = Value;
+            this.Value = value;
         }
 
         public string Value { get; private set; }
