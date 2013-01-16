@@ -98,8 +98,8 @@ namespace ETUS.Grammar
             var LEFT_BRACKET = ToPunctuation("[");
             var RIGHT_BRACKET = ToPunctuation("]");
 
-            var NUMBER = CreateNumber();
-            var IDENTIFIER = CreateIdentifier();
+            var NUMBER = ParseNumber();
+            var IDENTIFIER = ParseIdentifier();
 
             var qualified_identifier = new BnfiTermValue<string>();
 
