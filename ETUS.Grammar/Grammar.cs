@@ -315,7 +315,7 @@ namespace ETUS.Grammar
             unit_reference.UtokenizerForUnparse = (formatProvider, _unitReference) => new Utoken[] { Utoken.CreateText(_unitReference.NameRef.Value) };
 
             // this is not really needed, it is only here for performance reasons
-            qualified_identifier.UtokenizerForUnparse = (formatProvider, _qualifiedIdentifier) => new Utoken[] { Utoken.CreateText(_qualifiedIdentifier) };
+//            qualified_identifier.UtokenizerForUnparse = (formatProvider, _qualifiedIdentifier) => new Utoken[] { Utoken.CreateText(_qualifiedIdentifier) };
 
             DefaultFormatting.InsertUtokensBefore(@namespace, Utoken.EmptyLine);
             DefaultFormatting.InsertUtokensBefore(definitions, Utoken.EmptyLine);
