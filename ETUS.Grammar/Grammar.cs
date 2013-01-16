@@ -321,7 +321,7 @@ namespace ETUS.Grammar
             DefaultFormatting.InsertUtokensBefore(definitions, Utoken.EmptyLine);
             DefaultFormatting.InsertUtokensAfter(definition, Utoken.NewLine);
             DefaultFormatting.InsertUtokensBefore(conversions, Utoken.NewLine, Utoken.IndentBlock);
-            DefaultFormatting.InsertUtokensAfter(conversions, 1, Overridable.Yes, Utoken.EmptyLine);
+            DefaultFormatting.InsertUtokensAfter(conversions, priority: 1, overridable: Overridable.Yes, utokensAfter: Utoken.EmptyLine);
             DefaultFormatting.InsertUtokensAfter(conversion, Utoken.NewLine);
 
             DefaultFormatting.InsertUtokensBetweenUnordered(prefix_definition, unit_definition, Utoken.EmptyLine);
