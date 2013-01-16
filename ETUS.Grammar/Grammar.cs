@@ -198,13 +198,11 @@ namespace ETUS.Grammar
                 + expression_with_unit.BindMember(complex_conversion, t => t.Expr)
                 ;
 
-            BnfiTermValue<UnitExpression> xxx;
-
             complex_conversion_with_equal.Rule =
                 complex_conversion_without_equal.Copy()
                 + PreferShiftHere()
                 + EQUAL_STATEMENT
-                + (xxx = unit_variable_expression_with_unit.ConvertValue(unit_variable => unit_variable.Value)).BindMember(complex_conversion, t => t.OtherUnit)
+                + unit_variable_expression_with_unit.ConvertValue(unit_variable => unit_variable.Value, _unit_expression => new ExpressionWithUnit.Unit { Value = _unit_expression }).BindMember(complex_conversion, t => t.OtherUnit)
                 ;
 
             unit_expression.SetRuleOr(
@@ -312,8 +310,6 @@ namespace ETUS.Grammar
             number_expression.UtokenizerForUnparse = (formatProvider, _number_expression) => new Utoken[] { Utoken.CreateText(_number_expression.Value.ToString()) };
             quantity_reference.UtokenizerForUnparse = (formatProvider, _quantity_reference) => new Utoken[] { Utoken.CreateText(_quantity_reference.NameRef.Value) };
             unit_reference.UtokenizerForUnparse = (formatProvider, _unit_reference) => new Utoken[] { Utoken.CreateText(_unit_reference.NameRef.Value) };
-
-            xxx.InverseValueConverterForUnparse = _unit_expression => new ExpressionWithUnit.Unit { Value = _unit_expression };
 
             DefaultFormatting.InsertUtokensBefore(@namespace, Utoken.EmptyLine);
             DefaultFormatting.InsertUtokensBefore(definitions, Utoken.EmptyLine);
