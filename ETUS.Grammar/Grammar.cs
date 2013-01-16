@@ -300,6 +300,9 @@ namespace ETUS.Grammar
             quantity_reference.Rule = nameref.ConvertValue(nameRef => Reference.Get<QuantityDefinition>(nameRef));
             unit_reference.Rule = nameref.ConvertValue(nameRef => Reference.Get<UnitDefinition>(nameRef));
 
+            //quantity_reference.Rule = nameref.ConvertValue(nameRef => Reference.Get<QuantityDefinition>(nameRef), NoUnparse<Reference<QuantityDefinition>, NameRef>());
+            //unit_reference.Rule = nameref.ConvertValue(nameRef => Reference.Get<UnitDefinition>(nameRef), unitReference => unitReference.NameRef);
+
             #endregion
 
             #region Unparse
