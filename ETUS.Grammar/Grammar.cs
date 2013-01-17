@@ -296,7 +296,7 @@ namespace ETUS.Grammar
                 .PlusList(DOT)
                 .ConvertValue(
                     _identifiers => string.Join(DOT.Text, _identifiers),
-                    _qualifiedIdentifier => _qualifiedIdentifier.Split(new string[] { DOT.Text }, StringSplitOptions.None).ToList()
+                    _qualifiedIdentifier => _qualifiedIdentifier.Split(new string[] { DOT.Text }, StringSplitOptions.None)
                 );
 
             name.Rule = IDENTIFIER.BindMember(name, t => t.Value);
