@@ -38,10 +38,10 @@ namespace ETUS.Grammar
             var conversion = new BnfiTermChoice<Conversion>();
             var simple_conversion = new BnfiTermType<SimpleConversion>();
             var complex_conversion = new BnfiTermChoice<ComplexConversion>();
-            var complex_conversion_without_equal = new BnfiTermType<ComplexConversion>();
-            var complex_conversion_with_equal = new BnfiTermType<ComplexConversion>();
-            var simple_conversion_op = new BnfiTermChoice<Direction>();
-            var complex_conversion_op = new BnfiTermChoice<Direction>();
+            var complex_conversion_without_equal = new BnfiTermType<ComplexConversion>("complex_conversion_without_equal");
+            var complex_conversion_with_equal = new BnfiTermType<ComplexConversion>("complex_conversion_with_equal");
+            var simple_conversion_op = new BnfiTermChoice<Direction>("simple_conversion_op");
+            var complex_conversion_op = new BnfiTermChoice<Direction>("complex_conversion_op");
 
             var unit_expression = new BnfiTermChoice<UnitExpression>();
             var binary_unit_expression = new BnfiTermType<UnitExpression.Binary>();
@@ -104,7 +104,7 @@ namespace ETUS.Grammar
             var qualified_identifier = new BnfiTermValue<string>();
 
             var name = new BnfiTermType<Name>();
-            var namespace_name = new BnfiTermType<Name>();
+            var namespace_name = new BnfiTermType<Name>("namespace_name");
             var nameref = new BnfiTermValue<NameRef>();
 
             var quantity_reference = new BnfiTermValue<Reference<QuantityDefinition>>();
