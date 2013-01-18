@@ -313,9 +313,17 @@ namespace ETUS.Grammar
             // this is not really needed, it is only here for performance reasons
 //            qualified_identifier.UtokenizerForUnparse = (formatProvider, _qualifiedIdentifier) => new Utoken[] { Utoken.CreateText(_qualifiedIdentifier) };
 
+            DefaultFormatting.InsertUtokensAround(DOT, Utoken.NoWhitespace);
+            DefaultFormatting.InsertUtokensAfter(LEFT_PAREN, Utoken.NoWhitespace);
+            DefaultFormatting.InsertUtokensBefore(RIGHT_PAREN, Utoken.NoWhitespace);
+            DefaultFormatting.InsertUtokensAfter(LEFT_BRACKET, Utoken.NoWhitespace);
+            DefaultFormatting.InsertUtokensBefore(RIGHT_BRACKET, Utoken.NoWhitespace);
+
             DefaultFormatting.InsertUtokensBefore(@namespace, Utoken.EmptyLine);
+
             DefaultFormatting.InsertUtokensBefore(definitions, Utoken.EmptyLine);
             DefaultFormatting.InsertUtokensAfter(definition, Utoken.NewLine);
+
             DefaultFormatting.InsertUtokensBefore(conversions, Utoken.NewLine, Utoken.IndentBlock);
             DefaultFormatting.InsertUtokensAfter(conversions, priority: 1, overridable: Overridable.Yes, utokensAfter: Utoken.EmptyLine);
             DefaultFormatting.InsertUtokensAfter(conversion, Utoken.NewLine);
