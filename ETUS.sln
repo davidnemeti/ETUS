@@ -26,13 +26,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ETUS.CSharp", "ETUS.CSharp"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication1", "ConsoleApplication1\ConsoleApplication1.csproj", "{65B89830-A608-40DC-96AF-D87C30FED087}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "010.Irony.2010", "..\Irony\Irony\010.Irony.2010.csproj", "{D81F5C91-D7DB-46E5-BC99-49488FB6814C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainCore", "DomainCore\DomainCore.csproj", "{FFA6152D-DA0C-4588-9CC2-A9B7E3AD5D14}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sarcasm", "Sarcasm\Sarcasm.csproj", "{A02FB9DE-B174-4438-83AF-034F8004C724}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sarcasm.UnitTest", "Sarcasm.UnitTest\Sarcasm.UnitTest.csproj", "{F0AEF19D-DA8E-49F7-BAA6-AA636BE48F82}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
