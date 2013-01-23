@@ -248,7 +248,14 @@ namespace ETUS.Grammar
 
             unary_operator.Rule = NEG_OP | POS_OP;
 
-            expression.SetRuleOr(number_expression, CONSTANT, external_variable, binary_expression, unary_expression, LEFT_PAREN + expression + RIGHT_PAREN);
+            expression.SetRuleOr(
+                number_expression,
+                CONSTANT,
+                external_variable,
+                binary_expression,
+                unary_expression,
+                LEFT_PAREN + expression + RIGHT_PAREN
+                );
 
             number_expression.Rule = NUMBER.BindMember(number_expression, t => t.Value);
 
