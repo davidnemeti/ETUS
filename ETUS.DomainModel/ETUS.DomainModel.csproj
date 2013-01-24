@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DomainCore">
+      <HintPath>..\Libraries\DomainCore.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -47,12 +50,6 @@
     <Compile Include="Expression.cs" />
     <Compile Include="ExpressionWithUnits.cs" />
     <Compile Include="UnitExpression.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DomainCore\DomainCore.csproj">
-      <Project>{ffa6152d-da0c-4588-9cc2-a9b7e3ad5d14}</Project>
-      <Name>DomainCore</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

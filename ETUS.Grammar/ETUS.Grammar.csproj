@@ -64,6 +64,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DomainCore">
+      <HintPath>..\Libraries\DomainCore.dll</HintPath>
+    </Reference>
     <Reference Include="Irony">
       <HintPath>..\Libraries\Irony.dll</HintPath>
     </Reference>
@@ -85,10 +88,6 @@
     <Compile Include="Grammar.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DomainCore\DomainCore.csproj">
-      <Project>{ffa6152d-da0c-4588-9cc2-a9b7e3ad5d14}</Project>
-      <Name>DomainCore</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ETUS.DomainModel\ETUS.DomainModel.csproj">
       <Project>{54970364-a9f5-4ee1-9165-4b9178fb8d25}</Project>
       <Name>ETUS.DomainModel</Name>
