@@ -29,7 +29,7 @@ namespace ETUS.DomainModel
         public NameRef NameRef { get; set; }
     }
 
-    public abstract class Definition : Identity
+    public abstract class Definition
     {
         public Name Name { get; set; }
 
