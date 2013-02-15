@@ -26,7 +26,7 @@ namespace ConsoleApplication1
         static void Main(string[] args)
         {
             var grammar = new UDLGrammar();
-            Console.WriteLine(grammar.GetNonTerminalsAsText());
+            //Console.WriteLine(grammar.GetNonTerminalsAsText());
             //Console.WriteLine();
             //Console.WriteLine(grammar.GetNonTerminalsAsText(omitBoundMembers: true));
 

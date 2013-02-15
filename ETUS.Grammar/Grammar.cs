@@ -318,26 +318,26 @@ namespace ETUS.Grammar
             #region Unparse
 
             // this is not really needed, it is only here for performance reasons
-//            qualified_identifier.UtokenizerForUnparse = (formatProvider, _qualifiedIdentifier) => new Utoken[] { Utoken.CreateText(_qualifiedIdentifier) };
+            qualified_identifier.UtokenizerForUnparse = (formatProvider, _qualifiedIdentifier) => new [] { UtokenValue.CreateText(_qualifiedIdentifier) };
 
-            DefaultFormatting.InsertUtokensAround(DOT, Utoken.NoWhitespace);
-            DefaultFormatting.InsertUtokensAfter(LEFT_PAREN, Utoken.NoWhitespace);
-            DefaultFormatting.InsertUtokensBefore(RIGHT_PAREN, Utoken.NoWhitespace);
-            DefaultFormatting.InsertUtokensAfter(LEFT_BRACKET, Utoken.NoWhitespace);
-            DefaultFormatting.InsertUtokensBefore(RIGHT_BRACKET, Utoken.NoWhitespace);
+            UnparseControl.DefaultFormatting.InsertUtokensAround(DOT, UtokenInsert.NoWhitespace);
+            UnparseControl.DefaultFormatting.InsertUtokensAfter(LEFT_PAREN, UtokenInsert.NoWhitespace);
+            UnparseControl.DefaultFormatting.InsertUtokensBefore(RIGHT_PAREN, UtokenInsert.NoWhitespace);
+            UnparseControl.DefaultFormatting.InsertUtokensAfter(LEFT_BRACKET, UtokenInsert.NoWhitespace);
+            UnparseControl.DefaultFormatting.InsertUtokensBefore(RIGHT_BRACKET, UtokenInsert.NoWhitespace);
 
-            DefaultFormatting.InsertUtokensBefore(@namespace, Utoken.EmptyLine);
+            UnparseControl.DefaultFormatting.InsertUtokensBefore(@namespace, UtokenInsert.EmptyLine);
 
-            DefaultFormatting.InsertUtokensBefore(definitions, Utoken.EmptyLine);
-            DefaultFormatting.InsertUtokensAfter(definition, Utoken.NewLine);
+            UnparseControl.DefaultFormatting.InsertUtokensBefore(definitions, UtokenInsert.EmptyLine);
+            UnparseControl.DefaultFormatting.InsertUtokensAfter(definition, UtokenInsert.NewLine);
 
-            DefaultFormatting.InsertUtokensBefore(conversions, Utoken.NewLine, Utoken.IndentBlock);
-            DefaultFormatting.InsertUtokensAfter(conversions, priority: 1, behavior: Behavior.Overridable, utokensAfter: Utoken.EmptyLine);
-            DefaultFormatting.InsertUtokensAfter(conversion, Utoken.NewLine);
+            UnparseControl.DefaultFormatting.InsertUtokensBefore(conversions, UtokenInsert.NewLine, UtokenInsert.IndentBlock);
+            UnparseControl.DefaultFormatting.InsertUtokensAfter(conversions, priority: 1, behavior: Behavior.Overridable, utokensAfter: UtokenInsert.EmptyLine);
+            UnparseControl.DefaultFormatting.InsertUtokensAfter(conversion, UtokenInsert.NewLine);
 
-            DefaultFormatting.InsertUtokensBetweenUnordered(prefix_definition, unit_definition, Utoken.EmptyLine);
-            DefaultFormatting.InsertUtokensBetweenUnordered(prefix_definition, quantity_definition, Utoken.EmptyLine);
-            DefaultFormatting.InsertUtokensBetweenUnordered(unit_definition, quantity_definition, Utoken.EmptyLine);
+            UnparseControl.DefaultFormatting.InsertUtokensBetweenUnordered(prefix_definition, unit_definition, UtokenInsert.EmptyLine);
+            UnparseControl.DefaultFormatting.InsertUtokensBetweenUnordered(prefix_definition, quantity_definition, UtokenInsert.EmptyLine);
+            UnparseControl.DefaultFormatting.InsertUtokensBetweenUnordered(unit_definition, quantity_definition, UtokenInsert.EmptyLine);
 
             #endregion
 
