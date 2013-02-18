@@ -340,53 +340,6 @@ namespace ETUS.Grammar
             UnparseControl.DefaultFormatting.InsertUtokensBetweenUnordered(unit_definition, quantity_definition, UtokenInsert.EmptyLine);
 
             #endregion
-
-#if false
-            // these all should fail with compile error...
-
-            var xxx_choice = new BnfiTermChoice<ExpressionWithUnit.Unit>();
-            xxx_choice.Rule =
-                LEFT_BRACKET
-                + unit_expression.BindMember(unit_variable_expression_with_unit, t => t.Value)
-                + RIGHT_BRACKET;
-
-            unit_expression.SetRuleOr(
-                binary_unit_expression,
-                square_unit_expression,
-                cube_unit_expression,
-                recip_unit_expression,
-                unit_unit_expression,
-                USE + unit_expression + DEFINE
-                );
-
-            unit_expression.Rule = USE + unit_expression + DEFINE;
-
-            binary_expression_with_unit2.Rule =
-                expression.BindMember(binary_expression_with_unit2, t => t.Term2)
-                + binary_operator.BindMember(binary_expression_with_unit2, t => t.Op)
-                + expression_with_unit.BindMember(binary_expression_with_unit2, t => t.Term1);
-
-            @namespace.Rule = DECLARE + NAMESPACE +
-                namespace_name.BindMember(t => t.Name) + definition.PlusList().BindMember(@namespace, t => t.Definitions);
-
-            @namespace.Rule = DECLARE + NAMESPACE +
-                namespace_name.BindMember(@namespace, t => t.Name) + definition.PlusList().BindMember(t => t.Definitions);
-
-            @namespace.Rule = DECLARE + NAMESPACE +
-                namespace_name.BindMember(@namespace, t => t.Name) + definition.PlusList().BindMember(namespace_usage, t => t.Definitions);
-
-            @namespace.Rule = DECLARE + NAMESPACE +
-                definition.BindMember(@namespace, t => t.Name) + definition.PlusList().BindMember(@namespace, t => t.Definitions);
-
-            @namespace.Rule = DECLARE + NAMESPACE +
-                namespace_name.BindMember(namespace_usage, t => t.Name) + definition.PlusList().BindMember(namespace_usage, t => t.Definitions);
-
-            @namespace.Rule = namespace_name.BindMember(namespace_usage, t => t.Name) + definition.PlusList().BindMember(namespace_usage, t => t.Definitions);
-
-            conversion.SetRuleOr(simple_conversion, complex_conversion, unit_expression);
-
-            definition.Rule = quantity_definition | unit_definition | prefix_definition | complex_conversion;
-#endif
         }
     }
 }
