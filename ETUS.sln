@@ -19,7 +19,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETUS.DomainModel", "ETUS.Do
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{E8BB73D5-07BA-42F5-9E1E-A84CAF30E702}"
 	ProjectSection(SolutionItems) = preProject
-		Libraries\DomainCore.dll = Libraries\DomainCore.dll
 		Libraries\Irony.dll = Libraries\Irony.dll
 		Libraries\Sarcasm.dll = Libraries\Sarcasm.dll
 	EndProjectSection
